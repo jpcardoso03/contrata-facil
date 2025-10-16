@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Mail, Lock, User, FileText } from 'lucide-react';
 import { UserType } from '@/types';
+import { useRouter } from 'next/navigation';
 
 export default function CadastroForm() {
   const [userType, setUserType] = useState<UserType>('candidato');
@@ -12,11 +13,12 @@ export default function CadastroForm() {
     cpf: '',
     password: ''
   });
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ userType, ...formData });
-    // Aqui você implementaria a lógica de cadastro
+    router.push('/dashboard');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +31,6 @@ export default function CadastroForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Cadastro {userType === 'candidato' ? 'Candidato' : 'Contratante'}
@@ -37,7 +38,6 @@ export default function CadastroForm() {
           <p className="text-gray-600">Crie sua conta</p>
         </div>
 
-        {/* Toggle Candidato/Contratante */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
           <button
             type="button"
@@ -65,9 +65,7 @@ export default function CadastroForm() {
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Nome Completo */}
           <div>
             <label htmlFor="nomeCompleto" className="block text-sm font-medium text-gray-700 mb-2">
               Nome completo
@@ -87,7 +85,6 @@ export default function CadastroForm() {
             </div>
           </div>
 
-          {/* E-mail */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               E-mail
@@ -107,7 +104,6 @@ export default function CadastroForm() {
             </div>
           </div>
 
-          {/* CPF */}
           <div>
             <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-2">
               CPF
@@ -127,7 +123,6 @@ export default function CadastroForm() {
             </div>
           </div>
 
-          {/* Senha */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Senha
@@ -147,10 +142,8 @@ export default function CadastroForm() {
             </div>
           </div>
 
-          {/* Linha divisória */}
           <div className="border-t border-gray-200 my-6"></div>
 
-          {/* Botão Cadastrar */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all"
@@ -158,7 +151,6 @@ export default function CadastroForm() {
             Cadastrar
           </button>
 
-          {/* Link para Login */}
           <div className="text-center">
             <p className="text-gray-600">
               Já tem conta?{' '}

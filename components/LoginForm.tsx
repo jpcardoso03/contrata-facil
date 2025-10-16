@@ -3,28 +3,28 @@
 import { useState } from 'react';
 import { Mail, Lock, User } from 'lucide-react';
 import { UserType } from '@/types';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
   const [userType, setUserType] = useState<UserType>('candidato');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ userType, email, password });
-    // Lógica de cadastro depois
+    router.push('/dashboard');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Login</h1>
           <p className="text-gray-600">Entre na sua conta</p>
         </div>
 
-        {/* Toggle Candidato/Contratante */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
           <button
             type="button"
@@ -52,9 +52,7 @@ export default function LoginForm() {
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* E-mail */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               E-mail
@@ -73,7 +71,6 @@ export default function LoginForm() {
             </div>
           </div>
 
-          {/* Senha */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Senha
@@ -92,7 +89,6 @@ export default function LoginForm() {
             </div>
           </div>
 
-          {/* Botão Entrar */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all"
@@ -100,7 +96,6 @@ export default function LoginForm() {
             Entrar
           </button>
 
-          {/* Link para Cadastro */}
           <div className="text-center">
             <p className="text-gray-600">
               Não tem conta?{' '}
