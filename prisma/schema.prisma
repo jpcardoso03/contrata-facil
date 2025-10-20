@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EnumTipoUsuario {
+  CONTRATANTE
+  PRESTADOR
+  ADMINISTRADOR
+}
+
+enum EnumStatusProposta {
+  PENDENTE
+  ACEITA
+  RECUSADA
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
+enum EnumNivelProeficiencia {
+  INICIANTE
+  INTERMEDIARIO
+  EXPERIENTE
+}
+
+model Usuario {
+  id             Int     @id @default(autoincrement()) @map("id_usuario")
+  nome           String
+  senha_hash     String
+  email          String  @unique
+  valor          Decimal @db.Money
+  sobre          String
+  tipo_usuario   EnumTipoUsuario
+
+  habilidades           PrestadorHabilidade[]
+  propostas_contratadas Proposta[] @relation("ContratantePropostas")
+  propostas_prestadas   Proposta[] @relation("PrestadorPropostas")
+
+  @@map("USUARIO")
+}
+
+model Habilidade {
+  id        Int @id @default(autoincrement()) @map("id_habilidade")
+  nome      String
+  descricao String
+
+  prestadores PrestadorHabilidade[]
+
+  @@map("HABILIDADE")
+}
+
+model PrestadorHabilidade {
+  id_habilidade Int
+  id_prestador  Int
+  nivel_proeficiencia EnumNivelProeficiencia
+
+  habilidade Habilidade @relation(fields: [id_habilidade], references: [id])
+  prestador  Usuario    @relation(fields: [id_prestador], references: [id])
+
+  @@id([id_habilidade, id_prestador])
+  @@map("PRESTADOR_HABILIDADE")
+}
+
+model Proposta {
+  id             Int @id @default(autoincrement()) @map("id_proposta")
+  id_contratante Int
+  id_prestador  Int
+  titulo         String
+  descricao      String
+  valor          Decimal @db.Money
+  data_envio     DateTime @default(now())
+  data_inicio    DateTime
+  data_termino   DateTime
+  Status         EnumStatusProposta 
+
+  contratante Usuario @relation("ContratantePropostas", fields: [id_contratante], references: [id])
+  prestador   Usuario @relation("PrestadorPropostas", fields: [id_prestador], references: [id])
+
+  servicos Servico[]
+  avaliacao Avaliacao[]
+
+  @@map("PROPOSTA")
+}
+
+model Servico {
+  id_servico Int
+  id_proposta Int
+  nome_servico String
+  descricao String
+
+  proposta Proposta @relation(fields: [id_proposta], references: [id])
+
+  @@id([id_servico, id_proposta])
+  @@map("SERVICO")
+}
+
+model Avaliacao {
+  id_proposta Int @id
+  nota Int
+  comentario String
+  data_avaliacao DateTime
+
+  proposta Proposta @relation(fields: [id_proposta], references: [id])
+
+  @@map("AVALIACAO")
+}
