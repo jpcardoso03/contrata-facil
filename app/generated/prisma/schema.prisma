@@ -29,18 +29,58 @@ enum EnumNivelProeficiencia {
   EXPERIENTE
 }
 
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model Usuario {
-  id           Int             @id @default(autoincrement()) @map("id_usuario")
-  nome         String
-  senha_hash   String
-  email        String          @unique
-  valor        Decimal         @db.Money
-  sobre        String
-  tipo_usuario EnumTipoUsuario
+  id             String          @id @default(cuid()) @map("id_usuario")
+  name           String?
+  hashedPassword String?
+  email          String?         @unique
+  emailVerified  DateTime?
+  image          String?
+  valor          Decimal         @db.Money
+  sobre          String
+  tipo_usuario   EnumTipoUsuario
 
   habilidades           PrestadorHabilidade[]
   propostas_contratadas Proposta[]            @relation("ContratantePropostas")
   propostas_prestadas   Proposta[]            @relation("PrestadorPropostas")
+
+  accounts Account[]
+  sessions Session[]
 
   @@map("USUARIO")
 }
@@ -57,7 +97,7 @@ model Habilidade {
 
 model PrestadorHabilidade {
   id_habilidade       Int
-  id_prestador        Int
+  id_prestador        String
   nivel_proeficiencia EnumNivelProeficiencia
 
   habilidade Habilidade @relation(fields: [id_habilidade], references: [id])
@@ -69,8 +109,8 @@ model PrestadorHabilidade {
 
 model Proposta {
   id             Int                @id @default(autoincrement()) @map("id_proposta")
-  id_contratante Int
-  id_prestador   Int
+  id_contratante String
+  id_prestador   String
   titulo         String
   descricao      String
   valor          Decimal            @db.Money

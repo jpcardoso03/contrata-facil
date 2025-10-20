@@ -4,17 +4,40 @@ import { useState } from 'react';
 import { Mail, Lock, User } from 'lucide-react';
 import { UserType } from '@/types';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
   const [userType, setUserType] = useState<UserType>('candidato');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ userType, email, password });
-    router.push('/dashboard');
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email: email,
+        password: password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+        setIsLoading(false);
+      } else if (result?.ok) {
+        // login foi bem sucedido
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Ocorreu um erro inesperado. Tente novamente.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,7 +64,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setUserType('contratante')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all  ${
               userType === 'contratante'
                 ? 'bg-white text-blue-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
@@ -64,9 +87,10 @@ export default function LoginForm() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
                 placeholder="seu@email.com"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -82,9 +106,10 @@ export default function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
                 placeholder="Sua senha"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>

@@ -4,21 +4,64 @@ import { useState } from 'react';
 import { Mail, Lock, User, FileText } from 'lucide-react';
 import { UserType } from '@/types';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function CadastroForm() {
   const [userType, setUserType] = useState<UserType>('candidato');
   const [formData, setFormData] = useState({
     nomeCompleto: '',
     email: '',
-    cpf: '',
     password: ''
   });
   const router = useRouter();
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ userType, ...formData });
-    router.push('/dashboard');
+    setError('');
+    setIsLoading(true);
+
+    const apiUserType = userType === 'candidato' ? 'PRESTADOR' : 'CONTRATANTE';
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.nomeCompleto,
+          tipo_usuario: apiUserType,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message || 'Erro ao cadastrar.');
+        setIsLoading(false);
+        return;
+      }
+
+      const loginResult = await signIn('credentials', {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (loginResult?.error) {
+        setError('Cadastro realizado com sucesso! Faça o login.');
+        router.push('/login');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Ocorreu um erro inesperado.');
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,9 +121,10 @@ export default function CadastroForm() {
                 type="text"
                 value={formData.nomeCompleto}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
                 placeholder="Seu nome completo"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -97,28 +141,10 @@ export default function CadastroForm() {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
                 placeholder="seu@email.com"
                 required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-2">
-              CPF
-            </label>
-            <div className="relative">
-              <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                id="cpf"
-                name="cpf"
-                type="text"
-                value={formData.cpf}
-                onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="000.000.000-00"
-                required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -135,20 +161,28 @@ export default function CadastroForm() {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
                 placeholder="Sua senha"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
+
+          {error && (
+            <p className="text-center text-sm text-red-600">
+              {error}
+            </p>
+          )}
 
           <div className="border-t border-gray-200 my-6"></div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all"
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed" // Adicionado estilo 'disabled'
           >
-            Cadastrar
+            {isLoading ? 'Cadastrando...' : 'Cadastrar'}
           </button>
 
           <div className="text-center">

@@ -120,11 +120,41 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.AccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  expires_at: 'expires_at',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId',
+  expires: 'expires'
+};
+
+exports.Prisma.VerificationTokenScalarFieldEnum = {
+  identifier: 'identifier',
+  token: 'token',
+  expires: 'expires'
+};
+
 exports.Prisma.UsuarioScalarFieldEnum = {
   id: 'id',
-  nome: 'nome',
-  senha_hash: 'senha_hash',
+  name: 'name',
+  hashedPassword: 'hashedPassword',
   email: 'email',
+  emailVerified: 'emailVerified',
+  image: 'image',
   valor: 'valor',
   sobre: 'sobre',
   tipo_usuario: 'tipo_usuario'
@@ -178,6 +208,11 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
 exports.EnumTipoUsuario = exports.$Enums.EnumTipoUsuario = {
   CONTRATANTE: 'CONTRATANTE',
   PRESTADOR: 'PRESTADOR',
@@ -200,6 +235,9 @@ exports.EnumStatusProposta = exports.$Enums.EnumStatusProposta = {
 };
 
 exports.Prisma.ModelName = {
+  Account: 'Account',
+  Session: 'Session',
+  VerificationToken: 'VerificationToken',
   Usuario: 'Usuario',
   Habilidade: 'Habilidade',
   PrestadorHabilidade: 'PrestadorHabilidade',
