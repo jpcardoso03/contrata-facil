@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
-  const [userType, setUserType] = useState<UserType>('candidato');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -46,33 +45,6 @@ export default function LoginForm() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Login</h1>
           <p className="text-gray-600">Entre na sua conta</p>
-        </div>
-
-        <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
-          <button
-            type="button"
-            onClick={() => setUserType('candidato')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              userType === 'candidato'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <User className="w-4 h-4 inline mr-2" />
-            Candidato
-          </button>
-          <button
-            type="button"
-            onClick={() => setUserType('contratante')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all  ${
-              userType === 'contratante'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            <User className="w-4 h-4 inline mr-2" />
-            Contratante
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
