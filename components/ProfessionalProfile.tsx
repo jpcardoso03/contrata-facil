@@ -2,10 +2,10 @@
 
 import { Home, Bell, MessageCircle, User, MapPin, Star, Mail, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { professionalsData } from '@/data/professionals';
+import type { ProcessedProfessional } from '@/app/profissional/[id]/page';
 
 interface ProfessionalProfileProps {
-  professionalId: string;
+  professionalId: ProcessedProfessional;
 }
 
 export default function ProfessionalProfile({ professionalId }: ProfessionalProfileProps) {
@@ -13,21 +13,6 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
 
   const professional = professionalsData[professionalId];
 
-  if (!professional) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center px-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Profissional não encontrado</h1>
-          <button 
-            onClick={() => router.back()}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-          >
-            Voltar
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
@@ -61,8 +46,7 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
   };
 
   return (
-    <div className="min-h-screen bg-white pb-20"> {/* Adicionei pb-20 no container principal */}
-      {/* Header responsivo */}
+    <div className="min-h-screen bg-white pb-20"> 
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex items-center max-w-4xl mx-auto">
           <button 
@@ -77,8 +61,7 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
         </div>
       </div>
 
-      {/* Conteúdo do Perfil - PADDING BOTTOM REMOVIDO */}
-      <div className="max-w-4xl mx-auto p-4 sm:p-6"> {/* Removi o pb-28 */}
+      <div className="max-w-4xl mx-auto p-4 sm:p-6"> 
         {/* Seção Superior: Foto e Informações Básicas */}
         <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">

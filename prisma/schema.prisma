@@ -71,6 +71,8 @@ model Usuario {
   email          String?  @unique
   emailVerified   DateTime?
   image           String?
+  city           String?
+  profissao      String?
   valor          Decimal @db.Money
   sobre          String
   tipo_usuario   EnumTipoUsuario
@@ -89,6 +91,8 @@ model Habilidade {
   id        Int @id @default(autoincrement()) @map("id_habilidade")
   nome      String
   descricao String
+  principal Boolean @default(false)
+  imagem_url String?
 
   prestadores PrestadorHabilidade[]
 

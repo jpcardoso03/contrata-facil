@@ -1,21 +1,74 @@
 import ProfessionalList from '@/components/ProfessionalList';
+import prisma from '@/app/data/prisma';
+import { notFound } from 'next/navigation';
 
-// Mapeamento de IDs para nomes de serviços
-const serviceMap: { [key: string]: string } = {
-  'electrical': 'Elétrica',
-  'plumbing': 'Hidráulica', 
-  'painting': 'Pintura',
-  'cleaning': 'Limpeza',
-  'gardening': 'Jardinagem',
-  'carpentry': 'Marcenaria'
+export type ProcessedProfessional = {
+  id: string;
+  name: string | null;
+  photoUrl: string | null;
+  rating: number;
+  hourlyRate: number;
+  reviews: number;
 };
 
-interface PageProps {
-  params: { id: string };
+async function getProfessionalsByService(
+  serviceName: string
+): Promise<ProcessedProfessional[]>{
+  const users = await prisma.usuario.findMany({
+    where: {
+      tipo_usuario: 'PRESTADOR',
+      habilidades: {
+        some: {
+          habilidade: {
+            nome: serviceName,
+          },
+        },
+      },
+    },
+    include: {
+      propostas_prestadas: {
+        include: {
+          avaliacao: {
+            select: { nota: true},
+          },
+        },
+      },
+    },
+  });
+
+  const professionals = users.map((user) => {
+    const allRatings = user.propostas_prestadas
+      .map((proposta) => proposta.avaliacao[0]?.nota)
+      .filter((nota): nota is number => nota != null);
+
+    const reviews = allRatings.length;
+    const rating =
+      reviews > 0
+        ? parseFloat(
+            (allRatings.reduce((acc, curr) => acc+curr, 0)/reviews).toFixed(1)
+        )
+        : 0;
+
+    return {
+      id: user.id,
+      name: user.name,
+      photoUrl: user.image,
+      hourlyRate: user.valor.toNumber(),
+      rating: rating,
+      reviews: reviews,
+    };
+  });
+
+  return professionals;
 }
 
-export default function ServicePage({ params }: PageProps) {
-  const serviceName = serviceMap[params.id] || 'Serviço';
+export default async function ServicePage({
+   params,
+   }: {
+    params: { serviceName: string};
+   }) {
+  const serviceName = decodeURIComponent(params.serviceName);
+  const professionals = await getProfessionalsByService(serviceName);
 
-  return <ProfessionalList serviceName={serviceName} />;
+  return <ProfessionalList serviceName={serviceName} professionals={professionals} />;
 }
