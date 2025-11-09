@@ -67,14 +67,14 @@ export default function NotificationsList() {
   };
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
-    } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   const handleNotificationClick = (notificationId: string) => {
     console.log('Clicou na notificação:', notificationId);
@@ -92,7 +92,7 @@ export default function NotificationsList() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20"> {/* Adicionei pb-20 */}
+    <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header Responsivo */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="max-w-4xl mx-auto">
@@ -118,8 +118,8 @@ export default function NotificationsList() {
         </div>
       </div>
 
-      {/* Lista de Notificações - Responsiva */}
-      <div className="max-w-4xl mx-auto p-4 sm:p-6"> {/* Removi o pb-28 */}
+      {/* Lista de Notificações */}
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
         <div className="space-y-3">
           {notifications.map((notification) => (
             <div
@@ -179,7 +179,7 @@ export default function NotificationsList() {
         )}
       </div>
 
-      {/* Menu Inferior Fixo - Responsivo */}
+      {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
           <div className="grid grid-cols-4 h-full">

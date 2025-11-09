@@ -1,152 +1,83 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+import NextAuth, { AuthOptions } from "next-auth";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from 'bcryptjs';
+import prisma from '@/app/data/prisma';
+
+export const authOptions: AuthOptions = {
+    adapter: PrismaAdapter(prisma as any),
+    providers: [
+        CredentialsProvider({
+            name: 'Credentials',
+            credentials: {
+                email: { label: 'Email', type: 'text' },
+                password: { label: 'Password', type: 'password' },
+            },
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error('Email e senha são obrigatórios');
+                }
+
+                const user = await prisma.usuario.findUnique({
+                    where: { email: credentials.email },
+                });
+
+                if (!user || !user.hashedPassword) {
+                    throw new Error('Usuário não encontrado');
+                }
+
+                const isCorrectPassword = await bcrypt.compare(
+                    credentials.password,
+                    user.hashedPassword
+                );
+
+                if (!isCorrectPassword) {
+                    throw new Error('Senha inválida');
+                }
+
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    tipo_usuario: user.tipo_usuario,
+                };
+            },
+        }),
+    ],
+    session: {
+        strategy: 'jwt',
+    },
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                const u = user as any;
+                token.id = u.id;
+                token.tipo_usuario = u.tipo_usuario;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (session.user) {
+                (session.user as any).id = token.id as string;
+                (session.user as any).tipo_usuario = token.tipo_usuario;
+            }
+            return session;
+        },
+    },
+    pages: {
+        signIn: '/login',
+    },
+    secret: process.env.NEXTAUTH_SECRET,
+    debug: process.env.NODE_ENV === 'development',
+};
+
+// CORREÇÃO PARA NEXT.JS 15 - Handlers assíncronos
+const handler = NextAuth(authOptions);
+
+export async function GET(request: Request) {
+    return handler(request);
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-enum EnumTipoUsuario {
-  CONTRATANTE
-  PRESTADOR
-  ADMINISTRADOR
-}
-
-enum EnumStatusProposta {
-  PENDENTE
-  ACEITA
-  RECUSADA
-  EM_ANDAMENTO
-  CONCLUIDA
-  CANCELADA
-}
-
-enum EnumNivelProeficiencia {
-  INICIANTE
-  INTERMEDIARIO
-  EXPERIENTE
-}
-
-model Account {
-  id String @id @default(cuid())
-  userId String
-  type String
-  provider String
-  providerAccountId String
-  refresh_token String? @db.Text
-  access_token String? @db.Text
-  expires_at Int?
-  token_type String?
-  scope String?
-  id_token String? @db.Text
-  session_state String?
-
-  user Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String  
-  expires      DateTime
-  user         Usuario     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-model Usuario {
-  id             String     @id @default(cuid()) @map("id_usuario")
-  name           String?
-  hashedPassword     String?
-  email          String?  @unique
-  emailVerified   DateTime?
-  image           String?
-  valor          Decimal @db.Money
-  sobre          String
-  tipo_usuario   EnumTipoUsuario
-
-  habilidades           PrestadorHabilidade[]
-  propostas_contratadas Proposta[] @relation("ContratantePropostas")
-  propostas_prestadas   Proposta[] @relation("PrestadorPropostas")
-
-  accounts Account[]
-  sessions Session[]
-
-  @@map("USUARIO")
-}
-
-model Habilidade {
-  id        Int @id @default(autoincrement()) @map("id_habilidade")
-  nome      String
-  descricao String
-
-  prestadores PrestadorHabilidade[]
-
-  @@map("HABILIDADE")
-}
-
-model PrestadorHabilidade {
-  id_habilidade Int
-  id_prestador  String
-  nivel_proeficiencia EnumNivelProeficiencia
-
-  habilidade Habilidade @relation(fields: [id_habilidade], references: [id])
-  prestador  Usuario    @relation(fields: [id_prestador], references: [id])
-
-  @@id([id_habilidade, id_prestador])
-  @@map("PRESTADOR_HABILIDADE")
-}
-
-model Proposta {
-  id             Int @id @default(autoincrement()) @map("id_proposta")
-  id_contratante String
-  id_prestador  String
-  titulo         String
-  descricao      String
-  valor          Decimal @db.Money
-  data_envio     DateTime @default(now())
-  data_inicio    DateTime
-  data_termino   DateTime
-  Status         EnumStatusProposta 
-
-  contratante Usuario @relation("ContratantePropostas", fields: [id_contratante], references: [id])
-  prestador   Usuario @relation("PrestadorPropostas", fields: [id_prestador], references: [id])
-
-  servicos Servico[]
-  avaliacao Avaliacao[]
-
-  @@map("PROPOSTA")
-}
-
-model Servico {
-  id_servico Int
-  id_proposta Int
-  nome_servico String
-  descricao String
-
-  proposta Proposta @relation(fields: [id_proposta], references: [id])
-
-  @@id([id_servico, id_proposta])
-  @@map("SERVICO")
-}
-
-model Avaliacao {
-  id_proposta Int @id
-  nota Int
-  comentario String
-  data_avaliacao DateTime
-
-  proposta Proposta @relation(fields: [id_proposta], references: [id])
-
-  @@map("AVALIACAO")
+export async function POST(request: Request) {
+    return handler(request);
 }

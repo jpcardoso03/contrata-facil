@@ -1,12 +1,59 @@
 'use client';
 
-import { Home, Bell, MessageCircle, User, MapPin, Star, Mail, FileText } from 'lucide-react';
+import { Home, Bell, MessageCircle, User, MapPin, Star, Mail, FileText, ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { professionalsData } from '@/data/professionals';
 
 interface ProfessionalProfileProps {
   professionalId: string;
 }
+
+// Dados mockados - você pode mover para um arquivo separado depois
+const professionalsData: any = {
+  "1": {
+    name: "Carlos Silva",
+    photoUrl: "https://images.unsplash.com/photo-1601462904263-f2fa0c851cb9?w=400",
+    profession: "Eletricista",
+    city: "São Paulo, SP",
+    rating: 4.9,
+    reviews: 127,
+    hourlyRate: 85,
+    description: "Eletricista com mais de 10 anos de experiência, especializado em instalações residenciais e comerciais. Trabalho com qualidade e garantia em todos os serviços prestados.",
+    skills: ["Instalação Elétrica", "Manutenção", "Quadros de Distribuição", "Automação Residencial", "SPDA"]
+  },
+  "2": {
+    name: "Ana Costa", 
+    photoUrl: "https://images.unsplash.com/photo-1746652433560-fb39d6136620?w=400",
+    profession: "Encanadora",
+    city: "Rio de Janeiro, RJ", 
+    rating: 4.8,
+    reviews: 94,
+    hourlyRate: 75,
+    description: "Encanadora especializada em soluções hidráulicas para residências e pequenos comércios. Atendo emergências e faço orçamentos sem compromisso.",
+    skills: ["Encanamento", "Reparos", "Instalações Hidráulicas", "Manutenção Preventiva", "Desentupimento"]
+  },
+  "3": {
+    name: "Roberto Oliveira",
+    photoUrl: "https://images.unsplash.com/photo-1660074127797-1c429fbb8cd6?w=400",
+    profession: "Pintor",
+    city: "Belo Horizonte, MG",
+    rating: 4.7,
+    reviews: 156,
+    hourlyRate: 90,
+    description: "Pintor profissional com vasta experiência em pintura residencial e comercial. Utilizo apenas materiais de primeira qualidade e ofereço garantia no serviço.",
+    skills: ["Pintura Residencial", "Pintura Comercial", "Texturização", "Impermeabilização", "Preparação de Superfícies"]
+  },
+  "4": {
+    name: "Maria Santos",
+    photoUrl: "https://images.unsplash.com/photo-1717229773894-8e7c04aac950?w=400",
+    profession: "Jardineira",
+    city: "Curitiba, PR",
+    rating: 4.6,
+    reviews: 89,
+    hourlyRate: 80,
+    description: "Jardineira especializada em paisagismo e manutenção de áreas verdes. Crio e mantenho jardins bonitos e saudáveis para residências e empresas.",
+    skills: ["Paisagismo", "Manutenção de Jardins", "Podas", "Plantio", "Irrigação"]
+  }
+};
 
 export default function ProfessionalProfile({ professionalId }: ProfessionalProfileProps) {
   const router = useRouter();
@@ -37,16 +84,16 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
   ];
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
-    } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Notificações') {
+    router.push('/notificacoes');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   const handleBackClick = () => {
     router.back();
@@ -54,31 +101,43 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
 
   const handleContactClick = () => {
     console.log('Entrar em contato com:', professional.name);
+    // Aqui você pode implementar a lógica de contato
   };
 
   const handleCreateProposalClick = () => {
-    console.log('Criar proposta para:', professional.name);
+  router.push(`/criar-proposta/${professionalId}`);
+};
+
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    return (
+      <div className="flex text-yellow-400 text-lg">
+        {'★'.repeat(fullStars)}
+        {hasHalfStar && '½'}
+        {'☆'.repeat(5 - Math.ceil(rating))}
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-white pb-20"> {/* Adicionei pb-20 no container principal */}
-      {/* Header responsivo */}
+    <div className="min-h-screen bg-white pb-20">
+      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex items-center max-w-4xl mx-auto">
           <button 
             onClick={handleBackClick}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors mr-3"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft className="w-6 h-6 text-gray-700" />
           </button>
           <h1 className="text-xl font-bold text-gray-900">Perfil do Profissional</h1>
         </div>
       </div>
 
-      {/* Conteúdo do Perfil - PADDING BOTTOM REMOVIDO */}
-      <div className="max-w-4xl mx-auto p-4 sm:p-6"> {/* Removi o pb-28 */}
+      {/* Conteúdo do Perfil */}
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
         {/* Seção Superior: Foto e Informações Básicas */}
         <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
@@ -136,7 +195,7 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
         <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 mb-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Habilidades</h2>
           <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-            {professional.skills.map((skill, index) => (
+            {professional.skills.map((skill: string, index: number) => (
               <span
                 key={index}
                 className="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium"
@@ -147,7 +206,7 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
           </div>
         </div>
 
-        {/* Botões de Ação - LADO A LADO */}
+        {/* Botões de Ação */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Botão Criar Proposta */}
           <button
@@ -179,7 +238,7 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
         </div>
       </div>
 
-      {/* Menu Inferior Fixo - ALTURA FIXA */}
+      {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
           <div className="grid grid-cols-4 h-full">

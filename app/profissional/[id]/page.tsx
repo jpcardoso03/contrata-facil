@@ -1,9 +1,11 @@
 import ProfessionalProfile from '@/components/ProfessionalProfile';
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function ProfessionalPage({ params }: PageProps) {
-  return <ProfessionalProfile professionalId={params.id} />;
+export default async function ProfessionalPage({ params }: PageProps) {
+  const { id } = await params;
+  
+  return <ProfessionalProfile professionalId={id} />;
 }

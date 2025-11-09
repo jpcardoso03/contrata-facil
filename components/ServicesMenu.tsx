@@ -58,19 +58,19 @@ export default function ServicesMenu() {
   };
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
-    } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Notificações') {
+    router.push('/notificacoes');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   return (
-    <div className="min-h-screen bg-white pb-20"> {/* Adicionei pb-20 no container principal */}
+    <div className="min-h-screen bg-white pb-20"> 
       {/* Header RESPONSIVO */}
       <div className="bg-white border-b border-gray-200 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">

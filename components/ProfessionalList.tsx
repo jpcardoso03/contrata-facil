@@ -63,28 +63,37 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
   ];
 
   const renderStars = (rating: number) => {
-    return '★★★★★'.slice(0, 5) + '☆'.slice(0, 5 - 5);
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    return (
+      <div className="flex text-yellow-400">
+        {'★'.repeat(fullStars)}
+        {hasHalfStar && '½'}
+        {'☆'.repeat(5 - Math.ceil(rating))}
+      </div>
+    );
   };
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
-    } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Notificações') {
+    router.push('/notificacoes');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   const handleBackClick = () => {
     router.back();
   };
 
   return (
-    <div className="min-h-screen bg-white pb-20"> {/* Adicionei pb-20 no container principal */}
-      {/* Header com botão voltar e filtro - RESPONSIVO */}
+    <div className="min-h-screen bg-white pb-20">
+      {/* Header com botão voltar e filtro */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -107,8 +116,8 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
         </div>
       </div>
 
-      {/* Lista de Profissionais - PADDING BOTTOM REMOVIDO */}
-      <div className="max-w-4xl mx-auto p-4 sm:p-6"> {/* Removi o pb-32 */}
+      {/* Lista de Profissionais */}
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
         <div className="space-y-4">
           {professionals.map((professional, index) => (
             <div key={professional.id}>
@@ -168,7 +177,7 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
         </div>
       </div>
 
-      {/* Menu Inferior Fixo - ALTURA FIXA */}
+      {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
           <div className="grid grid-cols-4 h-full">
