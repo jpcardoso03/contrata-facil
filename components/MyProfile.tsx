@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, MessageCircle } from 'lucide-react';
+import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, MessageCircle, FileText } from 'lucide-react';
 
 export default function MyProfile() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function MyProfile() {
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
     { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
+    { name: 'Propostas', icon: FileText },
     { name: 'Perfil', icon: User, active: true },
   ];
 
@@ -47,8 +47,8 @@ export default function MyProfile() {
       router.push('/dashboard');
     } else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      router.push('/mensagens');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
     }
   };
 

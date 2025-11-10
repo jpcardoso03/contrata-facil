@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Bell, MessageCircle, User, Filter, ChevronLeft } from 'lucide-react';
+import { Home, Bell, MessageCircle, User, Filter, ChevronLeft, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { ProcessedProfessional } from '@/app/servicos/[id]/page';
@@ -18,7 +18,7 @@ export default function ProfessionalList({
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
     { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
+    { name: 'Propostas', icon: FileText },
     { name: 'Perfil', icon: User },
   ];
 
@@ -32,10 +32,10 @@ export default function ProfessionalList({
       router.push('/dashboard');
     } else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
     } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
+      router.push('Ir para perfil');
     }
   };
 

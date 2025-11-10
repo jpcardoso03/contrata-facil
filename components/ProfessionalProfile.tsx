@@ -14,7 +14,7 @@ export default function ProfessionalProfile({ professional }: ProfessionalProfil
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
     { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
+    { name: 'Propostas', icon: FileText },
     { name: 'Perfil', icon: User },
   ];
 
@@ -23,10 +23,10 @@ export default function ProfessionalProfile({ professional }: ProfessionalProfil
       router.push('/dashboard');
     } else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
     } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
+      router.push('/perfil');
     }
   };
 

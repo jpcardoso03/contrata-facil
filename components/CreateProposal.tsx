@@ -25,7 +25,7 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
     { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
+    { name: 'Propostas', icon: FileText },
     { name: 'Perfil', icon: User },
   ];
 
@@ -104,8 +104,8 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
       router.push('/dashboard');
     } else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      router.push('/mensagens');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
     } else if (itemName === 'Perfil') {
       router.push('/perfil');
     }

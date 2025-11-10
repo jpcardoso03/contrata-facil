@@ -1,6 +1,9 @@
 import ProfessionalProfile from '@/components/ProfessionalProfile';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import prisma from '@/app/data/prisma';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { EnumTipoUsuario } from '@/app/generated/prisma';
 
 export type ProcessedProfessional = {
   id: string;
@@ -72,6 +75,16 @@ interface PageProps {
 }
 
 export default async function ProfessionalPage({ params }: {params: {id: string}}) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    redirect('/login');
+  }
+
+  if (session.user.tipo_usuario === EnumTipoUsuario.PRESTADOR) {
+    redirect('/propostas');
+  }
+  
   const professional = await getProfessionalData(params.id)
 
   if (!professional) {

@@ -1,6 +1,7 @@
 import prisma from '@/app/data/prisma';
 import PropostasList from '@/components/PropostasList';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -70,7 +71,7 @@ async function getPropostasData(userId: string) {
 }
 
 export default async function PropostasPage() {
-    const session = await getSession();
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
         redirect('/login');
     }

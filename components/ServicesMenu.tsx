@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Bell, MessageCircle, User } from 'lucide-react';
+import { Home, Bell, MessageCircle, User, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { HabilidadeCard } from '@/app/dashboard/page';
@@ -15,7 +15,7 @@ export default function ServicesMenu({ habilidades}: ServicesMenuProps) {
   const menuItems = [
     { name: 'Home', icon: Home, active: true },
     { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
+    { name: 'Propostas', icon: FileText },
     { name: 'Perfil', icon: User },
   ];
 
@@ -34,10 +34,10 @@ export default function ServicesMenu({ habilidades}: ServicesMenuProps) {
       router.push('/dashboard');
     } else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      console.log('Ir para mensagens');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
     } else if (itemName === 'Perfil') {
-      console.log('Ir para perfil');
+      router.push('/perfil');
     }
   };
 

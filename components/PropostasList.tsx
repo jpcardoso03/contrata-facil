@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { ChevronDown } from "lucide-react";
+import { Home, Bell, User, Edit, FileText, ChevronDown } from 'lucide-react';
 import { EnumStatusProposta } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
 
@@ -66,7 +66,26 @@ export default function PropostasList({
   stats,
 }: PropostasListProps) {
   const router = useRouter();
-  // State para controlar qual item está expandido
+
+  const menuItems = [
+  	{ name: 'Home', icon: Home, active: false },
+  	{ name: 'Notificações', icon: Bell, active: true },
+  	{ name: 'Propostas', icon: FileText },
+  	{ name: 'Perfil', icon: User },
+  ];
+
+  const handleMenuClick = (itemName: string) => {
+    if (itemName === 'Home') {
+      router.push('/dashboard');
+    } else if (itemName === 'Notificações') {
+      router.push('/notificacoes');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
+    } else if (itemName === 'Perfil') {
+      router.push('/perfil');
+    }
+  };
+
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const toggleProposta = (id: number) => {
@@ -175,7 +194,29 @@ export default function PropostasList({
         </div>
       </div>
 
-      {/* adicionar menu inferior fixo  */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
+        <div className="max-w-6xl mx-auto h-full">
+          <div className="grid grid-cols-4 h-full">
+            {menuItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleMenuClick(item.name)}
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                    item.active
+                      ? 'text-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <IconComponent className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
