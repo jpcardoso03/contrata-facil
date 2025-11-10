@@ -1,29 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, MessageCircle, FileText } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, FileText, LogOut } from 'lucide-react';
+import type { ProcessedUserProfile } from '@/app/perfil/page'; 
+import { EnumTipoUsuario } from '@/app/generated/prisma';
 
-export default function MyProfile() {
+interface MyProfileClientProps {
+  user: ProcessedUserProfile;
+}
+
+export default function MyProfileClient({ user }: MyProfileClientProps) {
   const router = useRouter();
-  const { data: session } = useSession();
   
-  // Dados do usuário (em produção, viria da API)
-  const [userData, setUserData] = useState({
-    name: "João Silva",
-    email: "joao.silva@email.com",
-    phone: "(11) 99999-9999",
-    profession: "Contratante",
-    city: "São Paulo, SP",
-    rating: 4.8,
-    reviews: 24,
-    memberSince: "2024",
-    about: "Sou um contratante que valoriza serviços de qualidade e profissionais comprometidos. Sempre em busca das melhores soluções para meus projetos.",
-    skills: ["Gestão de Projetos", "Orçamento", "Comunicação", "Planejamento"],
-    completedProjects: 12,
-    activeProjects: 2
-  });
+  const isPrestador = user.tipo_usuario === EnumTipoUsuario.PRESTADOR;
 
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
@@ -32,13 +22,18 @@ export default function MyProfile() {
     { name: 'Perfil', icon: User, active: true },
   ];
 
-  // Ações do perfil (apenas Editar Perfil)
   const profileActions = [
     {
       icon: Edit,
       label: 'Editar Perfil',
       description: 'Atualize suas informações pessoais',
       onClick: () => console.log('Editar perfil')
+    },
+    {
+      icon: LogOut,
+      label: 'Sair (Logout)',
+      description: 'Desconecte-se da sua conta',
+      onClick: () => signOut({ callbackUrl: '/login' }) // Ação de Logout
     }
   ];
 
@@ -52,14 +47,8 @@ export default function MyProfile() {
     }
   };
 
-  const handleLogout = () => {
-    // Aqui você implementaria o logout
-    console.log('Logout realizado');
-    router.push('/login');
-  };
-
-  // Gerar iniciais do nome
-  const getInitials = (name: string) => {
+  const getInitials = (name: string | null) => {
+    if (!name) return '??';
     return name
       .split(' ')
       .map(word => word[0])
@@ -84,10 +73,18 @@ export default function MyProfile() {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             {/* Foto do Usuário */}
             <div className="flex flex-col items-center sm:items-start gap-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-500 rounded-full flex items-center justify-center relative">
-                <span className="text-white text-2xl sm:text-3xl font-bold">
-                  {getInitials(userData.name)}
-                </span>
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-500 rounded-full flex items-center justify-center relative overflow-hidden">
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name || 'Foto de perfil'}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white text-2xl sm:text-3xl font-bold">
+                    {getInitials(user.name)}
+                  </span>
+                )}
                 <button className="absolute -bottom-2 -right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors">
                   <Edit className="w-4 h-4" />
                 </button>
@@ -96,15 +93,19 @@ export default function MyProfile() {
               {/* Estatísticas Rápidas */}
               <div className="flex gap-4 text-center">
                 <div>
-                  <div className="text-lg sm:text-xl font-bold text-gray-900">{userData.completedProjects}</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Projetos</div>
+                  <div className="text-lg sm:text-xl font-bold text-gray-900">{user.completedProjects}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Concluídos</div>
                 </div>
+                
+                {isPrestador && (
+                  <div>
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{user.rating}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Avaliação</div>
+                  </div>
+                )}
+                
                 <div>
-                  <div className="text-lg sm:text-xl font-bold text-gray-900">{userData.rating}</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Avaliação</div>
-                </div>
-                <div>
-                  <div className="text-lg sm:text-xl font-bold text-gray-900">{userData.activeProjects}</div>
+                  <div className="text-lg sm:text-xl font-bold text-gray-900">{user.activeProjects}</div>
                   <div className="text-xs sm:text-sm text-gray-600">Ativos</div>
                 </div>
               </div>
@@ -115,22 +116,31 @@ export default function MyProfile() {
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
                 <div className="flex-1">
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                    {userData.name}
+                    {user.name}
                   </h1>
-                  <p className="text-lg text-gray-700 mb-2">{userData.profession}</p>
+                  
+                  {isPrestador && user.profissao && (
+                    <p className="text-lg text-gray-700 mb-2">{user.profissao}</p>
+                  )}
                   
                   <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-4 text-gray-600 text-sm sm:text-base">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      <span>{userData.city}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-400" />
-                      <span>{userData.rating} ({userData.reviews} avaliações)</span>
-                    </div>
+                    {user.city && (
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        <span>{user.city}</span>
+                      </div>
+                    )}
+                    
+                    {isPrestador && (
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-400" />
+                        <span>{user.rating} ({user.reviews} avaliações)</span>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      <span>Membro desde {userData.memberSince}</span>
+                      <span>Membro desde {user.memberSince}</span>
                     </div>
                   </div>
                 </div>
@@ -141,11 +151,7 @@ export default function MyProfile() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm">
                   <div className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-700">{userData.email}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-700">{userData.phone}</span>
+                    <span className="text-gray-700">{user.email}</span>
                   </div>
                 </div>
               </div>
@@ -157,26 +163,27 @@ export default function MyProfile() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Sobre</h2>
           <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-            {userData.about}
+            {user.sobre || (isPrestador ? 'Este profissional ainda não adicionou uma descrição.' : 'Este usuário ainda não adicionou uma descrição.')}
           </p>
         </div>
 
-        {/* Habilidades */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Minhas Habilidades</h2>
-          <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-            {userData.skills.map((skill, index) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium"
-              >
-                {skill}
-              </span>
-            ))}
+        {isPrestador && user.skills.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Minhas Habilidades</h2>
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+              {user.skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Ações do Perfil - APENAS EDITAR PERFIL */}
+        {/* Ações do Perfil */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Gerenciar Perfil</h2>
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -186,14 +193,26 @@ export default function MyProfile() {
                 <button
                   key={index}
                   onClick={action.onClick}
-                  className="bg-white border border-gray-200 rounded-xl p-4 text-left hover:border-blue-300 hover:shadow-md transition-all group w-full"
+                  className={`bg-white border rounded-xl p-4 text-left hover:shadow-md transition-all group w-full ${
+                    action.label.includes('Sair') 
+                    ? 'border-gray-200 hover:border-red-300' 
+                    : 'border-gray-200 hover:border-blue-300'
+                  }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
-                      <IconComponent className="w-5 h-5 text-blue-600" />
+                    <div className={`p-2 rounded-lg transition-colors ${
+                      action.label.includes('Sair') 
+                      ? 'bg-red-100 group-hover:bg-red-200' 
+                      : 'bg-blue-100 group-hover:bg-blue-200'
+                    }`}>
+                      <IconComponent className={`w-5 h-5 ${
+                        action.label.includes('Sair') ? 'text-red-600' : 'text-blue-600'
+                      }`} />
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900 text-sm sm:text-base">{action.label}</div>
+                      <div className={`font-semibold text-sm sm:text-base ${
+                        action.label.includes('Sair') ? 'text-red-700' : 'text-gray-900'
+                      }`}>{action.label}</div>
                       <div className="text-xs sm:text-sm text-gray-600">{action.description}</div>
                     </div>
                   </div>
