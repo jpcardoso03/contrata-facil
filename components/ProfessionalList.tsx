@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Bell, MessageCircle, User, Filter, ChevronLeft } from 'lucide-react';
+import { Home, Bell, MessageCircle, User, Filter, ChevronLeft, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -58,6 +58,7 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
     { name: 'Notificações', icon: Bell },
+    { name: 'Busca', icon: Search, active: false },
     { name: 'Mensagem', icon: MessageCircle },
     { name: 'Perfil', icon: User },
   ];
@@ -80,6 +81,8 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
     router.push('/dashboard');
   } else if (itemName === 'Notificações') {
     router.push('/notificacoes');
+  } else if (itemName === 'Busca') { 
+    router.push('/busca');
   } else if (itemName === 'Mensagem') {
     router.push('/mensagens');
   } else if (itemName === 'Perfil') {
@@ -180,7 +183,7 @@ export default function ProfessionalList({ serviceName }: ProfessionalListProps)
       {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          <div className="grid grid-cols-5 h-full">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (

@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, MessageCircle } from 'lucide-react';
+import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, MessageCircle, Search } from 'lucide-react';
 
 export default function MyProfile() {
   const router = useRouter();
   const { data: session } = useSession();
   
-  // Dados do usuário (em produção, viria da API)
   const [userData, setUserData] = useState({
     name: "João Silva",
     email: "joao.silva@email.com",
@@ -26,34 +25,39 @@ export default function MyProfile() {
   });
 
   const menuItems = [
-    { name: 'Home', icon: Home, active: false },
-    { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
-    { name: 'Perfil', icon: User, active: true },
-  ];
+  { name: 'Home', icon: Home, active: false },
+  { name: 'Notificações', icon: Bell },
+  { name: 'Busca', icon: Search, active: false }, 
+  { name: 'Mensagem', icon: MessageCircle },
+  { name: 'Perfil', icon: User },
+];
 
-  // Ações do perfil (apenas Editar Perfil)
+  
   const profileActions = [
-    {
-      icon: Edit,
-      label: 'Editar Perfil',
-      description: 'Atualize suas informações pessoais',
-      onClick: () => console.log('Editar perfil')
-    }
-  ];
+  {
+    icon: Edit,
+    label: 'Editar Perfil',
+    description: 'Atualize suas informações pessoais',
+    onClick: () => router.push('/editar-perfil') 
+  }
+];
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      router.push('/mensagens');
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Notificações') {
+    router.push('/notificacoes');
+  } else if (itemName === 'Busca') { 
+    router.push('/busca');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   const handleLogout = () => {
-    // Aqui você implementaria o logout
+    // Aqui para implementar o logout
     console.log('Logout realizado');
     router.push('/login');
   };
@@ -176,7 +180,7 @@ export default function MyProfile() {
           </div>
         </div>
 
-        {/* Ações do Perfil - APENAS EDITAR PERFIL */}
+        {/* Ações do Perfil - APENAS EDITAR PERFIL POR ENQUANTO */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Gerenciar Perfil</h2>
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -207,7 +211,7 @@ export default function MyProfile() {
       {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          <div className="grid grid-cols-5 h-full">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (

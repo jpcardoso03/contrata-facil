@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, Clock, DollarSign, FileText, User, ArrowLeft, Star, Home, Bell, MessageCircle } from 'lucide-react';
+import { Calendar, Clock, DollarSign, FileText, User, ArrowLeft, Star, Home, Bell, MessageCircle, Search } from 'lucide-react';
+
 
 interface ProfessionalInfo {
   id: string;
@@ -21,7 +22,7 @@ interface CreateProposalProps {
   professionalId: string;
 }
 
-// Dados mockados dos profissionais
+
 const professionalsData: { [key: string]: ProfessionalInfo } = {
   "1": {
     id: "1",
@@ -89,11 +90,12 @@ export default function CreateProposal({ professionalId }: CreateProposalProps) 
 
   // Menu items
   const menuItems = [
-    { name: 'Home', icon: Home, active: false },
-    { name: 'Notificações', icon: Bell },
-    { name: 'Mensagem', icon: MessageCircle },
-    { name: 'Perfil', icon: User },
-  ];
+  { name: 'Home', icon: Home, active: false },
+  { name: 'Notificações', icon: Bell },
+  { name: 'Busca', icon: Search, active: false }, 
+  { name: 'Mensagem', icon: MessageCircle },
+  { name: 'Perfil', icon: User },
+];
 
   // Tipos de serviço baseados na profissão
   const getServiceTypes = () => {
@@ -208,16 +210,18 @@ export default function CreateProposal({ professionalId }: CreateProposalProps) 
 
   // Função para navegação do menu
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Mensagem') {
-      router.push('/mensagens');
-    } else if (itemName === 'Perfil') {
-      router.push('/perfil'); // ← CORRIGIDO
-    }
-  };
+  if (itemName === 'Home') {
+    router.push('/dashboard');
+  } else if (itemName === 'Notificações') {
+    router.push('/notificacoes');
+  } else if (itemName === 'Busca') { 
+    router.push('/busca');
+  } else if (itemName === 'Mensagem') {
+    router.push('/mensagens');
+  } else if (itemName === 'Perfil') {
+    router.push('/perfil'); 
+  }
+};
 
   // Se profissional não for encontrado
   if (!professional) {
@@ -464,7 +468,7 @@ export default function CreateProposal({ professionalId }: CreateProposalProps) 
       {/* Menu Inferior Fixo */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          <div className="grid grid-cols-5 h-full">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
