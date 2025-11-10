@@ -24,6 +24,8 @@ export async function createProposalAction(formData: FormData) {
   }
   const id_contratante = session.user.id;
 
+  const professionalName = formData.get('professionalName') as string;
+
   const data_inicio = `${formData.get('selectedDate')}T${formData.get(
     'selectedTime'
   )}:00`;
@@ -78,6 +80,7 @@ export async function createProposalAction(formData: FormData) {
       },
     });
 
+    // notificação prestador
     await prisma.notificacao.create({
       data: {
         userId: id_prestador,
@@ -89,6 +92,18 @@ export async function createProposalAction(formData: FormData) {
         link: `/propostas/${novaProposta.id}`,
       },
     });
+
+    // notificação contratante
+    await prisma.notificacao.create({
+      data: {
+        userId: id_contratante, 
+        titulo: 'Proposta enviada!',
+        mensagem: `Você enviou uma proposta de "${titulo}" para ${professionalName}.`,
+        tipo: EnumTipoNotificacao.SUCESS,
+        link: `/propostas/${novaProposta.id}`,
+      },
+    });
+    
   } catch (error) {
     console.error(error);
     return { success: false, error: 'Falha ao criar proposta no banco.' };

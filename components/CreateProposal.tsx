@@ -72,6 +72,7 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
 
     const formData = new FormData();
     formData.append('professionalId', professional.id);
+    formData.append('professionalName', professional.name || 'Profissional');
     formData.append('serviceType', serviceType);
     formData.append('hourlyRate', String(hourlyRate));
     formData.append('estimatedHours', String(estimatedHours));
@@ -85,7 +86,11 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
         .then((response) => {
           if (response?.success === false) {
             alert(`Erro: ${response.error}`);
+            return;
           }
+
+          alert('Proposta enviada com sucesso!');
+          router.push('/propostas');
         })
         .catch((err) => {
           console.error(err);
@@ -98,7 +103,6 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
     router.back();
   };
 
-  // Navegação do menu
   const handleMenuClick = (itemName: string) => {
     if (itemName === 'Home') {
       router.push('/dashboard');
@@ -112,7 +116,6 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
   };
 
   const getInitials = (name: string | null) => {
-    // Adiciona uma verificação de 'null' ou 'undefined'
     if (!name) {
       return '??';
     }

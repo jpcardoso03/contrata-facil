@@ -26,9 +26,7 @@ async function getProfessionalData(id: string): Promise<ProcessedProfessional | 
     include: {
       habilidades: {
         include: {
-          habilidade: {
-            select: {nome: true},
-          },
+          habilidade: { select: { nome: true } },
         },
       },
       propostas_prestadas: {
@@ -36,14 +34,12 @@ async function getProfessionalData(id: string): Promise<ProcessedProfessional | 
           avaliacao: true,
         },
       },
-    }
+    },
   });
 
   if (!user) {
     return null;
   }
-
-  // Processamento
 
   const skills = user.habilidades.map((ph) => ph.habilidade.nome);
 
@@ -52,29 +48,31 @@ async function getProfessionalData(id: string): Promise<ProcessedProfessional | 
     .filter((nota): nota is number => nota != null);
 
   const reviews = allRatings.length;
-  const rating = reviews > 0
-    ? (allRatings.reduce((acc, curr) => acc + curr, 0)/reviews).toFixed(1)
-    : 'N/A';
+  const rating =
+    reviews > 0
+      ? (allRatings.reduce((acc, curr) => acc + curr, 0) / reviews).toFixed(1)
+      : 'N/A';
 
-  const processedData: ProcessedProfessional = {
+  return {
     id: user.id,
     name: user.name,
     photoUrl: user.image,
     city: user.city ?? 'Local não informado',
-    rating: rating,
-    reviews: reviews,
+    rating,
+    reviews,
     hourlyRate: user.valor.toString(),
     description: user.sobre,
-    skills: skills,
+    skills,
   };
-
-  return processedData;
-}
-interface PageProps {
-  params: { id: string };
 }
 
-export default async function ProfessionalPage({ params }: {params: {id: string}}) {
+export default async function ProfessionalPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params; // 👈 aguarda o params (mudança necessária)
+
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -84,11 +82,12 @@ export default async function ProfessionalPage({ params }: {params: {id: string}
   if (session.user.tipo_usuario === EnumTipoUsuario.PRESTADOR) {
     redirect('/propostas');
   }
-  
-  const professional = await getProfessionalData(params.id)
+
+  const professional = await getProfessionalData(id);
 
   if (!professional) {
     notFound();
   }
+
   return <ProfessionalProfile professional={professional} />;
 }

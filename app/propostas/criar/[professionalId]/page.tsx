@@ -11,11 +11,10 @@ export type ProfessionalProposalInfo = {
   habilidades: { id: number; nome: string }[];
 };
 
-export default function CreateProposalPage(props: {
-  params: { professionalId: string };
+export default async function CreateProposalPage(props: {
+  params: Promise<{ professionalId: string }>;
 }) {
-  
-  const id = props.params.professionalId;
+  const { professionalId } = await props.params;
 
-  return <ProposalLoader professionalId={id} />;
+  return <ProposalLoader professionalId={professionalId} />;
 }
