@@ -103,7 +103,7 @@ export async function createProposalAction(formData: FormData) {
         link: `/propostas/${novaProposta.id}`,
       },
     });
-    
+
   } catch (error) {
     console.error(error);
     return { success: false, error: 'Falha ao criar proposta no banco.' };

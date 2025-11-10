@@ -249,6 +249,8 @@ exports.EnumNivelProeficiencia = exports.$Enums.EnumNivelProeficiencia = {
 };
 
 exports.EnumStatusProposta = exports.$Enums.EnumStatusProposta = {
+  AGUARDANDO_PRESTADOR: 'AGUARDANDO_PRESTADOR',
+  AGUARDANDO_CONTRATANTE: 'AGUARDANDO_CONTRATANTE',
   PENDENTE: 'PENDENTE',
   ACEITA: 'ACEITA',
   RECUSADA: 'RECUSADA',

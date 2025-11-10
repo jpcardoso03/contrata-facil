@@ -78,6 +78,8 @@ export type EnumTipoUsuario = (typeof EnumTipoUsuario)[keyof typeof EnumTipoUsua
 
 
 export const EnumStatusProposta: {
+  AGUARDANDO_PRESTADOR: 'AGUARDANDO_PRESTADOR',
+  AGUARDANDO_CONTRATANTE: 'AGUARDANDO_CONTRATANTE',
   PENDENTE: 'PENDENTE',
   ACEITA: 'ACEITA',
   RECUSADA: 'RECUSADA',

@@ -15,6 +15,7 @@ export type PropostaProcessada = {
     valorFormatado: string;
     prazo: string;
     status: EnumStatusProposta;
+    userRole: 'contratante' | 'prestador';
 };
 
 export type PropostaStats = {
@@ -27,7 +28,10 @@ export type PropostaStats = {
 async function getPropostasData(userId: string) {
     const propostas = await prisma.proposta.findMany({
         where: {
-            id_contratante: userId,
+            OR: [
+                { id_contratante: userId },
+                { id_prestador: userId }
+            ],
         },
         orderBy: {
             data_envio: 'desc',
@@ -39,7 +43,8 @@ async function getPropostasData(userId: string) {
         concluidas: propostas.filter((p) => p.Status === 'CONCLUIDA').length,
         emAndamento: propostas.filter((p) => p.Status === 'EM_ANDAMENTO').length,
         pendentes: propostas.filter(
-            (p) => p.Status === 'PENDENTE' || p.Status === 'ACEITA'
+            (p) => 
+                p.Status === 'PENDENTE' || p.Status === 'AGUARDANDO_CONTRATANTE' || p.Status === 'AGUARDANDO_PRESTADOR'
         ).length,
     };
 
@@ -56,6 +61,8 @@ async function getPropostasData(userId: string) {
                 { locale: ptBR}
             );
 
+            const userRole = proposta.id_contratante === userId ? 'contratante' : 'prestador';
+
             return {
                 id: proposta.id,
                 titulo: proposta.titulo,
@@ -63,6 +70,7 @@ async function getPropostasData(userId: string) {
                 valorFormatado: valorFormatado,
                 prazo: prazo,
                 status: proposta.Status,
+                userRole
             };
         }
     );

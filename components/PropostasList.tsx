@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Home, Bell, User, Edit, FileText, ChevronDown } from 'lucide-react';
+import { Home, Bell, User, Edit, FileText, ChevronDown, Check, Clock, Eye, Trash2 } from 'lucide-react';
 import { EnumStatusProposta } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
+import { deleteProposalAction } from '@/app/propostas/remover/actions';
 
 interface PropostasListProps {
   initialPropostas: PropostaProcessada[];
@@ -23,7 +24,10 @@ function StatCard({ title, value }: { title: string; value: number }) {
   );
 }
 
-function getStatusBadge(status: EnumStatusProposta) {
+function getStatusBadge(
+  status: EnumStatusProposta,
+  userRole: 'contratante' | 'prestador'
+) {
   let text = '';
   let className = '';
 
@@ -37,8 +41,16 @@ function getStatusBadge(status: EnumStatusProposta) {
       className = 'bg-blue-100 text-blue-800';
       break;
     case 'PENDENTE':
-      text = 'Pendente';
-      className = 'bg-yellow-100 text-yellow-800';
+      text = userRole === 'contratante' ? 'Aguardando Prestador' : 'Revisão Necessária';
+      className = userRole === 'contratante' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800 animate-pulse';
+      break;
+    case 'AGUARDANDO_CONTRATANTE':
+      text = userRole === 'contratante' ? 'Revisão Necessária' : 'Aguardando Contratante';
+      className = userRole === 'contratante' ? 'bg-yellow-100 text-yellow-800 animate-pulse' : 'bg-gray-100 text-gray-800';
+      break;
+    case 'AGUARDANDO_PRESTADOR':
+      text = userRole === 'contratante' ? 'Aguardando Prestador' : 'Revisão Necessária';
+      className = userRole === 'contratante' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800 animate-pulse';
       break;
     case 'ACEITA':
       text = 'Aceita';
@@ -61,11 +73,90 @@ function getStatusBadge(status: EnumStatusProposta) {
   );
 }
 
+function PropostaActions({
+  proposta,
+  onDelete,
+  isPending,
+}: {
+  proposta: PropostaProcessada;
+  onDelete: (id: number) => void;
+  isPending: boolean;
+}) {
+  const { status, userRole, id } = proposta;
+
+  const canDelete =
+    userRole === 'contratante' && (status === 'PENDENTE' || status === 'CONCLUIDA');
+  
+  const deleteButton = canDelete && (
+    <button
+      onClick={() => onDelete(id)}
+      disabled={isPending}
+      className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 text-sm font-medium disabled:opacity-50"
+    >
+      <Trash2 className="w-4 h-4" />
+      Excluir
+    </button>
+  );
+
+  let actionButton = null;
+
+  if (
+    (status === 'PENDENTE' && userRole === 'prestador') ||
+    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'contratante') ||
+    (status === 'AGUARDANDO_PRESTADOR' && userRole === 'prestador')
+  ) {
+    actionButton = (
+      <Link
+        href={`/propostas/revisar/${id}`}
+        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+      >
+        <Check className="w-4 h-4" />
+        Revisar e Responder
+      </Link>
+    );
+  }
+  
+  else if (
+    (status === 'PENDENTE' && userRole === 'contratante') ||
+    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'prestador') ||
+    (status === 'AGUARDANDO_PRESTADOR' && userRole === 'contratante')
+  ) {
+    actionButton = (
+      <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium">
+        <Clock className="w-4 h-4" />
+        Aguardando resposta...
+      </div>
+    );
+  }
+
+  else {
+    actionButton = (
+      <Link
+        href={`/propostas/update/${id}`}
+        className="inline-flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm font-medium"
+      >
+        <Edit className="w-4 h-4" />
+        Editar
+      </Link>
+    );
+  }
+
+  return (
+    <div className="flex justify-end gap-3">
+      {deleteButton}
+      {actionButton}
+    </div>
+  );
+}
+
 export default function PropostasList({
   initialPropostas,
   stats,
 }: PropostasListProps) {
   const router = useRouter();
+
+  const [isPending, startTransition] = useTransition();
+  const [propostas, setPropostas] = useState(initialPropostas);
 
   const menuItems = [
   	{ name: 'Home', icon: Home, active: false },
@@ -92,6 +183,21 @@ export default function PropostasList({
     setExpandedId(expandedId === id ? null : id);
   };
 
+  const handleDelete = (id: number) => {
+    if (confirm('Tem certeza que deseja excluir esta proposta? Esta ação não pode ser desfeita.')) {
+      startTransition(async () => {
+        const result = await deleteProposalAction(id);
+        if (result.success) {
+          setPropostas((prev) => prev.filter((p) => p.id !== id));
+          alert('Proposta excluída com sucesso.');
+          router.refresh();
+        } else {
+          alert(`Erro ao excluir: ${result.error}`);
+        }
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
@@ -110,7 +216,7 @@ export default function PropostasList({
           <StatCard title="Pendentes" value={stats.pendentes} />
         </div>
 
-        {/* Lista de Propostas (Acordeão) */}
+        {/* Lista de Propostas*/}
         <div className="space-y-4">
           {initialPropostas.length === 0 ? (
             <div className="text-center bg-white border border-gray-200 rounded-xl p-12">
@@ -138,7 +244,7 @@ export default function PropostasList({
                       {proposta.titulo}
                     </h2>
                     <div className="flex items-center gap-4">
-                      {getStatusBadge(proposta.status)}
+                      {getStatusBadge(proposta.status, proposta.userRole)}
                       <ChevronDown
                         className={`w-5 h-5 text-gray-500 transition-transform ${
                           isExpanded ? 'rotate-180' : ''
@@ -147,7 +253,6 @@ export default function PropostasList({
                     </div>
                   </button>
 
-                  {/* Conteúdo Colapsável */}
                   {isExpanded && (
                     <div className="px-4 sm:px-6 pb-6 border-t border-gray-200">
                       <div className="pt-4">
@@ -175,14 +280,12 @@ export default function PropostasList({
                           </div>
                         </div>
 
-                        <div className="flex justify-end">
-                          <Link
-                            href={`/propostas/editar/${proposta.id}`} // Rota de Edição
-                            className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
-                          >
-                            <Edit className="w-4 h-4" />
-                            Editar Proposta
-                          </Link>
+                        <div className="mt-6">
+                          <PropostaActions
+                            proposta={proposta}
+                            onDelete={handleDelete}
+                            isPending={isPending}
+                          />
                         </div>
                       </div>
                     </div>

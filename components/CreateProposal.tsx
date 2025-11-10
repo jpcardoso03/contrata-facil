@@ -119,13 +119,13 @@ export default function CreateProposal({ professional }: CreateProposalProps) {
     if (!name) {
       return '??';
     }
-    return name
+    return name
       .split(' ')
-      .map(word => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+    };
 
   return (
     <div className="min-h-screen bg-blue-50 pb-24 sm:pb-20">
