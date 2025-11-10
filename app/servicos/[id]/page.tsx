@@ -14,64 +14,69 @@ export type ProcessedProfessional = {
   reviews: number;
 };
 
-async function getProfessionalsByService(
-  serviceName: string
-): Promise<ProcessedProfessional[]>{
-  const users = await prisma.usuario.findMany({
-    where: {
-      tipo_usuario: 'PRESTADOR',
-      habilidades: {
-        some: {
-          habilidade: {
-            nome: serviceName,
-          },
-        },
-      },
-    },
-    include: {
-      propostas_prestadas: {
-        include: {
-          avaliacao: {
-            select: { nota: true},
-          },
-        },
-      },
-    },
-  });
+async function getServiceData(serviceId: number) {
+  const service = await prisma.habilidade.findUnique({
+    where: { id: serviceId },
+    select: {
+      nome: true, 
+      prestadores: { 
+        select: {
+          prestador: {
+            include: {
+              propostas_prestadas: {
+                include: {
+                  avaliacao: {
+                    select: { nota: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 
-  const professionals = users.map((user) => {
-    const allRatings = user.propostas_prestadas
-      .map((proposta) => proposta.avaliacao[0]?.nota)
-      .filter((nota): nota is number => nota != null);
+if (!service) {
+    notFound();
+  }
 
-    const reviews = allRatings.length;
-    const rating =
-      reviews > 0
-        ? parseFloat(
-            (allRatings.reduce((acc, curr) => acc+curr, 0)/reviews).toFixed(1)
-        )
-        : 0;
+  const professionals = service.prestadores.map(({ prestador: user }) => {
+    const allRatings = user.propostas_prestadas
+      .map((proposta) => proposta.avaliacao[0]?.nota)
+      .filter((nota): nota is number => nota != null);
 
-    return {
-      id: user.id,
-      name: user.name,
-      photoUrl: user.image,
-      hourlyRate: user.valor.toNumber(),
-      rating: rating,
-      reviews: reviews,
-    };
-  });
+    const reviews = allRatings.length;
+    const rating =
+      reviews > 0
+        ? parseFloat(
+            (allRatings.reduce((acc, curr) => acc + curr, 0) / reviews).toFixed(1)
+          )
+        : 0;
 
-  return professionals;
+    return {
+      id: user.id,
+      name: user.name,
+      photoUrl: user.image,
+      hourlyRate: user.valor.toNumber(),
+      rating: rating,
+      reviews: reviews,
+    };
+  });
+
+  // Retorna ambos os dados para a página
+  return {
+    serviceName: service.nome,
+    professionals: professionals,
+  };
 }
 
-export default async function ServicePage({
-   params,
-   }: {
-    params: { serviceName: string};
+export default async function ServicePage(
+   props: {
+    params: { id: string};
    }) {
     const session = await getServerSession(authOptions);
-
+    
     if (!session || !session.user) {
       redirect('/login');
     }
@@ -80,8 +85,12 @@ export default async function ServicePage({
       redirect('/propostas')
     }
   
-    const serviceName = decodeURIComponent(params.serviceName);
-    const professionals = await getProfessionalsByService(serviceName);
+    const serviceId = parseInt(props.params.id);
+    if (isNaN(serviceId)) {
+      notFound();
+    }
+
+    const { serviceName, professionals } = await getServiceData(serviceId);
 
     return <ProfessionalList serviceName={serviceName} professionals={professionals} />;
 }

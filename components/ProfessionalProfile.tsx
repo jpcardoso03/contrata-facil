@@ -39,7 +39,7 @@ export default function ProfessionalProfile({ professional }: ProfessionalProfil
   };
 
   const handleCreateProposalClick = () => {
-    console.log('Criar proposta para:', professional.name);
+    router.push(`/propostas/criar/${professional.id}`);
   };
 
   return (

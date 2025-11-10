@@ -111,7 +111,7 @@ model Notificacao {
 
 model Habilidade {
   id         Int     @id @default(autoincrement()) @map("id_habilidade")
-  nome       String
+  nome       String  @unique
   descricao  String
   principal  Boolean @default(false)
   imagem_url String?

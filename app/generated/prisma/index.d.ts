@@ -400,8 +400,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.18.0
-   * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
+   * Prisma Client JS version: 6.19.0
+   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
    */
   export type PrismaVersion = {
     client: string
@@ -13758,15 +13758,15 @@ export namespace Prisma {
 
   export type HabilidadeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    nome?: string
     AND?: HabilidadeWhereInput | HabilidadeWhereInput[]
     OR?: HabilidadeWhereInput[]
     NOT?: HabilidadeWhereInput | HabilidadeWhereInput[]
-    nome?: StringFilter<"Habilidade"> | string
     descricao?: StringFilter<"Habilidade"> | string
     principal?: BoolFilter<"Habilidade"> | boolean
     imagem_url?: StringNullableFilter<"Habilidade"> | string | null
     prestadores?: PrestadorHabilidadeListRelationFilter
-  }, "id">
+  }, "id" | "nome">
 
   export type HabilidadeOrderByWithAggregationInput = {
     id?: SortOrder

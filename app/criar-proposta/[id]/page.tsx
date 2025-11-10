@@ -73,7 +73,9 @@ interface PageProps {
   params: { professionalId: string }; 
 }
 
-export default async function CreateProposalPage({ params }: PageProps) {
+export default async function CreateProposalPage( props: {
+  params: {id: string}
+}) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -84,7 +86,7 @@ export default async function CreateProposalPage({ params }: PageProps) {
     redirect('/propostas');
   }
   
-  const professional = await getProfessionalData(params.professionalId);
+  const professional = await getProfessionalData(props.params.id);
 
   if (!professional) {
     notFound();

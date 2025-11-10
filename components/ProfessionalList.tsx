@@ -75,15 +75,15 @@ export default function ProfessionalList({
           {professionals.map((professional, index) => (
             <div key={professional.id}>
               <Link href={`/profissional/${professional.id}`}>
-                <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-all cursor-pointer">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer">
                   <div className="flex flex-col sm:flex-row items-center gap-4">
                     {/* Foto circular */}
                     <div className="flex-shrink-0">
                       <img
-                        src={professional.photoUrl || '/default-avatar.png'} 
-                        alt={professional.name || 'Profissional'}
-                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-gray-200"
-                      />
+                        src={professional.photoUrl || '/default-avatar.png'} 
+                        alt={professional.name || 'Profissional'}
+                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-200"
+                      />
                     </div>
                     
                     {/* Informações */}

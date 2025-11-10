@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import prisma from '@/app/data/prisma';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'; 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { EnumStatusProposta, EnumTipoNotificacao } from '@/app/generated/prisma';
 
 const ProposalSchema = z.object({
   id_prestador: z.string(),
@@ -17,21 +18,23 @@ const ProposalSchema = z.object({
 });
 
 export async function createProposalAction(formData: FormData) {
-    const session = await getSession();
-    if (!session?.user?.id) {
-        return { success: false, error: 'Usuário não autenticado.'};
-    }
-    const id_contratante = session.user.id;
+  const session = await getServerSession(authOptions); 
+  if (!session?.user?.id) {
+    return { success: false, error: 'Usuário não autenticado.' };
+  }
+  const id_contratante = session.user.id;
 
-    const data_inicio = `${formData.get('selectedDate')}T${formData.get('selectedTime')}:00`;
-    const horas_estimadas = Number(formData.get('estimatedHours'));
+  const data_inicio = `${formData.get('selectedDate')}T${formData.get(
+    'selectedTime'
+  )}:00`;
+  const horas_estimadas = Number(formData.get('estimatedHours'));
 
-    const dataInicioObj = new Date(data_inicio);
-    const dataTerminoObj = new Date(
-        dataInicioObj.getTime() + horas_estimadas * 60 * 60 * 1000
-    );
+  const dataInicioObj = new Date(data_inicio);
+  const dataTerminoObj = new Date(
+    dataInicioObj.getTime() + horas_estimadas * 60 * 60 * 1000
+  );
 
-    const validatedFields = ProposalSchema.safeParse({
+  const validatedFields = ProposalSchema.safeParse({
     id_prestador: formData.get('professionalId'),
     titulo: formData.get('serviceType'),
     descricao: formData.get('description'),
@@ -39,20 +42,20 @@ export async function createProposalAction(formData: FormData) {
     data_inicio_str: formData.get('selectedDate'),
     data_termino_str: formData.get('selectedTime'),
     horas_estimadas: horas_estimadas,
-    });
+  });
 
-    if (!validatedFields.success) {
-        console.error(validatedFields.error.flatten().fieldErrors);
-        return {
-        success: false,
-        error: 'Dados inválidos.',
-        errors: validatedFields.error.flatten().fieldErrors,
-        };
-    }
+  if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
+    return {
+      success: false,
+      error: 'Dados inválidos.',
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 
-    const { id_prestador, titulo, descricao, valor } = validatedFields.data;
+  const { id_prestador, titulo, descricao, valor } = validatedFields.data;
 
-    try {
+  try {
     const novaProposta = await prisma.proposta.create({
       data: {
         id_contratante: id_contratante,
@@ -63,7 +66,15 @@ export async function createProposalAction(formData: FormData) {
         data_envio: new Date(),
         data_inicio: dataInicioObj,
         data_termino: dataTerminoObj,
-        Status: 'PENDENTE',
+        Status: EnumStatusProposta.PENDENTE, 
+        
+        servicos: {
+          create: {
+            id_servico: 1,
+            nome_servico: titulo,
+            descricao: descricao || '',
+          }
+        }
       },
     });
 
@@ -71,17 +82,18 @@ export async function createProposalAction(formData: FormData) {
       data: {
         userId: id_prestador,
         titulo: 'Nova proposta recebida!',
-        mensagem: `Você recebeu uma nova proposta de ${session.user.name || 'um cliente'}.`,
-        tipo: 'INFO',
+        mensagem: `Você recebeu uma nova proposta de ${
+          session.user.name || 'um cliente'
+        }.`,
+        tipo: EnumTipoNotificacao.INFO, 
         link: `/propostas/${novaProposta.id}`,
       },
     });
-
-    } catch (error) {
+  } catch (error) {
     console.error(error);
     return { success: false, error: 'Falha ao criar proposta no banco.' };
-    }
+  }
 
-    revalidatePath('/propostas');
-    redirect('/propostas');
+  revalidatePath('/propostas');
+  return { success: true };
 }
