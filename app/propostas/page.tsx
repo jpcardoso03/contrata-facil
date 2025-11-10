@@ -1,10 +1,10 @@
 import prisma from '@/app/data/prisma';
-import PropostasList from '@/app/components/PropostasList';
+import PropostasList from '@/components/PropostasList';
 import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { EnumStatusProposta, Proposta } from '@prisma/client';
+import { EnumStatusProposta, Proposta } from '@/app/generated/prisma';
 import { stat } from 'fs';
 
 export type PropostaProcessada = {
@@ -75,7 +75,7 @@ export default async function PropostasPage() {
         redirect('/login');
     }
 
-    const { propostasProcessadas, stats } await getPropostasData(
+    const { propostasProcessadas, stats } = await getPropostasData(
         session.user.id
     );
 

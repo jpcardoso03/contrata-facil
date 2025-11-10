@@ -2,9 +2,9 @@
 
 import { Home, Bell, MessageCircle, User, Check, MessageSquare } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import type { Notificacao } from '@prisma/client';
+import type { Notificacao } from '@/app/generated/prisma';
 import { markAsRead, markAllAsRead } from '@/app/notificacoes/actions';
-import { formDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 interface NotificationsListProps {

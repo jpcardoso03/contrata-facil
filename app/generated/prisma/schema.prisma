@@ -29,6 +29,13 @@ enum EnumNivelProeficiencia {
   EXPERIENTE
 }
 
+enum EnumTipoNotificacao {
+  SUCESS
+  INFO
+  WARNING
+  ERROR
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -71,6 +78,8 @@ model Usuario {
   email          String?         @unique
   emailVerified  DateTime?
   image          String?
+  city           String?
+  profissao      String?
   valor          Decimal         @db.Money
   sobre          String
   tipo_usuario   EnumTipoUsuario
@@ -79,16 +88,33 @@ model Usuario {
   propostas_contratadas Proposta[]            @relation("ContratantePropostas")
   propostas_prestadas   Proposta[]            @relation("PrestadorPropostas")
 
-  accounts Account[]
-  sessions Session[]
+  accounts     Account[]
+  sessions     Session[]
+  notificacoes Notificacao[]
 
   @@map("USUARIO")
 }
 
+model Notificacao {
+  id        String              @id @default(cuid())
+  titulo    String
+  mensagem  String
+  tipo      EnumTipoNotificacao @default(INFO)
+  lida      Boolean             @default(false)
+  createdAt DateTime            @default(now())
+  userId    String
+  usuario   Usuario             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link      String?
+
+  @@map("NOTIFICACAO")
+}
+
 model Habilidade {
-  id        Int    @id @default(autoincrement()) @map("id_habilidade")
-  nome      String
-  descricao String
+  id         Int     @id @default(autoincrement()) @map("id_habilidade")
+  nome       String
+  descricao  String
+  principal  Boolean @default(false)
+  imagem_url String?
 
   prestadores PrestadorHabilidade[]
 

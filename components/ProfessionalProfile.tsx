@@ -5,14 +5,11 @@ import { useRouter } from 'next/navigation';
 import type { ProcessedProfessional } from '@/app/profissional/[id]/page';
 
 interface ProfessionalProfileProps {
-  professionalId: ProcessedProfessional;
+  professional: ProcessedProfessional;
 }
 
-export default function ProfessionalProfile({ professionalId }: ProfessionalProfileProps) {
+export default function ProfessionalProfile({ professional }: ProfessionalProfileProps) {
   const router = useRouter();
-
-  const professional = professionalsData[professionalId];
-
 
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
@@ -68,10 +65,10 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
             {/* Foto do Profissional */}
             <div className="flex-shrink-0 mx-auto sm:mx-0">
               <img
-                src={professional.photoUrl}
-                alt={professional.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-gray-200"
-              />
+                src={professional.photoUrl || '/default-avatar.png'}
+                alt={professional.name || 'Foto do profissional'}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-gray-200"
+              />
             </div>
             
             {/* Informações Principais */}
@@ -81,9 +78,6 @@ export default function ProfessionalProfile({ professionalId }: ProfessionalProf
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 text-center sm:text-left">
                     {professional.name}
                   </h1>
-                  <p className="text-lg text-gray-700 mb-2 text-center sm:text-left">
-                    {professional.profession}
-                  </p>
                   <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-4 text-gray-600 text-sm sm:text-base">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />

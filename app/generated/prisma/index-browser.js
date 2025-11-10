@@ -155,15 +155,30 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  city: 'city',
+  profissao: 'profissao',
   valor: 'valor',
   sobre: 'sobre',
   tipo_usuario: 'tipo_usuario'
 };
 
+exports.Prisma.NotificacaoScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  mensagem: 'mensagem',
+  tipo: 'tipo',
+  lida: 'lida',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  link: 'link'
+};
+
 exports.Prisma.HabilidadeScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
-  descricao: 'descricao'
+  descricao: 'descricao',
+  principal: 'principal',
+  imagem_url: 'imagem_url'
 };
 
 exports.Prisma.PrestadorHabilidadeScalarFieldEnum = {
@@ -219,6 +234,13 @@ exports.EnumTipoUsuario = exports.$Enums.EnumTipoUsuario = {
   ADMINISTRADOR: 'ADMINISTRADOR'
 };
 
+exports.EnumTipoNotificacao = exports.$Enums.EnumTipoNotificacao = {
+  SUCESS: 'SUCESS',
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR'
+};
+
 exports.EnumNivelProeficiencia = exports.$Enums.EnumNivelProeficiencia = {
   INICIANTE: 'INICIANTE',
   INTERMEDIARIO: 'INTERMEDIARIO',
@@ -239,6 +261,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Usuario: 'Usuario',
+  Notificacao: 'Notificacao',
   Habilidade: 'Habilidade',
   PrestadorHabilidade: 'PrestadorHabilidade',
   Proposta: 'Proposta',

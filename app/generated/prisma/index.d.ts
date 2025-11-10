@@ -34,6 +34,11 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
  */
 export type Usuario = $Result.DefaultSelection<Prisma.$UsuarioPayload>
 /**
+ * Model Notificacao
+ * 
+ */
+export type Notificacao = $Result.DefaultSelection<Prisma.$NotificacaoPayload>
+/**
  * Model Habilidade
  * 
  */
@@ -92,6 +97,16 @@ export const EnumNivelProeficiencia: {
 
 export type EnumNivelProeficiencia = (typeof EnumNivelProeficiencia)[keyof typeof EnumNivelProeficiencia]
 
+
+export const EnumTipoNotificacao: {
+  SUCESS: 'SUCESS',
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR'
+};
+
+export type EnumTipoNotificacao = (typeof EnumTipoNotificacao)[keyof typeof EnumTipoNotificacao]
+
 }
 
 export type EnumTipoUsuario = $Enums.EnumTipoUsuario
@@ -105,6 +120,10 @@ export const EnumStatusProposta: typeof $Enums.EnumStatusProposta
 export type EnumNivelProeficiencia = $Enums.EnumNivelProeficiencia
 
 export const EnumNivelProeficiencia: typeof $Enums.EnumNivelProeficiencia
+
+export type EnumTipoNotificacao = $Enums.EnumTipoNotificacao
+
+export const EnumTipoNotificacao: typeof $Enums.EnumTipoNotificacao
 
 /**
  * ##  Prisma Client ʲˢ
@@ -263,6 +282,16 @@ export class PrismaClient<
     * ```
     */
   get usuario(): Prisma.UsuarioDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notificacao`: Exposes CRUD operations for the **Notificacao** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notificacaos
+    * const notificacaos = await prisma.notificacao.findMany()
+    * ```
+    */
+  get notificacao(): Prisma.NotificacaoDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.habilidade`: Exposes CRUD operations for the **Habilidade** model.
@@ -758,6 +787,7 @@ export namespace Prisma {
     Session: 'Session',
     VerificationToken: 'VerificationToken',
     Usuario: 'Usuario',
+    Notificacao: 'Notificacao',
     Habilidade: 'Habilidade',
     PrestadorHabilidade: 'PrestadorHabilidade',
     Proposta: 'Proposta',
@@ -781,7 +811,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "verificationToken" | "usuario" | "habilidade" | "prestadorHabilidade" | "proposta" | "servico" | "avaliacao"
+      modelProps: "account" | "session" | "verificationToken" | "usuario" | "notificacao" | "habilidade" | "prestadorHabilidade" | "proposta" | "servico" | "avaliacao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1078,6 +1108,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UsuarioCountArgs<ExtArgs>
             result: $Utils.Optional<UsuarioCountAggregateOutputType> | number
+          }
+        }
+      }
+      Notificacao: {
+        payload: Prisma.$NotificacaoPayload<ExtArgs>
+        fields: Prisma.NotificacaoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificacaoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificacaoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificacaoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificacaoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          findMany: {
+            args: Prisma.NotificacaoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>[]
+          }
+          create: {
+            args: Prisma.NotificacaoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          createMany: {
+            args: Prisma.NotificacaoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificacaoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificacaoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          update: {
+            args: Prisma.NotificacaoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificacaoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificacaoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificacaoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificacaoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificacaoPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificacaoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificacao>
+          }
+          groupBy: {
+            args: Prisma.NotificacaoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificacaoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificacaoCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificacaoCountAggregateOutputType> | number
           }
         }
       }
@@ -1551,6 +1655,7 @@ export namespace Prisma {
     session?: SessionOmit
     verificationToken?: VerificationTokenOmit
     usuario?: UsuarioOmit
+    notificacao?: NotificacaoOmit
     habilidade?: HabilidadeOmit
     prestadorHabilidade?: PrestadorHabilidadeOmit
     proposta?: PropostaOmit
@@ -1641,6 +1746,7 @@ export namespace Prisma {
     propostas_prestadas: number
     accounts: number
     sessions: number
+    notificacoes: number
   }
 
   export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1649,6 +1755,7 @@ export namespace Prisma {
     propostas_prestadas?: boolean | UsuarioCountOutputTypeCountPropostas_prestadasArgs
     accounts?: boolean | UsuarioCountOutputTypeCountAccountsArgs
     sessions?: boolean | UsuarioCountOutputTypeCountSessionsArgs
+    notificacoes?: boolean | UsuarioCountOutputTypeCountNotificacoesArgs
   }
 
   // Custom InputTypes
@@ -1695,6 +1802,13 @@ export namespace Prisma {
    */
   export type UsuarioCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountNotificacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificacaoWhereInput
   }
 
 
@@ -4997,6 +5111,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    city: string | null
+    profissao: string | null
     valor: Decimal | null
     sobre: string | null
     tipo_usuario: $Enums.EnumTipoUsuario | null
@@ -5009,6 +5125,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    city: string | null
+    profissao: string | null
     valor: Decimal | null
     sobre: string | null
     tipo_usuario: $Enums.EnumTipoUsuario | null
@@ -5021,6 +5139,8 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    city: number
+    profissao: number
     valor: number
     sobre: number
     tipo_usuario: number
@@ -5043,6 +5163,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    city?: true
+    profissao?: true
     valor?: true
     sobre?: true
     tipo_usuario?: true
@@ -5055,6 +5177,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    city?: true
+    profissao?: true
     valor?: true
     sobre?: true
     tipo_usuario?: true
@@ -5067,6 +5191,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    city?: true
+    profissao?: true
     valor?: true
     sobre?: true
     tipo_usuario?: true
@@ -5166,6 +5292,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    city: string | null
+    profissao: string | null
     valor: Decimal
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -5197,6 +5325,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    city?: boolean
+    profissao?: boolean
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
@@ -5205,6 +5335,7 @@ export namespace Prisma {
     propostas_prestadas?: boolean | Usuario$propostas_prestadasArgs<ExtArgs>
     accounts?: boolean | Usuario$accountsArgs<ExtArgs>
     sessions?: boolean | Usuario$sessionsArgs<ExtArgs>
+    notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
@@ -5215,6 +5346,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    city?: boolean
+    profissao?: boolean
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
@@ -5227,6 +5360,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    city?: boolean
+    profissao?: boolean
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
@@ -5239,18 +5374,21 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    city?: boolean
+    profissao?: boolean
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
   }
 
-  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "hashedPassword" | "email" | "emailVerified" | "image" | "valor" | "sobre" | "tipo_usuario", ExtArgs["result"]["usuario"]>
+  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "hashedPassword" | "email" | "emailVerified" | "image" | "city" | "profissao" | "valor" | "sobre" | "tipo_usuario", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     habilidades?: boolean | Usuario$habilidadesArgs<ExtArgs>
     propostas_contratadas?: boolean | Usuario$propostas_contratadasArgs<ExtArgs>
     propostas_prestadas?: boolean | Usuario$propostas_prestadasArgs<ExtArgs>
     accounts?: boolean | Usuario$accountsArgs<ExtArgs>
     sessions?: boolean | Usuario$sessionsArgs<ExtArgs>
+    notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5264,6 +5402,7 @@ export namespace Prisma {
       propostas_prestadas: Prisma.$PropostaPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      notificacoes: Prisma.$NotificacaoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5272,6 +5411,8 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
+      city: string | null
+      profissao: string | null
       valor: Prisma.Decimal
       sobre: string
       tipo_usuario: $Enums.EnumTipoUsuario
@@ -5674,6 +5815,7 @@ export namespace Prisma {
     propostas_prestadas<T extends Usuario$propostas_prestadasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$propostas_prestadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropostaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends Usuario$accountsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends Usuario$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notificacoes<T extends Usuario$notificacoesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$notificacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5709,6 +5851,8 @@ export namespace Prisma {
     readonly email: FieldRef<"Usuario", 'String'>
     readonly emailVerified: FieldRef<"Usuario", 'DateTime'>
     readonly image: FieldRef<"Usuario", 'String'>
+    readonly city: FieldRef<"Usuario", 'String'>
+    readonly profissao: FieldRef<"Usuario", 'String'>
     readonly valor: FieldRef<"Usuario", 'Decimal'>
     readonly sobre: FieldRef<"Usuario", 'String'>
     readonly tipo_usuario: FieldRef<"Usuario", 'EnumTipoUsuario'>
@@ -6220,6 +6364,30 @@ export namespace Prisma {
   }
 
   /**
+   * Usuario.notificacoes
+   */
+  export type Usuario$notificacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    where?: NotificacaoWhereInput
+    orderBy?: NotificacaoOrderByWithRelationInput | NotificacaoOrderByWithRelationInput[]
+    cursor?: NotificacaoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificacaoScalarFieldEnum | NotificacaoScalarFieldEnum[]
+  }
+
+  /**
    * Usuario without action
    */
   export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6235,6 +6403,1103 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UsuarioInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Notificacao
+   */
+
+  export type AggregateNotificacao = {
+    _count: NotificacaoCountAggregateOutputType | null
+    _min: NotificacaoMinAggregateOutputType | null
+    _max: NotificacaoMaxAggregateOutputType | null
+  }
+
+  export type NotificacaoMinAggregateOutputType = {
+    id: string | null
+    titulo: string | null
+    mensagem: string | null
+    tipo: $Enums.EnumTipoNotificacao | null
+    lida: boolean | null
+    createdAt: Date | null
+    userId: string | null
+    link: string | null
+  }
+
+  export type NotificacaoMaxAggregateOutputType = {
+    id: string | null
+    titulo: string | null
+    mensagem: string | null
+    tipo: $Enums.EnumTipoNotificacao | null
+    lida: boolean | null
+    createdAt: Date | null
+    userId: string | null
+    link: string | null
+  }
+
+  export type NotificacaoCountAggregateOutputType = {
+    id: number
+    titulo: number
+    mensagem: number
+    tipo: number
+    lida: number
+    createdAt: number
+    userId: number
+    link: number
+    _all: number
+  }
+
+
+  export type NotificacaoMinAggregateInputType = {
+    id?: true
+    titulo?: true
+    mensagem?: true
+    tipo?: true
+    lida?: true
+    createdAt?: true
+    userId?: true
+    link?: true
+  }
+
+  export type NotificacaoMaxAggregateInputType = {
+    id?: true
+    titulo?: true
+    mensagem?: true
+    tipo?: true
+    lida?: true
+    createdAt?: true
+    userId?: true
+    link?: true
+  }
+
+  export type NotificacaoCountAggregateInputType = {
+    id?: true
+    titulo?: true
+    mensagem?: true
+    tipo?: true
+    lida?: true
+    createdAt?: true
+    userId?: true
+    link?: true
+    _all?: true
+  }
+
+  export type NotificacaoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notificacao to aggregate.
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notificacaos to fetch.
+     */
+    orderBy?: NotificacaoOrderByWithRelationInput | NotificacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notificacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notificacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notificacaos
+    **/
+    _count?: true | NotificacaoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificacaoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificacaoMaxAggregateInputType
+  }
+
+  export type GetNotificacaoAggregateType<T extends NotificacaoAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificacao]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificacao[P]>
+      : GetScalarType<T[P], AggregateNotificacao[P]>
+  }
+
+
+
+
+  export type NotificacaoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificacaoWhereInput
+    orderBy?: NotificacaoOrderByWithAggregationInput | NotificacaoOrderByWithAggregationInput[]
+    by: NotificacaoScalarFieldEnum[] | NotificacaoScalarFieldEnum
+    having?: NotificacaoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificacaoCountAggregateInputType | true
+    _min?: NotificacaoMinAggregateInputType
+    _max?: NotificacaoMaxAggregateInputType
+  }
+
+  export type NotificacaoGroupByOutputType = {
+    id: string
+    titulo: string
+    mensagem: string
+    tipo: $Enums.EnumTipoNotificacao
+    lida: boolean
+    createdAt: Date
+    userId: string
+    link: string | null
+    _count: NotificacaoCountAggregateOutputType | null
+    _min: NotificacaoMinAggregateOutputType | null
+    _max: NotificacaoMaxAggregateOutputType | null
+  }
+
+  type GetNotificacaoGroupByPayload<T extends NotificacaoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificacaoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificacaoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificacaoGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificacaoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificacaoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    tipo?: boolean
+    lida?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    link?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificacao"]>
+
+  export type NotificacaoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    tipo?: boolean
+    lida?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    link?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificacao"]>
+
+  export type NotificacaoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    tipo?: boolean
+    lida?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    link?: boolean
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificacao"]>
+
+  export type NotificacaoSelectScalar = {
+    id?: boolean
+    titulo?: boolean
+    mensagem?: boolean
+    tipo?: boolean
+    lida?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    link?: boolean
+  }
+
+  export type NotificacaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "mensagem" | "tipo" | "lida" | "createdAt" | "userId" | "link", ExtArgs["result"]["notificacao"]>
+  export type NotificacaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type NotificacaoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type NotificacaoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificacaoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notificacao"
+    objects: {
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      titulo: string
+      mensagem: string
+      tipo: $Enums.EnumTipoNotificacao
+      lida: boolean
+      createdAt: Date
+      userId: string
+      link: string | null
+    }, ExtArgs["result"]["notificacao"]>
+    composites: {}
+  }
+
+  type NotificacaoGetPayload<S extends boolean | null | undefined | NotificacaoDefaultArgs> = $Result.GetResult<Prisma.$NotificacaoPayload, S>
+
+  type NotificacaoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificacaoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificacaoCountAggregateInputType | true
+    }
+
+  export interface NotificacaoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notificacao'], meta: { name: 'Notificacao' } }
+    /**
+     * Find zero or one Notificacao that matches the filter.
+     * @param {NotificacaoFindUniqueArgs} args - Arguments to find a Notificacao
+     * @example
+     * // Get one Notificacao
+     * const notificacao = await prisma.notificacao.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificacaoFindUniqueArgs>(args: SelectSubset<T, NotificacaoFindUniqueArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notificacao that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificacaoFindUniqueOrThrowArgs} args - Arguments to find a Notificacao
+     * @example
+     * // Get one Notificacao
+     * const notificacao = await prisma.notificacao.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificacaoFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificacaoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notificacao that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoFindFirstArgs} args - Arguments to find a Notificacao
+     * @example
+     * // Get one Notificacao
+     * const notificacao = await prisma.notificacao.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificacaoFindFirstArgs>(args?: SelectSubset<T, NotificacaoFindFirstArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notificacao that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoFindFirstOrThrowArgs} args - Arguments to find a Notificacao
+     * @example
+     * // Get one Notificacao
+     * const notificacao = await prisma.notificacao.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificacaoFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificacaoFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notificacaos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notificacaos
+     * const notificacaos = await prisma.notificacao.findMany()
+     * 
+     * // Get first 10 Notificacaos
+     * const notificacaos = await prisma.notificacao.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificacaoWithIdOnly = await prisma.notificacao.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificacaoFindManyArgs>(args?: SelectSubset<T, NotificacaoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notificacao.
+     * @param {NotificacaoCreateArgs} args - Arguments to create a Notificacao.
+     * @example
+     * // Create one Notificacao
+     * const Notificacao = await prisma.notificacao.create({
+     *   data: {
+     *     // ... data to create a Notificacao
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificacaoCreateArgs>(args: SelectSubset<T, NotificacaoCreateArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notificacaos.
+     * @param {NotificacaoCreateManyArgs} args - Arguments to create many Notificacaos.
+     * @example
+     * // Create many Notificacaos
+     * const notificacao = await prisma.notificacao.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificacaoCreateManyArgs>(args?: SelectSubset<T, NotificacaoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notificacaos and returns the data saved in the database.
+     * @param {NotificacaoCreateManyAndReturnArgs} args - Arguments to create many Notificacaos.
+     * @example
+     * // Create many Notificacaos
+     * const notificacao = await prisma.notificacao.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notificacaos and only return the `id`
+     * const notificacaoWithIdOnly = await prisma.notificacao.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificacaoCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificacaoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notificacao.
+     * @param {NotificacaoDeleteArgs} args - Arguments to delete one Notificacao.
+     * @example
+     * // Delete one Notificacao
+     * const Notificacao = await prisma.notificacao.delete({
+     *   where: {
+     *     // ... filter to delete one Notificacao
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificacaoDeleteArgs>(args: SelectSubset<T, NotificacaoDeleteArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notificacao.
+     * @param {NotificacaoUpdateArgs} args - Arguments to update one Notificacao.
+     * @example
+     * // Update one Notificacao
+     * const notificacao = await prisma.notificacao.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificacaoUpdateArgs>(args: SelectSubset<T, NotificacaoUpdateArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notificacaos.
+     * @param {NotificacaoDeleteManyArgs} args - Arguments to filter Notificacaos to delete.
+     * @example
+     * // Delete a few Notificacaos
+     * const { count } = await prisma.notificacao.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificacaoDeleteManyArgs>(args?: SelectSubset<T, NotificacaoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notificacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notificacaos
+     * const notificacao = await prisma.notificacao.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificacaoUpdateManyArgs>(args: SelectSubset<T, NotificacaoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notificacaos and returns the data updated in the database.
+     * @param {NotificacaoUpdateManyAndReturnArgs} args - Arguments to update many Notificacaos.
+     * @example
+     * // Update many Notificacaos
+     * const notificacao = await prisma.notificacao.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notificacaos and only return the `id`
+     * const notificacaoWithIdOnly = await prisma.notificacao.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificacaoUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificacaoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notificacao.
+     * @param {NotificacaoUpsertArgs} args - Arguments to update or create a Notificacao.
+     * @example
+     * // Update or create a Notificacao
+     * const notificacao = await prisma.notificacao.upsert({
+     *   create: {
+     *     // ... data to create a Notificacao
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notificacao we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificacaoUpsertArgs>(args: SelectSubset<T, NotificacaoUpsertArgs<ExtArgs>>): Prisma__NotificacaoClient<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notificacaos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoCountArgs} args - Arguments to filter Notificacaos to count.
+     * @example
+     * // Count the number of Notificacaos
+     * const count = await prisma.notificacao.count({
+     *   where: {
+     *     // ... the filter for the Notificacaos we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificacaoCountArgs>(
+      args?: Subset<T, NotificacaoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificacaoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notificacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificacaoAggregateArgs>(args: Subset<T, NotificacaoAggregateArgs>): Prisma.PrismaPromise<GetNotificacaoAggregateType<T>>
+
+    /**
+     * Group by Notificacao.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificacaoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificacaoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificacaoGroupByArgs['orderBy'] }
+        : { orderBy?: NotificacaoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificacaoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificacaoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notificacao model
+   */
+  readonly fields: NotificacaoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notificacao.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificacaoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notificacao model
+   */
+  interface NotificacaoFieldRefs {
+    readonly id: FieldRef<"Notificacao", 'String'>
+    readonly titulo: FieldRef<"Notificacao", 'String'>
+    readonly mensagem: FieldRef<"Notificacao", 'String'>
+    readonly tipo: FieldRef<"Notificacao", 'EnumTipoNotificacao'>
+    readonly lida: FieldRef<"Notificacao", 'Boolean'>
+    readonly createdAt: FieldRef<"Notificacao", 'DateTime'>
+    readonly userId: FieldRef<"Notificacao", 'String'>
+    readonly link: FieldRef<"Notificacao", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notificacao findUnique
+   */
+  export type NotificacaoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Notificacao to fetch.
+     */
+    where: NotificacaoWhereUniqueInput
+  }
+
+  /**
+   * Notificacao findUniqueOrThrow
+   */
+  export type NotificacaoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Notificacao to fetch.
+     */
+    where: NotificacaoWhereUniqueInput
+  }
+
+  /**
+   * Notificacao findFirst
+   */
+  export type NotificacaoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Notificacao to fetch.
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notificacaos to fetch.
+     */
+    orderBy?: NotificacaoOrderByWithRelationInput | NotificacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notificacaos.
+     */
+    cursor?: NotificacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notificacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notificacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notificacaos.
+     */
+    distinct?: NotificacaoScalarFieldEnum | NotificacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Notificacao findFirstOrThrow
+   */
+  export type NotificacaoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Notificacao to fetch.
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notificacaos to fetch.
+     */
+    orderBy?: NotificacaoOrderByWithRelationInput | NotificacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notificacaos.
+     */
+    cursor?: NotificacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notificacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notificacaos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notificacaos.
+     */
+    distinct?: NotificacaoScalarFieldEnum | NotificacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Notificacao findMany
+   */
+  export type NotificacaoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter, which Notificacaos to fetch.
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notificacaos to fetch.
+     */
+    orderBy?: NotificacaoOrderByWithRelationInput | NotificacaoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notificacaos.
+     */
+    cursor?: NotificacaoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notificacaos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notificacaos.
+     */
+    skip?: number
+    distinct?: NotificacaoScalarFieldEnum | NotificacaoScalarFieldEnum[]
+  }
+
+  /**
+   * Notificacao create
+   */
+  export type NotificacaoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notificacao.
+     */
+    data: XOR<NotificacaoCreateInput, NotificacaoUncheckedCreateInput>
+  }
+
+  /**
+   * Notificacao createMany
+   */
+  export type NotificacaoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notificacaos.
+     */
+    data: NotificacaoCreateManyInput | NotificacaoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notificacao createManyAndReturn
+   */
+  export type NotificacaoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notificacaos.
+     */
+    data: NotificacaoCreateManyInput | NotificacaoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notificacao update
+   */
+  export type NotificacaoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notificacao.
+     */
+    data: XOR<NotificacaoUpdateInput, NotificacaoUncheckedUpdateInput>
+    /**
+     * Choose, which Notificacao to update.
+     */
+    where: NotificacaoWhereUniqueInput
+  }
+
+  /**
+   * Notificacao updateMany
+   */
+  export type NotificacaoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notificacaos.
+     */
+    data: XOR<NotificacaoUpdateManyMutationInput, NotificacaoUncheckedUpdateManyInput>
+    /**
+     * Filter which Notificacaos to update
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * Limit how many Notificacaos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notificacao updateManyAndReturn
+   */
+  export type NotificacaoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * The data used to update Notificacaos.
+     */
+    data: XOR<NotificacaoUpdateManyMutationInput, NotificacaoUncheckedUpdateManyInput>
+    /**
+     * Filter which Notificacaos to update
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * Limit how many Notificacaos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notificacao upsert
+   */
+  export type NotificacaoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notificacao to update in case it exists.
+     */
+    where: NotificacaoWhereUniqueInput
+    /**
+     * In case the Notificacao found by the `where` argument doesn't exist, create a new Notificacao with this data.
+     */
+    create: XOR<NotificacaoCreateInput, NotificacaoUncheckedCreateInput>
+    /**
+     * In case the Notificacao was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificacaoUpdateInput, NotificacaoUncheckedUpdateInput>
+  }
+
+  /**
+   * Notificacao delete
+   */
+  export type NotificacaoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
+    /**
+     * Filter which Notificacao to delete.
+     */
+    where: NotificacaoWhereUniqueInput
+  }
+
+  /**
+   * Notificacao deleteMany
+   */
+  export type NotificacaoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notificacaos to delete
+     */
+    where?: NotificacaoWhereInput
+    /**
+     * Limit how many Notificacaos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notificacao without action
+   */
+  export type NotificacaoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notificacao
+     */
+    select?: NotificacaoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notificacao
+     */
+    omit?: NotificacaoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificacaoInclude<ExtArgs> | null
   }
 
 
@@ -6262,18 +7527,24 @@ export namespace Prisma {
     id: number | null
     nome: string | null
     descricao: string | null
+    principal: boolean | null
+    imagem_url: string | null
   }
 
   export type HabilidadeMaxAggregateOutputType = {
     id: number | null
     nome: string | null
     descricao: string | null
+    principal: boolean | null
+    imagem_url: string | null
   }
 
   export type HabilidadeCountAggregateOutputType = {
     id: number
     nome: number
     descricao: number
+    principal: number
+    imagem_url: number
     _all: number
   }
 
@@ -6290,18 +7561,24 @@ export namespace Prisma {
     id?: true
     nome?: true
     descricao?: true
+    principal?: true
+    imagem_url?: true
   }
 
   export type HabilidadeMaxAggregateInputType = {
     id?: true
     nome?: true
     descricao?: true
+    principal?: true
+    imagem_url?: true
   }
 
   export type HabilidadeCountAggregateInputType = {
     id?: true
     nome?: true
     descricao?: true
+    principal?: true
+    imagem_url?: true
     _all?: true
   }
 
@@ -6395,6 +7672,8 @@ export namespace Prisma {
     id: number
     nome: string
     descricao: string
+    principal: boolean
+    imagem_url: string | null
     _count: HabilidadeCountAggregateOutputType | null
     _avg: HabilidadeAvgAggregateOutputType | null
     _sum: HabilidadeSumAggregateOutputType | null
@@ -6420,6 +7699,8 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     descricao?: boolean
+    principal?: boolean
+    imagem_url?: boolean
     prestadores?: boolean | Habilidade$prestadoresArgs<ExtArgs>
     _count?: boolean | HabilidadeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["habilidade"]>
@@ -6428,21 +7709,27 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     descricao?: boolean
+    principal?: boolean
+    imagem_url?: boolean
   }, ExtArgs["result"]["habilidade"]>
 
   export type HabilidadeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nome?: boolean
     descricao?: boolean
+    principal?: boolean
+    imagem_url?: boolean
   }, ExtArgs["result"]["habilidade"]>
 
   export type HabilidadeSelectScalar = {
     id?: boolean
     nome?: boolean
     descricao?: boolean
+    principal?: boolean
+    imagem_url?: boolean
   }
 
-  export type HabilidadeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "descricao", ExtArgs["result"]["habilidade"]>
+  export type HabilidadeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "descricao" | "principal" | "imagem_url", ExtArgs["result"]["habilidade"]>
   export type HabilidadeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     prestadores?: boolean | Habilidade$prestadoresArgs<ExtArgs>
     _count?: boolean | HabilidadeCountOutputTypeDefaultArgs<ExtArgs>
@@ -6459,6 +7746,8 @@ export namespace Prisma {
       id: number
       nome: string
       descricao: string
+      principal: boolean
+      imagem_url: string | null
     }, ExtArgs["result"]["habilidade"]>
     composites: {}
   }
@@ -6886,6 +8175,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Habilidade", 'Int'>
     readonly nome: FieldRef<"Habilidade", 'String'>
     readonly descricao: FieldRef<"Habilidade", 'String'>
+    readonly principal: FieldRef<"Habilidade", 'Boolean'>
+    readonly imagem_url: FieldRef<"Habilidade", 'String'>
   }
     
 
@@ -11841,6 +13132,8 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
+    city: 'city',
+    profissao: 'profissao',
     valor: 'valor',
     sobre: 'sobre',
     tipo_usuario: 'tipo_usuario'
@@ -11849,10 +13142,26 @@ export namespace Prisma {
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+  export const NotificacaoScalarFieldEnum: {
+    id: 'id',
+    titulo: 'titulo',
+    mensagem: 'mensagem',
+    tipo: 'tipo',
+    lida: 'lida',
+    createdAt: 'createdAt',
+    userId: 'userId',
+    link: 'link'
+  };
+
+  export type NotificacaoScalarFieldEnum = (typeof NotificacaoScalarFieldEnum)[keyof typeof NotificacaoScalarFieldEnum]
+
+
   export const HabilidadeScalarFieldEnum: {
     id: 'id',
     nome: 'nome',
-    descricao: 'descricao'
+    descricao: 'descricao',
+    principal: 'principal',
+    imagem_url: 'imagem_url'
   };
 
   export type HabilidadeScalarFieldEnum = (typeof HabilidadeScalarFieldEnum)[keyof typeof HabilidadeScalarFieldEnum]
@@ -11999,6 +13308,27 @@ export namespace Prisma {
    * Reference to a field of type 'EnumTipoUsuario[]'
    */
   export type ListEnumEnumTipoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnumTipoUsuario[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'EnumTipoNotificacao'
+   */
+  export type EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnumTipoNotificacao'>
+    
+
+
+  /**
+   * Reference to a field of type 'EnumTipoNotificacao[]'
+   */
+  export type ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnumTipoNotificacao[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -12243,6 +13573,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"Usuario"> | string | null
     emailVerified?: DateTimeNullableFilter<"Usuario"> | Date | string | null
     image?: StringNullableFilter<"Usuario"> | string | null
+    city?: StringNullableFilter<"Usuario"> | string | null
+    profissao?: StringNullableFilter<"Usuario"> | string | null
     valor?: DecimalFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioFilter<"Usuario"> | $Enums.EnumTipoUsuario
@@ -12251,6 +13583,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    notificacoes?: NotificacaoListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -12260,6 +13593,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    profissao?: SortOrderInput | SortOrder
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
@@ -12268,6 +13603,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    notificacoes?: NotificacaoOrderByRelationAggregateInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -12280,6 +13616,8 @@ export namespace Prisma {
     hashedPassword?: StringNullableFilter<"Usuario"> | string | null
     emailVerified?: DateTimeNullableFilter<"Usuario"> | Date | string | null
     image?: StringNullableFilter<"Usuario"> | string | null
+    city?: StringNullableFilter<"Usuario"> | string | null
+    profissao?: StringNullableFilter<"Usuario"> | string | null
     valor?: DecimalFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioFilter<"Usuario"> | $Enums.EnumTipoUsuario
@@ -12288,6 +13626,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    notificacoes?: NotificacaoListRelationFilter
   }, "id" | "email">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -12297,6 +13636,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    profissao?: SortOrderInput | SortOrder
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
@@ -12317,9 +13658,81 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"Usuario"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
+    city?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
+    profissao?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
     valor?: DecimalWithAggregatesFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringWithAggregatesFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioWithAggregatesFilter<"Usuario"> | $Enums.EnumTipoUsuario
+  }
+
+  export type NotificacaoWhereInput = {
+    AND?: NotificacaoWhereInput | NotificacaoWhereInput[]
+    OR?: NotificacaoWhereInput[]
+    NOT?: NotificacaoWhereInput | NotificacaoWhereInput[]
+    id?: StringFilter<"Notificacao"> | string
+    titulo?: StringFilter<"Notificacao"> | string
+    mensagem?: StringFilter<"Notificacao"> | string
+    tipo?: EnumEnumTipoNotificacaoFilter<"Notificacao"> | $Enums.EnumTipoNotificacao
+    lida?: BoolFilter<"Notificacao"> | boolean
+    createdAt?: DateTimeFilter<"Notificacao"> | Date | string
+    userId?: StringFilter<"Notificacao"> | string
+    link?: StringNullableFilter<"Notificacao"> | string | null
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type NotificacaoOrderByWithRelationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    tipo?: SortOrder
+    lida?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    link?: SortOrderInput | SortOrder
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type NotificacaoWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificacaoWhereInput | NotificacaoWhereInput[]
+    OR?: NotificacaoWhereInput[]
+    NOT?: NotificacaoWhereInput | NotificacaoWhereInput[]
+    titulo?: StringFilter<"Notificacao"> | string
+    mensagem?: StringFilter<"Notificacao"> | string
+    tipo?: EnumEnumTipoNotificacaoFilter<"Notificacao"> | $Enums.EnumTipoNotificacao
+    lida?: BoolFilter<"Notificacao"> | boolean
+    createdAt?: DateTimeFilter<"Notificacao"> | Date | string
+    userId?: StringFilter<"Notificacao"> | string
+    link?: StringNullableFilter<"Notificacao"> | string | null
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id">
+
+  export type NotificacaoOrderByWithAggregationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    tipo?: SortOrder
+    lida?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    link?: SortOrderInput | SortOrder
+    _count?: NotificacaoCountOrderByAggregateInput
+    _max?: NotificacaoMaxOrderByAggregateInput
+    _min?: NotificacaoMinOrderByAggregateInput
+  }
+
+  export type NotificacaoScalarWhereWithAggregatesInput = {
+    AND?: NotificacaoScalarWhereWithAggregatesInput | NotificacaoScalarWhereWithAggregatesInput[]
+    OR?: NotificacaoScalarWhereWithAggregatesInput[]
+    NOT?: NotificacaoScalarWhereWithAggregatesInput | NotificacaoScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notificacao"> | string
+    titulo?: StringWithAggregatesFilter<"Notificacao"> | string
+    mensagem?: StringWithAggregatesFilter<"Notificacao"> | string
+    tipo?: EnumEnumTipoNotificacaoWithAggregatesFilter<"Notificacao"> | $Enums.EnumTipoNotificacao
+    lida?: BoolWithAggregatesFilter<"Notificacao"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Notificacao"> | Date | string
+    userId?: StringWithAggregatesFilter<"Notificacao"> | string
+    link?: StringNullableWithAggregatesFilter<"Notificacao"> | string | null
   }
 
   export type HabilidadeWhereInput = {
@@ -12329,6 +13742,8 @@ export namespace Prisma {
     id?: IntFilter<"Habilidade"> | number
     nome?: StringFilter<"Habilidade"> | string
     descricao?: StringFilter<"Habilidade"> | string
+    principal?: BoolFilter<"Habilidade"> | boolean
+    imagem_url?: StringNullableFilter<"Habilidade"> | string | null
     prestadores?: PrestadorHabilidadeListRelationFilter
   }
 
@@ -12336,6 +13751,8 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrder
+    principal?: SortOrder
+    imagem_url?: SortOrderInput | SortOrder
     prestadores?: PrestadorHabilidadeOrderByRelationAggregateInput
   }
 
@@ -12346,6 +13763,8 @@ export namespace Prisma {
     NOT?: HabilidadeWhereInput | HabilidadeWhereInput[]
     nome?: StringFilter<"Habilidade"> | string
     descricao?: StringFilter<"Habilidade"> | string
+    principal?: BoolFilter<"Habilidade"> | boolean
+    imagem_url?: StringNullableFilter<"Habilidade"> | string | null
     prestadores?: PrestadorHabilidadeListRelationFilter
   }, "id">
 
@@ -12353,6 +13772,8 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrder
+    principal?: SortOrder
+    imagem_url?: SortOrderInput | SortOrder
     _count?: HabilidadeCountOrderByAggregateInput
     _avg?: HabilidadeAvgOrderByAggregateInput
     _max?: HabilidadeMaxOrderByAggregateInput
@@ -12367,6 +13788,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Habilidade"> | number
     nome?: StringWithAggregatesFilter<"Habilidade"> | string
     descricao?: StringWithAggregatesFilter<"Habilidade"> | string
+    principal?: BoolWithAggregatesFilter<"Habilidade"> | boolean
+    imagem_url?: StringNullableWithAggregatesFilter<"Habilidade"> | string | null
   }
 
   export type PrestadorHabilidadeWhereInput = {
@@ -12817,6 +14240,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -12825,6 +14250,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -12834,6 +14260,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -12842,6 +14270,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
@@ -12851,6 +14280,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -12859,6 +14290,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -12868,6 +14300,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -12876,6 +14310,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -12885,6 +14320,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -12897,6 +14334,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -12909,14 +14348,94 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
   }
 
+  export type NotificacaoCreateInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    link?: string | null
+    usuario: UsuarioCreateNestedOneWithoutNotificacoesInput
+  }
+
+  export type NotificacaoUncheckedCreateInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    userId: string
+    link?: string | null
+  }
+
+  export type NotificacaoUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    usuario?: UsuarioUpdateOneRequiredWithoutNotificacoesNestedInput
+  }
+
+  export type NotificacaoUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificacaoCreateManyInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    userId: string
+    link?: string | null
+  }
+
+  export type NotificacaoUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificacaoUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type HabilidadeCreateInput = {
     nome: string
     descricao: string
+    principal?: boolean
+    imagem_url?: string | null
     prestadores?: PrestadorHabilidadeCreateNestedManyWithoutHabilidadeInput
   }
 
@@ -12924,12 +14443,16 @@ export namespace Prisma {
     id?: number
     nome: string
     descricao: string
+    principal?: boolean
+    imagem_url?: string | null
     prestadores?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutHabilidadeInput
   }
 
   export type HabilidadeUpdateInput = {
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
     prestadores?: PrestadorHabilidadeUpdateManyWithoutHabilidadeNestedInput
   }
 
@@ -12937,6 +14460,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
     prestadores?: PrestadorHabilidadeUncheckedUpdateManyWithoutHabilidadeNestedInput
   }
 
@@ -12944,17 +14469,23 @@ export namespace Prisma {
     id?: number
     nome: string
     descricao: string
+    principal?: boolean
+    imagem_url?: string | null
   }
 
   export type HabilidadeUpdateManyMutationInput = {
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type HabilidadeUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PrestadorHabilidadeCreateInput = {
@@ -13470,6 +15001,12 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type NotificacaoListRelationFilter = {
+    every?: NotificacaoWhereInput
+    some?: NotificacaoWhereInput
+    none?: NotificacaoWhereInput
+  }
+
   export type PrestadorHabilidadeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -13486,6 +15023,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type NotificacaoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UsuarioCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -13493,6 +15034,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    city?: SortOrder
+    profissao?: SortOrder
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
@@ -13509,6 +15052,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    city?: SortOrder
+    profissao?: SortOrder
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
@@ -13521,6 +15066,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    city?: SortOrder
+    profissao?: SortOrder
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
@@ -13570,6 +15117,69 @@ export namespace Prisma {
     _max?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel>
   }
 
+  export type EnumEnumTipoNotificacaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NotificacaoCountOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    tipo?: SortOrder
+    lida?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type NotificacaoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    tipo?: SortOrder
+    lida?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type NotificacaoMinOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    mensagem?: SortOrder
+    tipo?: SortOrder
+    lida?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    link?: SortOrder
+  }
+
+  export type EnumEnumTipoNotificacaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumEnumTipoNotificacaoWithAggregatesFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
+    _max?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -13585,6 +15195,8 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrder
+    principal?: SortOrder
+    imagem_url?: SortOrder
   }
 
   export type HabilidadeAvgOrderByAggregateInput = {
@@ -13595,12 +15207,16 @@ export namespace Prisma {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrder
+    principal?: SortOrder
+    imagem_url?: SortOrder
   }
 
   export type HabilidadeMinOrderByAggregateInput = {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrder
+    principal?: SortOrder
+    imagem_url?: SortOrder
   }
 
   export type HabilidadeSumOrderByAggregateInput = {
@@ -13917,6 +15533,13 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type NotificacaoCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput> | NotificacaoCreateWithoutUsuarioInput[] | NotificacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificacaoCreateOrConnectWithoutUsuarioInput | NotificacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: NotificacaoCreateManyUsuarioInputEnvelope
+    connect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+  }
+
   export type PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput = {
     create?: XOR<PrestadorHabilidadeCreateWithoutPrestadorInput, PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput> | PrestadorHabilidadeCreateWithoutPrestadorInput[] | PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput[]
     connectOrCreate?: PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput | PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput[]
@@ -13950,6 +15573,13 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput> | NotificacaoCreateWithoutUsuarioInput[] | NotificacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificacaoCreateOrConnectWithoutUsuarioInput | NotificacaoCreateOrConnectWithoutUsuarioInput[]
+    createMany?: NotificacaoCreateManyUsuarioInputEnvelope
+    connect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -14038,6 +15668,20 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type NotificacaoUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput> | NotificacaoCreateWithoutUsuarioInput[] | NotificacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificacaoCreateOrConnectWithoutUsuarioInput | NotificacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: NotificacaoUpsertWithWhereUniqueWithoutUsuarioInput | NotificacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: NotificacaoCreateManyUsuarioInputEnvelope
+    set?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    disconnect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    delete?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    connect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    update?: NotificacaoUpdateWithWhereUniqueWithoutUsuarioInput | NotificacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: NotificacaoUpdateManyWithWhereWithoutUsuarioInput | NotificacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: NotificacaoScalarWhereInput | NotificacaoScalarWhereInput[]
+  }
+
   export type PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput = {
     create?: XOR<PrestadorHabilidadeCreateWithoutPrestadorInput, PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput> | PrestadorHabilidadeCreateWithoutPrestadorInput[] | PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput[]
     connectOrCreate?: PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput | PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput[]
@@ -14106,6 +15750,42 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput> | NotificacaoCreateWithoutUsuarioInput[] | NotificacaoUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: NotificacaoCreateOrConnectWithoutUsuarioInput | NotificacaoCreateOrConnectWithoutUsuarioInput[]
+    upsert?: NotificacaoUpsertWithWhereUniqueWithoutUsuarioInput | NotificacaoUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: NotificacaoCreateManyUsuarioInputEnvelope
+    set?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    disconnect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    delete?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    connect?: NotificacaoWhereUniqueInput | NotificacaoWhereUniqueInput[]
+    update?: NotificacaoUpdateWithWhereUniqueWithoutUsuarioInput | NotificacaoUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: NotificacaoUpdateManyWithWhereWithoutUsuarioInput | NotificacaoUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: NotificacaoScalarWhereInput | NotificacaoScalarWhereInput[]
+  }
+
+  export type UsuarioCreateNestedOneWithoutNotificacoesInput = {
+    create?: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutNotificacoesInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type EnumEnumTipoNotificacaoFieldUpdateOperationsInput = {
+    set?: $Enums.EnumTipoNotificacao
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutNotificacoesNestedInput = {
+    create?: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutNotificacoesInput
+    upsert?: UsuarioUpsertWithoutNotificacoesInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutNotificacoesInput, UsuarioUpdateWithoutNotificacoesInput>, UsuarioUncheckedUpdateWithoutNotificacoesInput>
   }
 
   export type PrestadorHabilidadeCreateNestedManyWithoutHabilidadeInput = {
@@ -14539,6 +16219,36 @@ export namespace Prisma {
     _max?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel>
   }
 
+  export type NestedEnumEnumTipoNotificacaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumEnumTipoNotificacaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumEnumTipoNotificacaoWithAggregatesFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
+    _max?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -14607,6 +16317,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -14614,6 +16326,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutAccountsInput = {
@@ -14623,6 +16336,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -14630,6 +16345,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutAccountsInput = {
@@ -14655,6 +16371,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -14662,6 +16380,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutAccountsInput = {
@@ -14671,6 +16390,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -14678,6 +16399,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateWithoutSessionsInput = {
@@ -14687,6 +16409,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -14694,6 +16418,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     accounts?: AccountCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutSessionsInput = {
@@ -14703,6 +16428,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -14710,6 +16437,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutSessionsInput = {
@@ -14735,6 +16463,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -14742,6 +16472,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutSessionsInput = {
@@ -14751,6 +16482,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -14758,6 +16491,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type PrestadorHabilidadeCreateWithoutPrestadorInput = {
@@ -14914,6 +16648,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificacaoCreateWithoutUsuarioInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    link?: string | null
+  }
+
+  export type NotificacaoUncheckedCreateWithoutUsuarioInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    link?: string | null
+  }
+
+  export type NotificacaoCreateOrConnectWithoutUsuarioInput = {
+    where: NotificacaoWhereUniqueInput
+    create: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type NotificacaoCreateManyUsuarioInputEnvelope = {
+    data: NotificacaoCreateManyUsuarioInput | NotificacaoCreateManyUsuarioInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PrestadorHabilidadeUpsertWithWhereUniqueWithoutPrestadorInput = {
     where: PrestadorHabilidadeWhereUniqueInput
     update: XOR<PrestadorHabilidadeUpdateWithoutPrestadorInput, PrestadorHabilidadeUncheckedUpdateWithoutPrestadorInput>
@@ -15047,6 +16811,128 @@ export namespace Prisma {
     expires?: DateTimeFilter<"Session"> | Date | string
   }
 
+  export type NotificacaoUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: NotificacaoWhereUniqueInput
+    update: XOR<NotificacaoUpdateWithoutUsuarioInput, NotificacaoUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<NotificacaoCreateWithoutUsuarioInput, NotificacaoUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type NotificacaoUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: NotificacaoWhereUniqueInput
+    data: XOR<NotificacaoUpdateWithoutUsuarioInput, NotificacaoUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type NotificacaoUpdateManyWithWhereWithoutUsuarioInput = {
+    where: NotificacaoScalarWhereInput
+    data: XOR<NotificacaoUpdateManyMutationInput, NotificacaoUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type NotificacaoScalarWhereInput = {
+    AND?: NotificacaoScalarWhereInput | NotificacaoScalarWhereInput[]
+    OR?: NotificacaoScalarWhereInput[]
+    NOT?: NotificacaoScalarWhereInput | NotificacaoScalarWhereInput[]
+    id?: StringFilter<"Notificacao"> | string
+    titulo?: StringFilter<"Notificacao"> | string
+    mensagem?: StringFilter<"Notificacao"> | string
+    tipo?: EnumEnumTipoNotificacaoFilter<"Notificacao"> | $Enums.EnumTipoNotificacao
+    lida?: BoolFilter<"Notificacao"> | boolean
+    createdAt?: DateTimeFilter<"Notificacao"> | Date | string
+    userId?: StringFilter<"Notificacao"> | string
+    link?: StringNullableFilter<"Notificacao"> | string | null
+  }
+
+  export type UsuarioCreateWithoutNotificacoesInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutNotificacoesInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutNotificacoesInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+  }
+
+  export type UsuarioUpsertWithoutNotificacoesInput = {
+    update: XOR<UsuarioUpdateWithoutNotificacoesInput, UsuarioUncheckedUpdateWithoutNotificacoesInput>
+    create: XOR<UsuarioCreateWithoutNotificacoesInput, UsuarioUncheckedCreateWithoutNotificacoesInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutNotificacoesInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutNotificacoesInput, UsuarioUncheckedUpdateWithoutNotificacoesInput>
+  }
+
+  export type UsuarioUpdateWithoutNotificacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutNotificacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type PrestadorHabilidadeCreateWithoutHabilidadeInput = {
     nivel_proeficiencia: $Enums.EnumNivelProeficiencia
     prestador: UsuarioCreateNestedOneWithoutHabilidadesInput
@@ -15086,12 +16972,16 @@ export namespace Prisma {
   export type HabilidadeCreateWithoutPrestadoresInput = {
     nome: string
     descricao: string
+    principal?: boolean
+    imagem_url?: string | null
   }
 
   export type HabilidadeUncheckedCreateWithoutPrestadoresInput = {
     id?: number
     nome: string
     descricao: string
+    principal?: boolean
+    imagem_url?: string | null
   }
 
   export type HabilidadeCreateOrConnectWithoutPrestadoresInput = {
@@ -15106,6 +16996,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15113,6 +17005,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutHabilidadesInput = {
@@ -15122,6 +17015,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15129,6 +17024,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutHabilidadesInput = {
@@ -15150,12 +17046,16 @@ export namespace Prisma {
   export type HabilidadeUpdateWithoutPrestadoresInput = {
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type HabilidadeUncheckedUpdateWithoutPrestadoresInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: StringFieldUpdateOperationsInput | string
+    principal?: BoolFieldUpdateOperationsInput | boolean
+    imagem_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UsuarioUpsertWithoutHabilidadesInput = {
@@ -15176,6 +17076,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15183,6 +17085,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutHabilidadesInput = {
@@ -15192,6 +17095,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15199,6 +17104,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateWithoutPropostas_contratadasInput = {
@@ -15208,6 +17114,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15215,6 +17123,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutPropostas_contratadasInput = {
@@ -15224,6 +17133,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15231,6 +17142,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutPropostas_contratadasInput = {
@@ -15245,6 +17157,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15252,6 +17166,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutPropostas_prestadasInput = {
@@ -15261,6 +17176,8 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    city?: string | null
+    profissao?: string | null
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
@@ -15268,6 +17185,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutPropostas_prestadasInput = {
@@ -15337,6 +17255,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15344,6 +17264,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutPropostas_contratadasInput = {
@@ -15353,6 +17274,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15360,6 +17283,7 @@ export namespace Prisma {
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUpsertWithoutPropostas_prestadasInput = {
@@ -15380,6 +17304,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15387,6 +17313,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutPropostas_prestadasInput = {
@@ -15396,6 +17323,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
@@ -15403,6 +17332,7 @@ export namespace Prisma {
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type ServicoUpsertWithWhereUniqueWithoutPropostaInput = {
@@ -15646,6 +17576,16 @@ export namespace Prisma {
     expires: Date | string
   }
 
+  export type NotificacaoCreateManyUsuarioInput = {
+    id?: string
+    titulo: string
+    mensagem: string
+    tipo?: $Enums.EnumTipoNotificacao
+    lida?: boolean
+    createdAt?: Date | string
+    link?: string | null
+  }
+
   export type PrestadorHabilidadeUpdateWithoutPrestadorInput = {
     nivel_proeficiencia?: EnumEnumNivelProeficienciaFieldUpdateOperationsInput | $Enums.EnumNivelProeficiencia
     habilidade?: HabilidadeUpdateOneRequiredWithoutPrestadoresNestedInput
@@ -15797,6 +17737,36 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sessionToken?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificacaoUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificacaoUncheckedUpdateWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificacaoUncheckedUpdateManyWithoutUsuarioInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    mensagem?: StringFieldUpdateOperationsInput | string
+    tipo?: EnumEnumTipoNotificacaoFieldUpdateOperationsInput | $Enums.EnumTipoNotificacao
+    lida?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PrestadorHabilidadeCreateManyHabilidadeInput = {

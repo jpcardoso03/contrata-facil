@@ -57,7 +57,7 @@ async function getProfessionalData(id: string): Promise<ProcessedProfessional | 
     id: user.id,
     name: user.name,
     photoUrl: user.image,
-    city: user.city,
+    city: user.city ?? 'Local não informado',
     rating: rating,
     reviews: reviews,
     hourlyRate: user.valor.toString(),
@@ -71,7 +71,7 @@ interface PageProps {
   params: { id: string };
 }
 
-export default function ProfessionalPage({ params }: {params: {id: string}}) {
+export default async function ProfessionalPage({ params }: {params: {id: string}}) {
   const professional = await getProfessionalData(params.id)
 
   if (!professional) {

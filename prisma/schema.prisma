@@ -103,7 +103,7 @@ model Notificacao {
   lida      Boolean @default(false)
   createdAt DateTime @default(now())
   userId    String
-  usuario   Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario     Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
   link      String?
   @@map("NOTIFICACAO")
 }

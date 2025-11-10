@@ -1,6 +1,6 @@
 import prisma from '@/app/data/prisma';
 import { notFound } from 'next/navigation';
-import CreateProposal from '@/app/components/CreateProposal';
+import CreateProposal from '@/components/CreateProposal';
 
 export type ProfessionalProposalInfo = {
   id: string;

@@ -1,6 +1,7 @@
 import prisma from '@/app/data/prisma'
 import NotificationsList from '@/components/NotificationsList';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 
 async function getNotifications(userId:string) {
@@ -24,7 +25,7 @@ async function getNotifications(userId:string) {
 }
 
 export default async function NotificationsPage() {
-  const session = await getSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
     redirect('/login');
