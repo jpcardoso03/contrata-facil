@@ -27,13 +27,13 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
       icon: Edit,
       label: 'Editar Perfil',
       description: 'Atualize suas informações pessoais',
-      onClick: () => console.log('Editar perfil')
+      onClick: () => router.push('editar-perfil')
     },
     {
       icon: LogOut,
       label: 'Sair (Logout)',
       description: 'Desconecte-se da sua conta',
-      onClick: () => signOut({ callbackUrl: '/login' }) // Ação de Logout
+      onClick: () => signOut({ callbackUrl: '/login' })
     }
   ];
 
@@ -68,10 +68,8 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
 
       {/* Conteúdo Principal */}
       <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
-        {/* Seção Superior: Foto e Informações Básicas */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            {/* Foto do Usuário */}
             <div className="flex flex-col items-center sm:items-start gap-4">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-500 rounded-full flex items-center justify-center relative overflow-hidden">
                 {user.image ? (
@@ -90,7 +88,6 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
                 </button>
               </div>
               
-              {/* Estatísticas Rápidas */}
               <div className="flex gap-4 text-center">
                 <div>
                   <div className="text-lg sm:text-xl font-bold text-gray-900">{user.completedProjects}</div>
@@ -183,7 +180,7 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
           </div>
         )}
 
-        {/* Ações do Perfil */}
+        {/* Ações Perfil */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Gerenciar Perfil</h2>
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -223,7 +220,7 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
         </div>
       </div>
 
-      {/* Menu Inferior Fixo */}
+      {/* Menu Inferior */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
           <div className="grid grid-cols-4 h-full">

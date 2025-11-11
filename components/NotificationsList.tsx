@@ -131,7 +131,6 @@ export default function NotificationsList({
           ))}
         </div>
 
-        {/* Mensagem quando não há notificações */}
         {initialNotifications.length === 0 && (
           <div className="text-center py-12 sm:py-16">
           </div>

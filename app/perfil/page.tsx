@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/app/data/prisma';
 import { EnumStatusProposta, EnumTipoUsuario } from '@/app/generated/prisma';
-import MyProfileClient from '@/components/MyProfile'; // Assumindo que o front-end está em 'components/'
+import MyProfileClient from '@/components/MyProfile';
 import { notFound } from 'next/navigation';
 
 export type ProcessedUserProfile = {
