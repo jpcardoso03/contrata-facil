@@ -88,7 +88,7 @@ export default async function ReviewProposalPage({
   let isUsersTurn = false;
   if (
     userRole === 'contratante' &&
-    proposta.Status === EnumStatusProposta.AGUARDANDO_CONTRATANTE
+    proposta.Status === EnumStatusProposta.EM_ANDAMENTO
   ) {
     isUsersTurn = true;
   }

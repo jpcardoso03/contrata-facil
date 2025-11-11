@@ -107,7 +107,7 @@ function PropostaActions({
   ) {
     actionButton = (
       <Link
-        href={`/propostas/revisar/${id}`}
+        href={`/propostas/review/${id}`}
         className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
       >
         <Check className="w-4 h-4" />
