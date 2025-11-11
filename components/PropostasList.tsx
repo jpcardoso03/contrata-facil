@@ -160,8 +160,8 @@ export default function PropostasList({
 
   const menuItems = [
   	{ name: 'Home', icon: Home, active: false },
-  	{ name: 'Notificações', icon: Bell, active: true },
-  	{ name: 'Propostas', icon: FileText },
+  	{ name: 'Notificações', icon: Bell, active: false },
+  	{ name: 'Propostas', icon: FileText, active: true},
   	{ name: 'Perfil', icon: User },
   ];
 

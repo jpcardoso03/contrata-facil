@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Clock, DollarSign, FileText, User, ArrowLeft, Star, Home, Bell, Check, X, } from 'lucide-react';
 import { updateProposalAction } from '@/app/propostas/update/actions';
+import { EnumStatusProposta } from '@/app/generated/prisma';
 
 type OtherUserData = {
   id: string;
@@ -22,26 +23,33 @@ type ProposalData = {
   valor: number;
   data_inicio: Date;
   data_termino: Date;
+  status: EnumStatusProposta;
 };
 
 interface ReviewProposalProps {
   proposal: ProposalData;
   otherUser: OtherUserData;
-  menuItems: { name: string; icon: any; active?: boolean }[];
 }
 
 export default function ReviewProposal({
   proposal,
   otherUser,
-  menuItems,
 }: ReviewProposalProps) {
   const router = useRouter();
+  const isNegotiationPhase = proposal.status !== EnumStatusProposta.EM_ANDAMENTO;
   const [isPending, startTransition] = useTransition();
 
   const [totalValue, setTotalValue] = useState(Number(proposal.valor) || 0);
   const [description, setDescription] = useState(proposal.descricao || '');
 
   const [hourlyRate, setHourlyRate] = useState(Number(otherUser.valorBase) || 0);
+  
+  const menuItems = [
+    { name: 'Home', icon: Home, active: false },
+    { name: 'Notificações', icon: Bell },
+    { name: 'Propostas', icon: FileText, active: true }, // 'Propostas' está ativo
+    { name: 'Perfil', icon: User },
+  ];
   
   const formatDateTime = (date: Date) => {
     return {

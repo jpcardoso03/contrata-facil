@@ -66,11 +66,11 @@ export async function updateProposalAction(formData: FormData) {
       case 'accept':
         if (
           (userRole === 'prestador' && (proposta.Status === 'PENDENTE' || proposta.Status === 'AGUARDANDO_PRESTADOR')) ||
-          (userRole === 'contratante' && proposta.Status === 'AGUARDANDO_CONTRATANTE')
+          (userRole === 'contratante' && proposta.Status === 'AGUARDANDO_CONTRATANTE' || proposta.Status === 'EM_ANDAMENTO')
         ) {
-          newStatus = EnumStatusProposta.ACEITA;
+          newStatus = userRole === 'prestador' ? EnumStatusProposta.AGUARDANDO_CONTRATANTE : EnumStatusProposta.AGUARDANDO_PRESTADOR;
           notificationUserId = userRole === 'prestador' ? proposta.id_contratante : proposta.id_prestador;
-          notificationTitle = 'Proposta Aceita!';
+          notificationTitle = 'Nova Contrapoposta!';
           notificationMessage = `Sua proposta "${proposta.titulo}" foi aceita.`;
         } else {
           return { success: false, error: 'Você não pode aceitar esta proposta neste estado.' };

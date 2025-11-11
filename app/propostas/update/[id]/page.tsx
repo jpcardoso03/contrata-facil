@@ -1,10 +1,9 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { Home, Bell, FileText, User } from 'lucide-react';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/app/data/prisma';
-import ReviewProposal from '@/components/UpdateProposal'; // <-- componente de frontend
+import ReviewProposal from '@/components/UpdateProposal';
 import { EnumStatusProposta } from '@/app/generated/prisma';
 
 type ProposalData = {
@@ -14,6 +13,7 @@ type ProposalData = {
   valor: number;
   data_inicio: Date;
   data_termino: Date;
+  status: EnumStatusProposta;
 };
 
 type OtherUserData = {
@@ -88,7 +88,8 @@ export default async function ReviewProposalPage({
   let isUsersTurn = false;
   if (
     userRole === 'contratante' &&
-    proposta.Status === EnumStatusProposta.EM_ANDAMENTO
+    proposta.Status === EnumStatusProposta.EM_ANDAMENTO || 
+    proposta.Status === EnumStatusProposta.AGUARDANDO_CONTRATANTE
   ) {
     isUsersTurn = true;
   }
@@ -114,6 +115,7 @@ export default async function ReviewProposalPage({
     valor: proposta.valor.toNumber(),
     data_inicio: proposta.data_inicio,
     data_termino: proposta.data_termino,
+    status: proposta.Status,
   };
 
   const otherUserProps: OtherUserData = {
@@ -126,18 +128,11 @@ export default async function ReviewProposalPage({
     reviews: 23, 
   };
 
-  const menuItems = [
-    { name: 'Home', icon: Home, active: false },
-    { name: 'Notificações', icon: Bell },
-    { name: 'Propostas', icon: FileText, active: true },
-    { name: 'Perfil', icon: User },
-  ];
 
   return (
     <ReviewProposal
       proposal={proposalProps}
       otherUser={otherUserProps}
-      menuItems={menuItems}
     />
   );
 }
