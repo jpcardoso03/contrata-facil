@@ -50,7 +50,7 @@ export default function ReviewProposal({
     { name: 'Propostas', icon: FileText, active: true }, // 'Propostas' está ativo
     { name: 'Perfil', icon: User },
   ];
-  
+
   const formatDateTime = (date: Date) => {
     return {
       date: date.toLocaleDateString('pt-BR', {
@@ -287,6 +287,7 @@ export default function ReviewProposal({
         </form>
       </div>
 
+      {isNegotiationPhase && (
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4">
         <div className="max-w-4xl mx-auto grid grid-cols-2 gap-3">
           <button
@@ -309,6 +310,7 @@ export default function ReviewProposal({
           </button>
         </div>
       </div>
+      )}
 
       {/* Menu Inferior */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">

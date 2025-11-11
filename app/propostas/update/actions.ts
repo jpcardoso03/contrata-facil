@@ -64,14 +64,18 @@ export async function updateProposalAction(formData: FormData) {
     // mudar estado
     switch (actionType) {
       case 'accept':
-        if (
-          (userRole === 'prestador' && (proposta.Status === 'PENDENTE' || proposta.Status === 'AGUARDANDO_PRESTADOR')) ||
-          (userRole === 'contratante' && proposta.Status === 'AGUARDANDO_CONTRATANTE' || proposta.Status === 'EM_ANDAMENTO')
-        ) {
-          newStatus = userRole === 'prestador' ? EnumStatusProposta.AGUARDANDO_CONTRATANTE : EnumStatusProposta.AGUARDANDO_PRESTADOR;
-          notificationUserId = userRole === 'prestador' ? proposta.id_contratante : proposta.id_prestador;
-          notificationTitle = 'Nova Contrapoposta!';
-          notificationMessage = `Sua proposta "${proposta.titulo}" foi aceita.`;
+        if (userRole === 'prestador' && (proposta.Status === 'PENDENTE' || proposta.Status === 'AGUARDANDO_PRESTADOR')) {
+          newStatus = EnumStatusProposta.AGUARDANDO_CONTRATANTE;
+          notificationUserId = proposta.id_contratante;
+          notificationTitle = 'Termos Aceitos';
+          notificationMessage = `${proposta.prestador.name || 'O prestador'} aceitou os termos da proposta "${proposta.titulo}".`;
+
+        } else if (userRole === 'contratante' && (proposta.Status === 'AGUARDANDO_CONTRATANTE' || proposta.Status === 'EM_ANDAMENTO')) {
+          newStatus = EnumStatusProposta.EM_ANDAMENTO;
+          notificationUserId = proposta.id_prestador;
+          notificationTitle = 'Proposta Aprovada!';
+          notificationMessage = `Sua proposta "${proposta.titulo}" foi aprovada e está em andamento.`;
+        
         } else {
           return { success: false, error: 'Você não pode aceitar esta proposta neste estado.' };
         }
@@ -80,12 +84,12 @@ export async function updateProposalAction(formData: FormData) {
       case 'reject':
          if (
           (userRole === 'prestador' && (proposta.Status === 'PENDENTE' || proposta.Status === 'AGUARDANDO_PRESTADOR')) ||
-          (userRole === 'contratante' && proposta.Status === 'AGUARDANDO_CONTRATANTE')
+          (userRole === 'contratante' && (proposta.Status === 'AGUARDANDO_CONTRATANTE' || proposta.Status === EnumStatusProposta.EM_ANDAMENTO)) // Permitir recusar/cancelar
         ) {
           newStatus = EnumStatusProposta.RECUSADA;
           notificationUserId = userRole === 'prestador' ? proposta.id_contratante : proposta.id_prestador;
           notificationTitle = 'Proposta Recusada';
-          notificationMessage = `Sua proposta "${proposta.titulo}" foi recusada.`;
+          notificationMessage = `Sua proposta "${proposta.titulo}" foi recusada/cancelada.`;
         } else {
           return { success: false, error: 'Você não pode recusar esta proposta neste estado.' };
         }
@@ -94,9 +98,9 @@ export async function updateProposalAction(formData: FormData) {
       case 'counter-offer':
          if (
           (userRole === 'prestador' && (proposta.Status === 'PENDENTE' || proposta.Status === 'AGUARDANDO_PRESTADOR')) ||
-          (userRole === 'contratante' && proposta.Status === 'AGUARDANDO_CONTRATANTE')
+          (userRole === 'contratante' && (proposta.Status === 'AGUARDANDO_CONTRATANTE' || proposta.Status === EnumStatusProposta.EM_ANDAMENTO)) // <-- ADICIONADO
         ) {
-          // Inverter estado de aguardo
+
           newStatus = userRole === 'prestador' ? EnumStatusProposta.AGUARDANDO_CONTRATANTE : EnumStatusProposta.AGUARDANDO_PRESTADOR;
           notificationUserId = userRole === 'prestador' ? proposta.id_contratante : proposta.id_prestador;
           notificationTitle = 'Nova Contraproposta!';
@@ -105,7 +109,6 @@ export async function updateProposalAction(formData: FormData) {
           return { success: false, error: 'Você não pode fazer uma contraproposta neste estado.' };
         }
         
-        // Atualiza proposta
         await prisma.proposta.update({
           where: { id: propostaId },
           data: {
@@ -127,7 +130,6 @@ export async function updateProposalAction(formData: FormData) {
         });
     }
 
-    // Envia notificação
     if (notificationUserId) {
       await prisma.notificacao.create({
         data: {
