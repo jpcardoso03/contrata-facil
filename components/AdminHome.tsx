@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { UserPlus, Search, Settings } from 'lucide-react';
+import { UserPlus, Search, Settings, Home, User } from 'lucide-react';
 
 export default function AdminHomeScreen() {
   const router = useRouter();
@@ -10,11 +10,23 @@ export default function AdminHomeScreen() {
     router.push(path);
   };
 
+  const handleMenuClick = (itemName: string) => {
+    if (itemName === 'Home') router.push('/admin');
+    else if (itemName === 'Busca') router.push('/busca');
+    else if (itemName === 'Perfil') router.push('/perfil'); 
+  };
+
   // Dados mockados para visualizar o layout (depois podemos conectar na API)
   const stats = [
     { label: 'Total de Usuários', value: '1,234' },
     { label: 'Administradores', value: '12' },
     { label: 'Habilidades Cadastradas', value: '48' },
+  ];
+
+  const menuItems = [
+    { name: 'Home', icon: Home, active: false },
+    { name: 'Busca', icon: Search, active: true },
+    { name: 'Perfil', icon: User, active: false },
   ];
 
   return (
@@ -92,6 +104,30 @@ export default function AdminHomeScreen() {
             </div>
           ))}
         </div>
+
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
+        <div className="max-w-6xl mx-auto h-full">
+          <div className="grid grid-cols-3 h-full">
+            {menuItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleMenuClick(item.name)}
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                    item.active
+                      ? 'text-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <IconComponent className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
 
       </div>
     </div>
