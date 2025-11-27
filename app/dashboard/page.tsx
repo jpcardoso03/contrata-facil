@@ -32,14 +32,15 @@ async function getHabilidadesPrincipais() {
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
-  console.log("SESSÃO NO DASHBOARD:", session);
-
   if (!session || !session.user) {
     redirect('/login');
   }
 
-  if (session.user.tipo_usuario !== EnumTipoUsuario.CONTRATANTE) {
+  if (session.user.tipo_usuario === EnumTipoUsuario.PRESTADOR) {
     redirect('/propostas'); 
+  }
+  if (session.user.tipo_usuario === EnumTipoUsuario.ADMINISTRADOR) {
+    redirect('/busca'); 
   }
 
   const habilidades = await getHabilidadesPrincipais();

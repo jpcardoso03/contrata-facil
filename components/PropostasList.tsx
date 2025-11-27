@@ -130,6 +130,7 @@ function PropostaActions({
   }
 
   else {
+    {/*
     actionButton = (
       <Link
         href={`/propostas/update/${id}`}
@@ -139,11 +140,14 @@ function PropostaActions({
         Editar
       </Link>
     );
+    */}
   }
 
   return (
     <div className="flex justify-end gap-3">
+      {/*
       {deleteButton}
+      */}
       {actionButton}
     </div>
   );

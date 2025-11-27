@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs';
 import prisma from '@/app/data/prisma';
 
 export const authOptions: AuthOptions = {
-    //adapter: PrismaAdapter(prisma as any),
 
     providers: [
         CredentialsProvider({
@@ -15,7 +14,6 @@ export const authOptions: AuthOptions = {
                 password: {label: 'Password', type: 'password'},
             },
 
-            // autorização login
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
                     throw new Error('Email e senha são obrigatórios');
