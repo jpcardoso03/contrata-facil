@@ -146,6 +146,7 @@ model Proposta {
   data_inicio    DateTime
   data_termino   DateTime
   Status         EnumStatusProposta
+  resposta       String?
 
   contratante Usuario @relation("ContratantePropostas", fields: [id_contratante], references: [id])
   prestador   Usuario @relation("PrestadorPropostas", fields: [id_prestador], references: [id])

@@ -3,10 +3,11 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Home, Bell, User, Edit, FileText, ChevronDown, Check, Clock, Eye, Trash2 } from 'lucide-react';
+import { Home, Bell, User, Edit, FileText, ChevronDown, Check, Clock, Eye, Trash2, Star, X, RefreshCw } from 'lucide-react';
 import { EnumStatusProposta } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
 import { deleteProposalAction } from '@/app/propostas/remover/actions';
+import { updateProposalStatusAction } from '@/app/propostas/actions';
 
 interface PropostasListProps {
   initialPropostas: PropostaProcessada[];
@@ -73,13 +74,76 @@ function getStatusBadge(
   );
 }
 
+function StatusUpdateModal({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  currentStatus 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  onConfirm: (newStatus: EnumStatusProposta) => void;
+  currentStatus: EnumStatusProposta | null;
+}) {
+  if (!isOpen || !currentStatus) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        
+        <h3 className="text-xl font-bold text-gray-900 mb-2">Atualizar Proposta</h3>
+        <p className="text-gray-500 mb-6">Selecione o novo status para esta proposta:</p>
+        
+        <div className="flex flex-col gap-3">
+          {currentStatus === 'ACEITA' && (
+            <button
+              onClick={() => onConfirm('EM_ANDAMENTO')}
+              className="w-full py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium rounded-lg border border-blue-200 transition-colors flex items-center justify-center gap-2"
+            >
+              <Clock className="w-4 h-4" />
+              Marcar como Em Andamento
+            </button>
+          )}
+
+          {(currentStatus === 'ACEITA' || currentStatus === 'EM_ANDAMENTO') && (
+            <button
+              onClick={() => onConfirm('CONCLUIDA')}
+              className="w-full py-3 px-4 bg-green-50 hover:bg-green-100 text-green-700 font-medium rounded-lg border border-green-200 transition-colors flex items-center justify-center gap-2"
+            >
+              <Check className="w-4 h-4" />
+              Marcar como Concluída
+            </button>
+          )}
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+          <button 
+            onClick={onClose}
+            className="text-gray-600 font-medium text-sm hover:underline"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PropostaActions({
   proposta,
   onDelete,
+  onUpdateStatusClick, 
   isPending,
 }: {
   proposta: PropostaProcessada;
   onDelete: (id: number) => void;
+  onUpdateStatusClick: (proposta: PropostaProcessada) => void;
   isPending: boolean;
 }) {
   const { status, userRole, id } = proposta;
@@ -95,6 +159,21 @@ function PropostaActions({
     >
       <Trash2 className="w-4 h-4" />
       Excluir
+    </button>
+  );
+
+  const canUpdateStatus = 
+    userRole === 'contratante' && 
+    (status === 'EM_ANDAMENTO' || status === 'ACEITA');
+
+  const updateStatusButton = canUpdateStatus && (
+    <button
+      onClick={() => onUpdateStatusClick(proposta)}
+      disabled={isPending}
+      className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium disabled:opacity-50"
+    >
+      <RefreshCw className="w-4 h-4" />
+      Atualizar Proposta
     </button>
   );
 
@@ -129,25 +208,21 @@ function PropostaActions({
     );
   }
 
-  else {
-    {/*
+  else if (status === 'CONCLUIDA' && userRole === 'contratante') {
     actionButton = (
-      <Link
-        href={`/propostas/update/${id}`}
-        className="inline-flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm font-medium"
+      <Link 
+        href={`/avaliar/${id}`}
+        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
       >
-        <Edit className="w-4 h-4" />
-        Editar
+        <Star className="w-4 h-4" />
+        Avaliar
       </Link>
-    );
-    */}
+    )
   }
 
   return (
-    <div className="flex justify-end gap-3">
-      {/*
-      {deleteButton}
-      */}
+    <div className="flex justify-end gap-3 flex-wrap">
+      {updateStatusButton} 
       {actionButton}
     </div>
   );
@@ -162,11 +237,14 @@ export default function PropostasList({
   const [isPending, startTransition] = useTransition();
   const [propostas, setPropostas] = useState(initialPropostas);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProposta, setSelectedProposta] = useState<PropostaProcessada | null>(null);
+
   const menuItems = [
-  	{ name: 'Home', icon: Home, active: false },
-  	{ name: 'Notificações', icon: Bell, active: false },
-  	{ name: 'Propostas', icon: FileText, active: true},
-  	{ name: 'Perfil', icon: User },
+    { name: 'Home', icon: Home, active: false },
+    { name: 'Notificações', icon: Bell, active: false },
+    { name: 'Propostas', icon: FileText, active: true},
+    { name: 'Perfil', icon: User },
   ];
 
   const handleMenuClick = (itemName: string) => {
@@ -202,9 +280,42 @@ export default function PropostasList({
     }
   };
 
+  const openUpdateModal = (proposta: PropostaProcessada) => {
+    setSelectedProposta(proposta);
+    setIsModalOpen(true);
+  };
+
+  const handleStatusUpdate = (newStatus: EnumStatusProposta) => {
+    if (!selectedProposta) return;
+
+    startTransition(async () => {
+      const result = await updateProposalStatusAction(selectedProposta.id, newStatus);
+      
+      if (result.success) {
+        setPropostas((prev) => 
+          prev.map((p) => 
+            p.id === selectedProposta.id ? { ...p, status: newStatus } : p
+          )
+        );
+        setIsModalOpen(false);
+        setSelectedProposta(null);
+        router.refresh();
+      } else {
+        alert('Erro ao atualizar status.');
+      }
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50 pb-20 relative">
+      
+      <StatusUpdateModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleStatusUpdate}
+        currentStatus={selectedProposta?.status || null}
+      />
+
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 max-w-6xl mx-auto">
           Propostas
@@ -212,7 +323,6 @@ export default function PropostasList({
       </div>
 
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
-        {/* Seção de Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <StatCard title="Total" value={stats.total} />
           <StatCard title="Concluídas" value={stats.concluidas} />
@@ -220,7 +330,6 @@ export default function PropostasList({
           <StatCard title="Pendentes" value={stats.pendentes} />
         </div>
 
-        {/* Lista de Propostas*/}
         <div className="space-y-4">
           {initialPropostas.length === 0 ? (
             <div className="text-center bg-white border border-gray-200 rounded-xl p-12">
@@ -239,7 +348,6 @@ export default function PropostasList({
                   key={proposta.id}
                   className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden"
                 >
-                  {/* Header do Acordeão (Clicável) */}
                   <button
                     onClick={() => toggleProposta(proposta.id)}
                     className="flex items-center justify-between w-full p-4 sm:p-6 text-left"
@@ -288,6 +396,7 @@ export default function PropostasList({
                           <PropostaActions
                             proposta={proposta}
                             onDelete={handleDelete}
+                            onUpdateStatusClick={openUpdateModal}
                             isPending={isPending}
                           />
                         </div>

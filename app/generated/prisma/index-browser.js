@@ -198,7 +198,8 @@ exports.Prisma.PropostaScalarFieldEnum = {
   data_envio: 'data_envio',
   data_inicio: 'data_inicio',
   data_termino: 'data_termino',
-  Status: 'Status'
+  Status: 'Status',
+  resposta: 'resposta'
 };
 
 exports.Prisma.ServicoScalarFieldEnum = {

@@ -9716,6 +9716,7 @@ export namespace Prisma {
     data_inicio: Date | null
     data_termino: Date | null
     Status: $Enums.EnumStatusProposta | null
+    resposta: string | null
   }
 
   export type PropostaMaxAggregateOutputType = {
@@ -9729,6 +9730,7 @@ export namespace Prisma {
     data_inicio: Date | null
     data_termino: Date | null
     Status: $Enums.EnumStatusProposta | null
+    resposta: string | null
   }
 
   export type PropostaCountAggregateOutputType = {
@@ -9742,6 +9744,7 @@ export namespace Prisma {
     data_inicio: number
     data_termino: number
     Status: number
+    resposta: number
     _all: number
   }
 
@@ -9767,6 +9770,7 @@ export namespace Prisma {
     data_inicio?: true
     data_termino?: true
     Status?: true
+    resposta?: true
   }
 
   export type PropostaMaxAggregateInputType = {
@@ -9780,6 +9784,7 @@ export namespace Prisma {
     data_inicio?: true
     data_termino?: true
     Status?: true
+    resposta?: true
   }
 
   export type PropostaCountAggregateInputType = {
@@ -9793,6 +9798,7 @@ export namespace Prisma {
     data_inicio?: true
     data_termino?: true
     Status?: true
+    resposta?: true
     _all?: true
   }
 
@@ -9893,6 +9899,7 @@ export namespace Prisma {
     data_inicio: Date
     data_termino: Date
     Status: $Enums.EnumStatusProposta
+    resposta: string | null
     _count: PropostaCountAggregateOutputType | null
     _avg: PropostaAvgAggregateOutputType | null
     _sum: PropostaSumAggregateOutputType | null
@@ -9925,6 +9932,7 @@ export namespace Prisma {
     data_inicio?: boolean
     data_termino?: boolean
     Status?: boolean
+    resposta?: boolean
     contratante?: boolean | UsuarioDefaultArgs<ExtArgs>
     prestador?: boolean | UsuarioDefaultArgs<ExtArgs>
     servicos?: boolean | Proposta$servicosArgs<ExtArgs>
@@ -9943,6 +9951,7 @@ export namespace Prisma {
     data_inicio?: boolean
     data_termino?: boolean
     Status?: boolean
+    resposta?: boolean
     contratante?: boolean | UsuarioDefaultArgs<ExtArgs>
     prestador?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposta"]>
@@ -9958,6 +9967,7 @@ export namespace Prisma {
     data_inicio?: boolean
     data_termino?: boolean
     Status?: boolean
+    resposta?: boolean
     contratante?: boolean | UsuarioDefaultArgs<ExtArgs>
     prestador?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposta"]>
@@ -9973,9 +9983,10 @@ export namespace Prisma {
     data_inicio?: boolean
     data_termino?: boolean
     Status?: boolean
+    resposta?: boolean
   }
 
-  export type PropostaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "id_contratante" | "id_prestador" | "titulo" | "descricao" | "valor" | "data_envio" | "data_inicio" | "data_termino" | "Status", ExtArgs["result"]["proposta"]>
+  export type PropostaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "id_contratante" | "id_prestador" | "titulo" | "descricao" | "valor" | "data_envio" | "data_inicio" | "data_termino" | "Status" | "resposta", ExtArgs["result"]["proposta"]>
   export type PropostaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contratante?: boolean | UsuarioDefaultArgs<ExtArgs>
     prestador?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -10011,6 +10022,7 @@ export namespace Prisma {
       data_inicio: Date
       data_termino: Date
       Status: $Enums.EnumStatusProposta
+      resposta: string | null
     }, ExtArgs["result"]["proposta"]>
     composites: {}
   }
@@ -10448,6 +10460,7 @@ export namespace Prisma {
     readonly data_inicio: FieldRef<"Proposta", 'DateTime'>
     readonly data_termino: FieldRef<"Proposta", 'DateTime'>
     readonly Status: FieldRef<"Proposta", 'EnumStatusProposta'>
+    readonly resposta: FieldRef<"Proposta", 'String'>
   }
     
 
@@ -13188,7 +13201,8 @@ export namespace Prisma {
     data_envio: 'data_envio',
     data_inicio: 'data_inicio',
     data_termino: 'data_termino',
-    Status: 'Status'
+    Status: 'Status',
+    resposta: 'resposta'
   };
 
   export type PropostaScalarFieldEnum = (typeof PropostaScalarFieldEnum)[keyof typeof PropostaScalarFieldEnum]
@@ -13859,6 +13873,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFilter<"Proposta"> | Date | string
     data_termino?: DateTimeFilter<"Proposta"> | Date | string
     Status?: EnumEnumStatusPropostaFilter<"Proposta"> | $Enums.EnumStatusProposta
+    resposta?: StringNullableFilter<"Proposta"> | string | null
     contratante?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     prestador?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     servicos?: ServicoListRelationFilter
@@ -13876,6 +13891,7 @@ export namespace Prisma {
     data_inicio?: SortOrder
     data_termino?: SortOrder
     Status?: SortOrder
+    resposta?: SortOrderInput | SortOrder
     contratante?: UsuarioOrderByWithRelationInput
     prestador?: UsuarioOrderByWithRelationInput
     servicos?: ServicoOrderByRelationAggregateInput
@@ -13896,6 +13912,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFilter<"Proposta"> | Date | string
     data_termino?: DateTimeFilter<"Proposta"> | Date | string
     Status?: EnumEnumStatusPropostaFilter<"Proposta"> | $Enums.EnumStatusProposta
+    resposta?: StringNullableFilter<"Proposta"> | string | null
     contratante?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     prestador?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     servicos?: ServicoListRelationFilter
@@ -13913,6 +13930,7 @@ export namespace Prisma {
     data_inicio?: SortOrder
     data_termino?: SortOrder
     Status?: SortOrder
+    resposta?: SortOrderInput | SortOrder
     _count?: PropostaCountOrderByAggregateInput
     _avg?: PropostaAvgOrderByAggregateInput
     _max?: PropostaMaxOrderByAggregateInput
@@ -13934,6 +13952,7 @@ export namespace Prisma {
     data_inicio?: DateTimeWithAggregatesFilter<"Proposta"> | Date | string
     data_termino?: DateTimeWithAggregatesFilter<"Proposta"> | Date | string
     Status?: EnumEnumStatusPropostaWithAggregatesFilter<"Proposta"> | $Enums.EnumStatusProposta
+    resposta?: StringNullableWithAggregatesFilter<"Proposta"> | string | null
   }
 
   export type ServicoWhereInput = {
@@ -14538,6 +14557,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     contratante: UsuarioCreateNestedOneWithoutPropostas_contratadasInput
     prestador: UsuarioCreateNestedOneWithoutPropostas_prestadasInput
     servicos?: ServicoCreateNestedManyWithoutPropostaInput
@@ -14555,6 +14575,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     servicos?: ServicoUncheckedCreateNestedManyWithoutPropostaInput
     avaliacao?: AvaliacaoUncheckedCreateNestedManyWithoutPropostaInput
   }
@@ -14567,6 +14588,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     contratante?: UsuarioUpdateOneRequiredWithoutPropostas_contratadasNestedInput
     prestador?: UsuarioUpdateOneRequiredWithoutPropostas_prestadasNestedInput
     servicos?: ServicoUpdateManyWithoutPropostaNestedInput
@@ -14584,6 +14606,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     servicos?: ServicoUncheckedUpdateManyWithoutPropostaNestedInput
     avaliacao?: AvaliacaoUncheckedUpdateManyWithoutPropostaNestedInput
   }
@@ -14599,6 +14622,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
   }
 
   export type PropostaUpdateManyMutationInput = {
@@ -14609,6 +14633,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PropostaUncheckedUpdateManyInput = {
@@ -14622,6 +14647,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServicoCreateInput = {
@@ -15332,6 +15358,7 @@ export namespace Prisma {
     data_inicio?: SortOrder
     data_termino?: SortOrder
     Status?: SortOrder
+    resposta?: SortOrder
   }
 
   export type PropostaAvgOrderByAggregateInput = {
@@ -15350,6 +15377,7 @@ export namespace Prisma {
     data_inicio?: SortOrder
     data_termino?: SortOrder
     Status?: SortOrder
+    resposta?: SortOrder
   }
 
   export type PropostaMinOrderByAggregateInput = {
@@ -15363,6 +15391,7 @@ export namespace Prisma {
     data_inicio?: SortOrder
     data_termino?: SortOrder
     Status?: SortOrder
+    resposta?: SortOrder
   }
 
   export type PropostaSumOrderByAggregateInput = {
@@ -16524,6 +16553,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     prestador: UsuarioCreateNestedOneWithoutPropostas_prestadasInput
     servicos?: ServicoCreateNestedManyWithoutPropostaInput
     avaliacao?: AvaliacaoCreateNestedManyWithoutPropostaInput
@@ -16539,6 +16569,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     servicos?: ServicoUncheckedCreateNestedManyWithoutPropostaInput
     avaliacao?: AvaliacaoUncheckedCreateNestedManyWithoutPropostaInput
   }
@@ -16561,6 +16592,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     contratante: UsuarioCreateNestedOneWithoutPropostas_contratadasInput
     servicos?: ServicoCreateNestedManyWithoutPropostaInput
     avaliacao?: AvaliacaoCreateNestedManyWithoutPropostaInput
@@ -16576,6 +16608,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     servicos?: ServicoUncheckedCreateNestedManyWithoutPropostaInput
     avaliacao?: AvaliacaoUncheckedCreateNestedManyWithoutPropostaInput
   }
@@ -16735,6 +16768,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFilter<"Proposta"> | Date | string
     data_termino?: DateTimeFilter<"Proposta"> | Date | string
     Status?: EnumEnumStatusPropostaFilter<"Proposta"> | $Enums.EnumStatusProposta
+    resposta?: StringNullableFilter<"Proposta"> | string | null
   }
 
   export type PropostaUpsertWithWhereUniqueWithoutPrestadorInput = {
@@ -17397,6 +17431,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     contratante: UsuarioCreateNestedOneWithoutPropostas_contratadasInput
     prestador: UsuarioCreateNestedOneWithoutPropostas_prestadasInput
     avaliacao?: AvaliacaoCreateNestedManyWithoutPropostaInput
@@ -17413,6 +17448,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     avaliacao?: AvaliacaoUncheckedCreateNestedManyWithoutPropostaInput
   }
 
@@ -17440,6 +17476,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     contratante?: UsuarioUpdateOneRequiredWithoutPropostas_contratadasNestedInput
     prestador?: UsuarioUpdateOneRequiredWithoutPropostas_prestadasNestedInput
     avaliacao?: AvaliacaoUpdateManyWithoutPropostaNestedInput
@@ -17456,6 +17493,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     avaliacao?: AvaliacaoUncheckedUpdateManyWithoutPropostaNestedInput
   }
 
@@ -17467,6 +17505,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     contratante: UsuarioCreateNestedOneWithoutPropostas_contratadasInput
     prestador: UsuarioCreateNestedOneWithoutPropostas_prestadasInput
     servicos?: ServicoCreateNestedManyWithoutPropostaInput
@@ -17483,6 +17522,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
     servicos?: ServicoUncheckedCreateNestedManyWithoutPropostaInput
   }
 
@@ -17510,6 +17550,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     contratante?: UsuarioUpdateOneRequiredWithoutPropostas_contratadasNestedInput
     prestador?: UsuarioUpdateOneRequiredWithoutPropostas_prestadasNestedInput
     servicos?: ServicoUpdateManyWithoutPropostaNestedInput
@@ -17526,6 +17567,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     servicos?: ServicoUncheckedUpdateManyWithoutPropostaNestedInput
   }
 
@@ -17544,6 +17586,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
   }
 
   export type PropostaCreateManyPrestadorInput = {
@@ -17556,6 +17599,7 @@ export namespace Prisma {
     data_inicio: Date | string
     data_termino: Date | string
     Status: $Enums.EnumStatusProposta
+    resposta?: string | null
   }
 
   export type AccountCreateManyUserInput = {
@@ -17611,6 +17655,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     prestador?: UsuarioUpdateOneRequiredWithoutPropostas_prestadasNestedInput
     servicos?: ServicoUpdateManyWithoutPropostaNestedInput
     avaliacao?: AvaliacaoUpdateManyWithoutPropostaNestedInput
@@ -17626,6 +17671,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     servicos?: ServicoUncheckedUpdateManyWithoutPropostaNestedInput
     avaliacao?: AvaliacaoUncheckedUpdateManyWithoutPropostaNestedInput
   }
@@ -17640,6 +17686,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PropostaUpdateWithoutPrestadorInput = {
@@ -17650,6 +17697,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     contratante?: UsuarioUpdateOneRequiredWithoutPropostas_contratadasNestedInput
     servicos?: ServicoUpdateManyWithoutPropostaNestedInput
     avaliacao?: AvaliacaoUpdateManyWithoutPropostaNestedInput
@@ -17665,6 +17713,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
     servicos?: ServicoUncheckedUpdateManyWithoutPropostaNestedInput
     avaliacao?: AvaliacaoUncheckedUpdateManyWithoutPropostaNestedInput
   }
@@ -17679,6 +17728,7 @@ export namespace Prisma {
     data_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
+    resposta?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountUpdateWithoutUserInput = {
