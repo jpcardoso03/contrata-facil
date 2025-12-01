@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Star, User, Calendar, Clock, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Star, Calendar, Clock, MessageSquare, AlertCircle } from 'lucide-react';
+import { getProposalForRatingAction, submitRatingAction } from '@/app/avaliar/actions';
 
 interface RateProfessionalProps {
-  proposalId: string;
+  proposalId: number;
 }
 
 export default function RateProfessional({ proposalId }: RateProfessionalProps) {
@@ -14,12 +15,13 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Dados da proposta concluída
   const [proposalData, setProposalData] = useState({
-    id: "",
+    id: 0,
     professionalName: "",
     professionalProfession: "",
     serviceType: "",
@@ -29,77 +31,49 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
     description: ""
   });
 
-  // Buscar dados da proposta quando o componente montar
   useEffect(() => {
     const fetchProposalData = async () => {
+      if (!proposalId) return;
+
       try {
-        // Simular busca dos dados da proposta
-        // Em produção, você faria uma chamada API aqui:
-        // const response = await fetch(`/api/proposals/${proposalId}`);
-        // const data = await response.json();
+        const result = await getProposalForRatingAction(proposalId);
         
-        // Dados mockados baseados no proposalId
-        const mockData = {
-          id: proposalId,
-          professionalName: "Carlos Silva",
-          professionalProfession: "Eletricista",
-          serviceType: "Instalação de Tomadas",
-          scheduledDate: "2024-12-15",
-          scheduledTime: "14:00",
-          totalValue: 255,
-          description: "Instalação de 5 tomadas novas na sala e quarto"
-        };
-        
-        setProposalData(mockData);
+        if (result.success && result.data) {
+          setProposalData(result.data);
+        } else {
+          setErrorMsg(result.error || 'Erro ao carregar proposta');
+          if (result.alreadyRated) {
+             alert("Esta proposta já foi avaliada.");
+             router.push('/propostas');
+          }
+        }
       } catch (error) {
-        console.error('Erro ao carregar dados da proposta:', error);
-        alert('Erro ao carregar dados da proposta');
+        setErrorMsg('Erro de conexão ao buscar dados.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (proposalId) {
-      fetchProposalData();
-    }
-  }, [proposalId]);
+    fetchProposalData();
+  }, [proposalId, router]);
 
-  const handleSubmitRating = async () => {
+  const handleSubmitRating = () => {
     if (rating === 0) {
       alert('Por favor, selecione uma avaliação');
       return;
     }
 
-    setIsSubmitting(true);
+    startTransition(async () => {
+      const result = await submitRatingAction(proposalId, rating, comment);
 
-    try {
-      // Enviar avaliação para a API
-      const response = await fetch('/api/ratings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          proposalId: proposalData.id,
-          rating,
-          comment,
-          professionalId: "1" // Em produção, isso viria dos dados da proposta
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao enviar avaliação');
+      if (result.success) {
+        alert('Avaliação enviada com sucesso! Obrigado pelo feedback.');
+        router.push('/propostas');
+        router.refresh();
+      } else {
+        alert(`Erro: ${result.error}`);
       }
-
-      alert('Avaliação enviada com sucesso! Obrigado pelo feedback.');
-      router.push('/dashboard');
-      
-    } catch (error) {
-      console.error('Erro ao enviar avaliação:', error);
-      alert('Erro ao enviar avaliação. Tente novamente.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   const handleBack = () => {
@@ -107,6 +81,7 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
   };
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
@@ -121,9 +96,23 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
     );
   }
 
+  if (errorMsg) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center max-w-md">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Atenção</h2>
+          <p className="text-gray-600 mb-6">{errorMsg}</p>
+          <button onClick={() => router.push('/propostas')} className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-200">
+             Voltar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-4xl mx-auto flex items-center">
           <button 
@@ -137,16 +126,14 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
       </div>
 
       <div className="max-w-4xl mx-auto p-4 space-y-6">
-        {/* Informações do Serviço */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Serviço Concluído</h2>
           
           <div className="space-y-4">
-            {/* Profissional */}
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">
-                  {proposalData.professionalName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  {proposalData.professionalName ? proposalData.professionalName.substring(0,2).toUpperCase() : 'P'}
                 </span>
               </div>
               <div>
@@ -155,7 +142,6 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
               </div>
             </div>
 
-            {/* Detalhes do Serviço */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-gray-400" />
@@ -178,7 +164,6 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
           </div>
         </div>
 
-        {/* Avaliação */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-400" />
@@ -186,7 +171,6 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
           </h2>
 
           <div className="space-y-6">
-            {/* Avaliação por Estrelas */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-4 text-center">
                 Selecione sua avaliação *
@@ -200,7 +184,7 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
                     onClick={() => setRating(star)}
                     onMouseEnter={() => setHoverRating(star)}
                     onMouseLeave={() => setHoverRating(0)}
-                    className="text-4xl transition-transform hover:scale-110 focus:scale-110"
+                    className="text-4xl transition-transform hover:scale-110 focus:scale-110 outline-none"
                   >
                     <span className={`
                       ${star <= (hoverRating || rating) 
@@ -213,20 +197,18 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
                   </button>
                 ))}
               </div>
-
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
-                  {rating === 0 && 'Selecione de 1 a 5 estrelas'}
+              
+              <div className="text-center h-5">
+                 <p className="text-sm text-gray-600">
                   {rating === 1 && 'Péssimo - Muito insatisfeito'}
                   {rating === 2 && 'Ruim - Insatisfeito'}
                   {rating === 3 && 'Regular - Poderia ser melhor'}
                   {rating === 4 && 'Bom - Satisfeito'}
                   {rating === 5 && 'Excelente - Muito satisfeito'}
-                </p>
+                 </p>
               </div>
             </div>
 
-            {/* Comentário */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
@@ -236,24 +218,20 @@ export default function RateProfessional({ proposalId }: RateProfessionalProps) 
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={4}
-                placeholder="Conte como foi a experiência com o profissional... (pontualidade, qualidade do serviço, comunicação, etc.)"
+                placeholder="Conte como foi a experiência..."
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Sua avaliação ajuda outros usuários a escolherem os melhores profissionais
-              </p>
             </div>
           </div>
         </div>
 
-        {/* Botão de Enviar */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <button
             onClick={handleSubmitRating}
-            disabled={rating === 0 || isSubmitting}
+            disabled={rating === 0 || isPending}
             className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold text-lg flex items-center justify-center gap-2"
           >
-            {isSubmitting ? (
+            {isPending ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 Enviando...

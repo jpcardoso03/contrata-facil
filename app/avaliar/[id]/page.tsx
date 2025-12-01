@@ -4,6 +4,8 @@ interface PageProps {
   params: { id: string };
 }
 
-export default function AvaliarPage({ params }: PageProps) {
-  return <RateProfessional proposalId={params.id} />;
+export default function RateProfessionalPage({ params }: PageProps) {
+  const proposalId = Number(params.id);
+
+  return <RateProfessional proposalId={proposalId} />;
 }
