@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, FileText, LogOut } from 'lucide-react';
+import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, FileText, LogOut, Search } from 'lucide-react';
 import type { ProcessedUserProfile } from '@/app/perfil/page'; 
 import { EnumTipoUsuario } from '@/app/generated/prisma';
 
@@ -14,13 +14,25 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
   const router = useRouter();
   
   const isPrestador = user.tipo_usuario === EnumTipoUsuario.PRESTADOR;
+  const isAdm = user.tipo_usuario === EnumTipoUsuario.ADMINISTRADOR;
+  const isContratante = user.tipo_usuario === EnumTipoUsuario.CONTRATANTE;
 
-  const menuItems = [
-    { name: 'Home', icon: Home, active: false },
-    { name: 'Notificações', icon: Bell },
-    { name: 'Propostas', icon: FileText },
-    { name: 'Perfil', icon: User, active: true },
-  ];
+  const menuItems = [];
+
+  if (!isPrestador) {
+    menuItems.push({ name: 'Home', icon: Home, active: false });
+  }
+
+  if (isAdm) {
+    menuItems.push({ name: 'Busca', icon: Search, active: false });
+  }
+
+  if (!isAdm) {
+    menuItems.push({ name: 'Notificações', icon: Bell, active: false });
+    menuItems.push({ name: 'Propostas', icon: FileText, active: false });
+  }
+
+  menuItems.push({ name: 'Perfil', icon: User, active: true });
 
   const profileActions = [
     {
@@ -39,10 +51,16 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
 
   const handleMenuClick = (itemName: string) => {
     if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
+      if (isContratante) router.push('/dashboard');
+      if (isAdm) router.push('/adm');
+    } 
+    else if (itemName === 'Busca') {
+      router.push('/busca');
+    }
+    else if (itemName === 'Notificações') {
       router.push('/notificacoes');
-    } else if (itemName === 'Propostas') {
+    } 
+    else if (itemName === 'Propostas') {
       router.push('/propostas');
     }
   };
@@ -220,17 +238,19 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
         </div>
       </div>
 
-      {/* Menu Inferior */}
+      {/* Menu Inferior Atualizado com Flexbox para ajustar a qualquer quantidade de itens */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          {/* Mudei de grid-cols-4 para flex justify-between para se adaptar à quantidade de itens */}
+          <div className="flex items-center justify-between h-full px-2">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
                 <button
                   key={index}
                   onClick={() => handleMenuClick(item.name)}
-                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                  // w-full garante distribuição igual do espaço
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
                     item.active
                       ? 'text-blue-600'
                       : 'text-gray-500 hover:text-gray-700'

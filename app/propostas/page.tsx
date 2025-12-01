@@ -88,5 +88,5 @@ export default async function PropostasPage() {
         session.user.id
     );
 
-    return <PropostasList initialPropostas={propostasProcessadas} stats={stats} />;
+    return <PropostasList initialPropostas={propostasProcessadas} stats={stats} userType={session.user.tipo_usuario} />;
 }

@@ -3,6 +3,7 @@
 import { Home, Bell, User, Check, MessageSquare, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { Notificacao } from '@/app/generated/prisma';
+import { EnumTipoUsuario } from '@/app/generated/prisma';
 import { markAsRead, markAllAsRead } from '@/app/notificacoes/actions';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -10,20 +11,39 @@ import { ptBR } from 'date-fns/locale';
 interface NotificationsListProps {
   initialNotifications: Notificacao[];
   initialUnreadCount: number;
+  userType: EnumTipoUsuario;
 }
 
 export default function NotificationsList({
   initialNotifications,
   initialUnreadCount,
+  userType
 }: NotificationsListProps) {
   const router = useRouter();
 
-  const menuItems = [
-    { name: 'Home', icon: Home, active: false },
-    { name: 'Notificações', icon: Bell, active: true },
-    { name: 'Propostas', icon: FileText },
-    { name: 'Perfil', icon: User },
-  ];
+  const menuItems = [];
+
+  if (userType !== EnumTipoUsuario.PRESTADOR) {
+     menuItems.push({ name: 'Home', icon: Home, active: false });
+  }
+
+  menuItems.push(
+    { name: 'Notificações', icon: Bell, active: false },
+    { name: 'Propostas', icon: FileText, active: true},
+    { name: 'Perfil', icon: User, active: false }
+  );
+
+  const handleMenuClick = (itemName: string) => {
+    if (itemName === 'Home') {
+      router.push('/dashboard');
+    } else if (itemName === 'Notificações') {
+      router.push('/notificacoes');
+    } else if (itemName === 'Propostas') {
+      router.push('/propostas');
+    } else if (itemName === 'Perfil') {
+      router.push('/perfil');
+    }
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -31,16 +51,6 @@ export default function NotificationsList({
         return <Check className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />;
       default:
         return <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />;
-    }
-  };
-
-  const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Propostas') {
-      router.push('/propostas');
-    } else if (itemName === 'Perfil') {
-      router.push('/perfil');
     }
   };
 
@@ -137,17 +147,16 @@ export default function NotificationsList({
         )}
       </div>
 
-      {/* Menu Inferior */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          <div className="flex items-center justify-between h-full px-2">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
                 <button
                   key={index}
                   onClick={() => handleMenuClick(item.name)}
-                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
                     item.active
                       ? 'text-blue-600'
                       : 'text-gray-500 hover:text-gray-700'

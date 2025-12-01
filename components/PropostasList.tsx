@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { Home, Bell, User, Edit, FileText, ChevronDown, Check, Clock, Eye, Trash2, Star, X, RefreshCw } from 'lucide-react';
-import { EnumStatusProposta } from "@/app/generated/prisma";
+import { EnumStatusProposta, EnumTipoUsuario } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
 import { deleteProposalAction } from '@/app/propostas/remover/actions';
 import { updateProposalStatusAction } from '@/app/propostas/actions';
@@ -12,6 +12,7 @@ import { updateProposalStatusAction } from '@/app/propostas/actions';
 interface PropostasListProps {
   initialPropostas: PropostaProcessada[];
   stats: PropostaStats;
+  userType: EnumTipoUsuario;
 }
 
 function StatCard({ title, value }: { title: string; value: number }) {
@@ -231,6 +232,7 @@ function PropostaActions({
 export default function PropostasList({
   initialPropostas,
   stats,
+  userType
 }: PropostasListProps) {
   const router = useRouter();
 
@@ -240,12 +242,17 @@ export default function PropostasList({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProposta, setSelectedProposta] = useState<PropostaProcessada | null>(null);
 
-  const menuItems = [
-    { name: 'Home', icon: Home, active: false },
+  const menuItems = [];
+
+  if (userType !== EnumTipoUsuario.PRESTADOR) {
+     menuItems.push({ name: 'Home', icon: Home, active: false });
+  }
+
+  menuItems.push(
     { name: 'Notificações', icon: Bell, active: false },
     { name: 'Propostas', icon: FileText, active: true},
-    { name: 'Perfil', icon: User },
-  ];
+    { name: 'Perfil', icon: User, active: false }
+  );
 
   const handleMenuClick = (itemName: string) => {
     if (itemName === 'Home') {
@@ -412,14 +419,14 @@ export default function PropostasList({
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-4 h-full">
+          <div className="flex items-center justify-between h-full px-2">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
                 <button
                   key={index}
                   onClick={() => handleMenuClick(item.name)}
-                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
                     item.active
                       ? 'text-blue-600'
                       : 'text-gray-500 hover:text-gray-700'

@@ -36,5 +36,6 @@ export default async function NotificationsPage() {
   <NotificationsList
     initialNotifications={notifications}
     initialUnreadCount={unreadCount}
+    userType={session.user.tipo_usuario}
      />);
 }
