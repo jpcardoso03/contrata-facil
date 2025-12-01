@@ -133,7 +133,7 @@ export default function SearchScreen() {
   };
 
   const handleProfessionalClick = (professionalId: string) => {
-    router.push(`/profissional/${professionalId}`);
+    router.push(`adm/usuario/${professionalId}`);
   };
 
   const getInitials = (name: string) => {
@@ -299,14 +299,6 @@ export default function SearchScreen() {
                             )}
                           </div>
                         </div>
-                        
-                        {professional.hourlyRate > 0 && (
-                            <div className="text-center sm:text-right">
-                            <div className="text-xl sm:text-2xl font-bold text-green-600">
-                                R$ {professional.hourlyRate}/h
-                            </div>
-                            </div>
-                        )}
                       </div>
                     </div>
                   </div>

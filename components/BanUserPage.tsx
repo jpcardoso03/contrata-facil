@@ -9,7 +9,6 @@ export default function BanUserPage() {
   const [banReason, setBanReason] = useState('');
   const [banDuration, setBanDuration] = useState('');
 
-  // Dados do usuário (em produção, viriam da API)
   const userData = {
     name: "Ana Maria",
     email: "ana.maria@email.com",
@@ -37,7 +36,6 @@ export default function BanUserPage() {
       return;
     }
 
-    // Aqui você faria a chamada para a API banir o usuário
     console.log('Banindo usuário:', {
       userId: "123",
       userName: userData.name,
@@ -53,7 +51,6 @@ export default function BanUserPage() {
     router.back();
   };
 
-  // Gerar iniciais do nome
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -65,7 +62,6 @@ export default function BanUserPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-4xl mx-auto flex items-center">
           <button 
@@ -79,7 +75,6 @@ export default function BanUserPage() {
       </div>
 
       <div className="max-w-4xl mx-auto p-4 space-y-6">
-        {/* Alerta de Aviso */}
         <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
@@ -93,7 +88,6 @@ export default function BanUserPage() {
           </div>
         </div>
 
-        {/* Informações do Usuário */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Usuário a Ser Banido</h2>
           
@@ -130,12 +124,10 @@ export default function BanUserPage() {
           </div>
         </div>
 
-        {/* Formulário de Banimento */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Detalhes do Banimento</h2>
 
           <div className="space-y-6">
-            {/* Motivo do Banimento */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Motivo do banimento *
@@ -150,7 +142,6 @@ export default function BanUserPage() {
               />
             </div>
 
-            {/* Duração */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Duração do banimento *
@@ -172,7 +163,6 @@ export default function BanUserPage() {
           </div>
         </div>
 
-        {/* Botões de Ação */}
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleConfirmBan}
