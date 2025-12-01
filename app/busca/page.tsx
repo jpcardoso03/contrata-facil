@@ -1,4 +1,4 @@
-import SearchScreen from '@/components/SearchScreen';
+import SearchScreen from '@/components/Busca';
 import prisma from '@/app/data/prisma';
 
 import { getServerSession } from 'next-auth/next';

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, MapPin, Star, User, Home, Loader2 } from 'lucide-react';
 
-// Interface que define o formato que vem da API
 interface Professional {
   id: string;
   name: string;
@@ -15,39 +14,49 @@ interface Professional {
   city: string;
   photoUrl?: string;
   skills: string[];
+  userType: 'PRESTADOR' | 'CONTRATANTE' | 'ADMINISTRADOR';
+}
+
+interface FilterOption {
+  id: string;
+  name: string;
 }
 
 export default function SearchScreen() {
   const router = useRouter();
   
-  // Estados de Filtro
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUserType, setSelectedUserType] = useState('todos');
   const [selectedCategory, setSelectedCategory] = useState('todos');
   const [selectedCity, setSelectedCity] = useState('todas');
   
-  // Estados de Dados
   const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Categorias (Fixo no front para os filtros)
-  const categories = [
-    { id: 'todos', name: 'Todos' },
-    { id: 'eletricista', name: 'Eletricista' },
-    { id: 'encanador', name: 'Encanador' },
-    { id: 'pintor', name: 'Pintor' },
-    { id: 'jardineiro', name: 'Jardineiro' },
-    { id: 'marceneiro', name: 'Marceneiro' },
-    { id: 'diarista', name: 'Diarista' }
+  const [availableCategories, setAvailableCategories] = useState<FilterOption[]>([
+    { id: 'todos', name: 'Todas as Categorias' }
+  ]);
+  const [availableCities, setAvailableCities] = useState<FilterOption[]>([
+    { id: 'todas', name: 'Todas as Cidades' }
+  ]);
+
+  const userTypes = [
+    { id: 'todos', name: 'Todos os Usuários' },
+    { id: 'PRESTADOR', name: 'Prestadores' },
+    { id: 'CONTRATANTE', name: 'Contratantes' },
+    { id: 'ADMINISTRADOR', name: 'Administradores' },
   ];
 
-  // Cidades (Fixo no front para os filtros)
-  const cities = [
-    { id: 'todas', name: 'Todas as cidades' },
-    { id: 'sao-paulo', name: 'São Paulo, SP' },
-    { id: 'rio-de-janeiro', name: 'Rio de Janeiro, RJ' },
-    { id: 'belo-horizonte', name: 'Belo Horizonte, MG' },
-    { id: 'curitiba', name: 'Curitiba, PR' }
-  ];
+  const isCategoryDisabled = selectedUserType === 'CONTRATANTE' || selectedUserType === 'ADMINISTRADOR';
+
+  const handleUserTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newType = e.target.value;
+    setSelectedUserType(newType);
+    
+    if (newType === 'CONTRATANTE' || newType === 'ADMINISTRADOR') {
+      setSelectedCategory('todos');
+    }
+  };
 
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
@@ -55,14 +64,34 @@ export default function SearchScreen() {
     { name: 'Perfil', icon: User, active: false },
   ];
 
-  // BUSCA OS DADOS DA API AO CARREGAR A TELA
   useEffect(() => {
     async function fetchProfessionals() {
       try {
         const response = await fetch('/api/profissionais');
         if (!response.ok) throw new Error('Falha ao buscar dados');
-        const data = await response.json();
+        const data: Professional[] = await response.json();
+        
         setProfessionals(data);
+
+        const uniqueCities = Array.from(
+          new Set(data.map(p => p.city).filter(c => c && c !== 'Localização não informada'))
+        ).sort();
+
+        const cityOptions = [
+          { id: 'todas', name: 'Todas as Cidades' },
+          ...uniqueCities.map(city => ({ id: city, name: city }))
+        ];
+        setAvailableCities(cityOptions);
+
+        const allSkills = data.flatMap(p => p.skills || []);
+        const uniqueSkills = Array.from(new Set(allSkills)).sort();
+
+        const categoryOptions = [
+          { id: 'todos', name: 'Todas as Habilidades' },
+          ...uniqueSkills.map(skill => ({ id: skill, name: skill }))
+        ];
+        setAvailableCategories(categoryOptions);
+
       } catch (error) {
         console.error("Erro ao carregar profissionais:", error);
       } finally {
@@ -73,7 +102,6 @@ export default function SearchScreen() {
     fetchProfessionals();
   }, []);
 
-  // Lógica de Filtro (feita no cliente com os dados que vieram do banco)
   const filteredProfessionals = professionals.filter(professional => {
     const name = professional.name?.toLowerCase() || '';
     const profession = professional.profession?.toLowerCase() || '';
@@ -86,19 +114,21 @@ export default function SearchScreen() {
                           professional.skills.some(skill => skill.toLowerCase().includes(term));
     
     const matchesCategory = selectedCategory === 'todos' || 
-                            profession.includes(selectedCategory);
+                            professional.skills.includes(selectedCategory) ||
+                            profession.includes(selectedCategory.toLowerCase());
     
     const matchesCity = selectedCity === 'todas' || 
-                        city.includes(selectedCity.replace('-', ' '));
+                        city.toLowerCase() === selectedCity.toLowerCase();
 
-    return matchesSearch && matchesCategory && matchesCity;
+    const matchesUserType = selectedUserType === 'todos' || 
+                            professional.userType === selectedUserType;
+
+    return matchesSearch && matchesCategory && matchesCity && matchesUserType;
   });
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') router.push('/dashboard');
-    else if (itemName === 'Notificações') router.push('/notificacoes');
+    if (itemName === 'Home') router.push('/admin');
     else if (itemName === 'Busca') router.push('/busca');
-    else if (itemName === 'Mensagem') router.push('/mensagens');
     else if (itemName === 'Perfil') router.push('/perfil'); 
   };
 
@@ -118,15 +148,13 @@ export default function SearchScreen() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Buscar Profissionais</h1>
-          <p className="text-gray-600 text-sm mt-1">Encontre os melhores profissionais para seu serviço</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Buscar Usuários</h1>
+          <p className="text-gray-600 text-sm mt-1">Encontre profissionais, contratantes ou administradores</p>
         </div>
       </div>
 
-      {/* Barra de Busca e Filtros */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="max-w-4xl mx-auto space-y-4">
           <div className="relative">
@@ -142,13 +170,31 @@ export default function SearchScreen() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Usuário</label>
+              <select
+                value={selectedUserType}
+                onChange={handleUserTypeChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                {userTypes.map(type => (
+                  <option key={type.id} value={type.id}>{type.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex-1">
+              <label className={`block text-sm font-medium mb-1 ${isCategoryDisabled ? 'text-gray-400' : 'text-gray-700'}`}>
+                Categoria
+              </label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={isCategoryDisabled}
+                className={`w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    isCategoryDisabled ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'border-gray-300'
+                }`}
               >
-                {categories.map(category => (
+                {availableCategories.map(category => (
                   <option key={category.id} value={category.id}>{category.name}</option>
                 ))}
               </select>
@@ -161,7 +207,7 @@ export default function SearchScreen() {
                 onChange={(e) => setSelectedCity(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                {cities.map(city => (
+                {availableCities.map(city => (
                   <option key={city.id} value={city.id}>{city.name}</option>
                 ))}
               </select>
@@ -170,20 +216,18 @@ export default function SearchScreen() {
         </div>
       </div>
 
-      {/* Resultados */}
       <div className="max-w-4xl mx-auto p-4">
         
-        {/* Loading Spinner */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-4" />
-            <p className="text-gray-500">Carregando profissionais...</p>
+            <p className="text-gray-500">Carregando...</p>
           </div>
         ) : (
           <>
             <div className="mb-4">
               <p className="text-gray-600">
-                {filteredProfessionals.length} profissional{filteredProfessionals.length !== 1 ? 'is' : ''} encontrado{filteredProfessionals.length !== 1 ? 's' : ''}
+                {filteredProfessionals.length} usuário{filteredProfessionals.length !== 1 ? 's' : ''} encontrado{filteredProfessionals.length !== 1 ? 's' : ''}
               </p>
             </div>
 
@@ -217,18 +261,26 @@ export default function SearchScreen() {
                           <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
                             {professional.name}
                           </h3>
-                          <p className="text-gray-700 mb-2">{professional.profession}</p>
+                          <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+                            <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-medium border border-gray-200">
+                                {professional.userType}
+                            </span>
+                            <span className="text-gray-700 text-sm">{professional.profession}</span>
+                          </div>
                           
-                          <div className="flex flex-col sm:flex-row items-center gap-2 mb-3">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                              <span className="text-gray-700 font-medium">{professional.rating}</span>
-                              <span className="text-gray-500 text-sm">({professional.reviews} avaliações)</span>
+                          {professional.reviews > 0 && (
+                            <div className="flex flex-col sm:flex-row items-center gap-2 mb-3">
+                                <div className="flex items-center gap-1">
+                                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                                <span className="text-gray-700 font-medium">{professional.rating}</span>
+                                <span className="text-gray-500 text-sm">({professional.reviews} avaliações)</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-600 text-sm">{professional.city}</span>
-                            </div>
+                          )}
+                          
+                          <div className="flex items-center justify-center sm:justify-start gap-1 mb-3">
+                             <MapPin className="w-4 h-4 text-gray-400" />
+                             <span className="text-gray-600 text-sm">{professional.city}</span>
                           </div>
 
                           <div className="flex flex-wrap gap-1 justify-center sm:justify-start">
@@ -248,11 +300,13 @@ export default function SearchScreen() {
                           </div>
                         </div>
                         
-                        <div className="text-center sm:text-right">
-                          <div className="text-xl sm:text-2xl font-bold text-green-600">
-                            R$ {professional.hourlyRate}/h
-                          </div>
-                        </div>
+                        {professional.hourlyRate > 0 && (
+                            <div className="text-center sm:text-right">
+                            <div className="text-xl sm:text-2xl font-bold text-green-600">
+                                R$ {professional.hourlyRate}/h
+                            </div>
+                            </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -264,7 +318,7 @@ export default function SearchScreen() {
               <div className="text-center py-12">
                 <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  Nenhum profissional encontrado
+                  Nenhum usuário encontrado
                 </h3>
                 <p className="text-gray-600">
                   Tente ajustar os filtros ou buscar por outros termos
@@ -275,7 +329,6 @@ export default function SearchScreen() {
         )}
       </div>
 
-      {/* Menu Inferior */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
           <div className="grid grid-cols-3 h-full">

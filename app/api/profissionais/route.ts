@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/data/prisma';
 
 export async function GET() {
   try {
@@ -20,40 +18,37 @@ export async function GET() {
       },
     });
 
-    type UsuarioDoBanco = typeof usuarios[number];
-
-    const formattedProfessionals = usuarios.map((user: UsuarioDoBanco) => {
+    const formattedProfessionals = usuarios.map((user) => {
       
-      const todasAvaliacoes = user.propostas_prestadas.flatMap(
-        (p: any) => p.avaliacao
-      );
-      
+      const propostas = user.propostas_prestadas || [];
+      const todasAvaliacoes = propostas.flatMap((p) => p.avaliacao);
       const totalReviews = todasAvaliacoes.length;
       
       const somaNotas = todasAvaliacoes.reduce(
-        (acc: number, curr: any) => acc + curr.nota,
+        (acc, curr) => acc + curr.nota, 
         0
       );
       
       const rating = totalReviews > 0 ? somaNotas / totalReviews : 0;
-
-      const skills = user.habilidades.map((h: any) => h.habilidade.nome);
-
+      const skills = user.habilidades.map((h) => h.habilidade.nome);
       let displayProfession = user.profissao;
-      if (!displayProfession) {
-        displayProfession = user.tipo_usuario.charAt(0) + user.tipo_usuario.slice(1).toLowerCase();
+      
+      if (!displayProfession && user.tipo_usuario) {
+        const tipoStr = String(user.tipo_usuario);
+        displayProfession = tipoStr.charAt(0) + tipoStr.slice(1).toLowerCase();
       }
 
       return {
         id: user.id,
         name: user.name || 'Usuário sem nome',
-        profession: displayProfession,
+        profession: displayProfession || 'Profissional',
         rating: Number(rating.toFixed(1)),
         reviews: totalReviews,
         hourlyRate: user.valor ? Number(user.valor) : 0,
         city: user.city || 'Localização não informada',
         photoUrl: user.image || undefined,
         skills: skills,
+        userType: user.tipo_usuario,
       };
     });
 
