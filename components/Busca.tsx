@@ -127,7 +127,7 @@ export default function SearchScreen() {
   });
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') router.push('/admin');
+    if (itemName === 'Home') router.push('/adm');
     else if (itemName === 'Busca') router.push('/busca');
     else if (itemName === 'Perfil') router.push('/perfil'); 
   };

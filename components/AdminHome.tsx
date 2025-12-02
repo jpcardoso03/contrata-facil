@@ -11,12 +11,11 @@ export default function AdminHomeScreen() {
   };
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') router.push('/admin');
+    if (itemName === 'Home') router.push('/adm');
     else if (itemName === 'Busca') router.push('/busca');
     else if (itemName === 'Perfil') router.push('/perfil'); 
   };
 
-  // Dados mockados para visualizar o layout (depois podemos conectar na API)
   const stats = [
     { label: 'Total de Usuários', value: '1,234' },
     { label: 'Administradores', value: '12' },
@@ -33,16 +32,13 @@ export default function AdminHomeScreen() {
     <div className="min-h-screen bg-gray-50 p-6 md:p-10">
       <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Cabeçalho */}
         <div>
           <h1 className="text-2xl font-bold text-blue-900">Bem-vindo ao Sistema</h1>
           <p className="text-blue-500 mt-1">Selecione uma das opções abaixo para começar</p>
         </div>
 
-        {/* Cards de Ação (Main Grid) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          {/* Card 1: Criar Administrador */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-start h-full hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white mb-4">
               <UserPlus className="w-6 h-6" />
@@ -52,14 +48,13 @@ export default function AdminHomeScreen() {
               Adicione um novo administrador ao sistema com permissões completas
             </p>
             <button 
-              onClick={() => handleNavigate('/admin/criar')} 
+              onClick={() => handleNavigate('/adm/criar')} 
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
             >
               Criar Administrador
             </button>
           </div>
 
-          {/* Card 2: Buscar Usuário */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-start h-full hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white mb-4">
               <Search className="w-6 h-6" />
@@ -76,7 +71,6 @@ export default function AdminHomeScreen() {
             </button>
           </div>
 
-          {/* Card 3: Gerenciar Habilidades */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-start h-full hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white mb-4">
               <Settings className="w-6 h-6" />
@@ -86,7 +80,7 @@ export default function AdminHomeScreen() {
               Configure e edite habilidades disponíveis no sistema
             </p>
             <button 
-              onClick={() => handleNavigate('/admin/habilidades')} 
+              onClick={() => handleNavigate('/gerenciar-habilidades')} 
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
             >
               Gerenciar Habilidades
@@ -95,7 +89,6 @@ export default function AdminHomeScreen() {
 
         </div>
 
-        {/* Cards de Estatísticas (Rodapé) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {stats.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
