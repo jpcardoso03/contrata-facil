@@ -15,7 +15,6 @@ interface PropostasListProps {
   userType: EnumTipoUsuario;
 }
 
-// ... (Mantenha as funções StatCard, getStatusBadge e StatusUpdateModal IGUAIS ao que você já tem) ...
 function StatCard({ title, value }: { title: string; value: number }) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 text-center shadow-sm">
@@ -136,7 +135,6 @@ function StatusUpdateModal({
     </div>
   );
 }
-// ... (Mantenha as funções StatCard, getStatusBadge e StatusUpdateModal IGUAIS) ...
 
 function PropostaActions({
   proposta,
@@ -180,7 +178,6 @@ function PropostaActions({
     </button>
   );
 
-  // Lógica dos botões (Mantida a sua, apenas adicionado Link onde necessário)
   let actionButton = null;
 
   if (
@@ -189,7 +186,7 @@ function PropostaActions({
   ) {
     actionButton = (
       <Link
-        href={`/propostas/review/${id}`}
+        href={`/propostas/update/${id}`}
         className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
         >
         <Check className="w-4 h-4" />
@@ -200,7 +197,6 @@ function PropostaActions({
     (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'contratante') ||
     (status === 'PENDENTE' && userRole === 'prestador')
   ) {
-      // Caso aguardando o OUTRO responder
       actionButton = (
         <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium bg-gray-50 rounded-lg">
             <Clock className="w-4 h-4" />
@@ -324,7 +320,6 @@ export default function PropostasList({
       </div>
 
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
-        {/* Cards de Estatística */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <StatCard title="Total" value={stats.total} />
           <StatCard title="Concluídas" value={stats.concluidas} />
@@ -386,8 +381,6 @@ export default function PropostasList({
                   {isExpanded && (
                     <div className="px-4 sm:px-6 pb-6 border-t border-gray-200 bg-gray-50/50">
                       <div className="pt-6 space-y-6">
-                        
-                        {/* Seção 1: Detalhes Principais e Datas */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
                                 <div>
@@ -400,7 +393,6 @@ export default function PropostasList({
                                     </p>
                                 </div>
 
-                                {/* Resposta/Comentário se houver */}
                                 {proposta.resposta && (
                                     <div>
                                         <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
@@ -452,7 +444,6 @@ export default function PropostasList({
                             </div>
                         </div>
 
-                        {/* Seção 2: Lista de Serviços */}
                         <div>
                             <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-3">
                                 <ListChecks className="w-4 h-4 text-blue-600" />
@@ -482,7 +473,6 @@ export default function PropostasList({
                             )}
                         </div>
 
-                        {/* Botões de Ação */}
                         <div className="pt-4 border-t border-gray-200">
                           <PropostaActions
                             proposta={proposta}

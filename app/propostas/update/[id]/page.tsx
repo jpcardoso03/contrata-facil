@@ -1,138 +1,91 @@
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/app/data/prisma';
-import ReviewProposal from '@/components/UpdateProposal';
-import { EnumStatusProposta } from '@/app/generated/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { notFound, redirect } from 'next/navigation';
+import UpdateProposal from '@/components/UpdateProposal';
 
-type ProposalData = {
+export type ProposalEditData = {
   id: number;
   titulo: string;
   descricao: string;
-  valor: number;
-  data_inicio: Date;
-  data_termino: Date;
-  status: EnumStatusProposta;
+  valorTotal: number;
+  valorHora: number;
+  dataInicio: Date;
+  dataTermino: Date;
+  servicos: string[];
+  professionalName: string;
+  professionalId: string;
 };
 
-type OtherUserData = {
-  id: string;
-  name: string | null;
-  profissao: string | null;
-  photoUrl: string | null;
-  valorBase: number;
-  rating: number;
-  reviews: number;
-};
-
-export default async function ReviewProposalPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const proposalId = Number(id);
-
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect('/login');
-  }
-
-  const currentUserId = session.user.id;
-
-  if (isNaN(proposalId)) {
-    redirect('/propostas');
-  }
-
+async function getProposalForEdit(id: number, userId: string) {
   const proposta = await prisma.proposta.findUnique({
-    where: { id: proposalId },
+    where: { id },
     include: {
-      contratante: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          profissao: true,
-          valor: true,
-        },
-      },
+      servicos: true,
       prestador: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          profissao: true,
-          valor: true,
-        },
-      },
-    },
+        select: { id: true, name: true, valor: true }
+      }
+    }
   });
 
-  if (!proposta) {
-    redirect('/propostas');
+  if (!proposta) return null;
+
+  if (proposta.id_contratante !== userId) {
+    return 'unauthorized';
   }
 
-  const isContratante = proposta.id_contratante === currentUserId;
-  const isPrestador = proposta.id_prestador === currentUserId;
+  
+  const start = proposta.data_inicio;
+  const end = proposta.data_termino;
+  const totalValue = Number(proposta.valor);
 
-  if (!isContratante && !isPrestador) {
-    redirect('/propostas');
+  const startDay = new Date(start); startDay.setHours(0,0,0,0);
+  const endDay = new Date(end); endDay.setHours(0,0,0,0);
+  const daysDiff = Math.floor((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+
+  const startMinutes = start.getHours() * 60 + start.getMinutes();
+  const endMinutes = end.getHours() * 60 + end.getMinutes();
+  const minutesPerDay = endMinutes - startMinutes;
+  const hoursPerDay = minutesPerDay / 60;
+
+  let estimatedHours = 0;
+  if (daysDiff > 0 && hoursPerDay > 0) {
+    estimatedHours = daysDiff * hoursPerDay;
   }
 
-  const userRole = isContratante ? 'contratante' : 'prestador';
-  const otherUserDataRaw = isContratante
-    ? proposta.prestador
-    : proposta.contratante;
+  const calculatedHourlyRate = estimatedHours > 0 
+    ? totalValue / estimatedHours 
+    : Number(proposta.prestador.valor);
 
-  let isUsersTurn = false;
-  if (
-    userRole === 'contratante' &&
-    proposta.Status === EnumStatusProposta.EM_ANDAMENTO || 
-    proposta.Status === EnumStatusProposta.AGUARDANDO_CONTRATANTE
-  ) {
-    isUsersTurn = true;
-  }
-  if (
-    userRole === 'prestador' &&
-    (proposta.Status === EnumStatusProposta.PENDENTE ||
-      proposta.Status === EnumStatusProposta.AGUARDANDO_PRESTADOR)
-  ) {
-    isUsersTurn = true;
-  }
-
-  if (!isUsersTurn) {
-    console.warn(
-      `Usuário ${currentUserId} tentou revisar a proposta ${proposalId}, mas não é sua vez.`
-    );
-    redirect('/propostas');
-  }
-
-  const proposalProps: ProposalData = {
+  const editData: ProposalEditData = {
     id: proposta.id,
     titulo: proposta.titulo,
     descricao: proposta.descricao,
-    valor: proposta.valor.toNumber(),
-    data_inicio: proposta.data_inicio,
-    data_termino: proposta.data_termino,
-    status: proposta.Status,
+    valorTotal: totalValue,
+    valorHora: Math.round(calculatedHourlyRate * 100) / 100,
+    dataInicio: proposta.data_inicio,
+    dataTermino: proposta.data_termino,
+    servicos: proposta.servicos.map(s => s.nome_servico),
+    professionalName: proposta.prestador.name || 'Prestador',
+    professionalId: proposta.prestador.id
   };
 
-  const otherUserProps: OtherUserData = {
-    id: otherUserDataRaw.id,
-    name: otherUserDataRaw.name,
-    profissao: otherUserDataRaw.profissao,
-    photoUrl: otherUserDataRaw.image,
-    valorBase: otherUserDataRaw.valor.toNumber(),
-    rating: 4.8,
-    reviews: 23, 
-  };
+  return editData;
+}
 
+export default async function UpdateProposalPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const session = await getServerSession(authOptions);
 
-  return (
-    <ReviewProposal
-      proposal={proposalProps}
-      otherUser={otherUserProps}
-    />
-  );
+  if (!session?.user?.id) redirect('/login');
+
+  const proposalId = parseInt(params.id);
+  if (isNaN(proposalId)) notFound();
+
+  const data = await getProposalForEdit(proposalId, session.user.id);
+
+  if (!data) notFound();
+  if (data === 'unauthorized') redirect('/propostas'); // Redireciona se não for dono
+
+  return <UpdateProposal proposal={data} />;
 }
