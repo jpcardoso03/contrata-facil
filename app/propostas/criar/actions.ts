@@ -9,41 +9,34 @@ import { EnumStatusProposta, EnumTipoNotificacao } from '@/app/generated/prisma'
 
 const ProposalSchema = z.object({
   id_prestador: z.string(),
-  titulo: z.string().min(1, 'O tipo de serviço é obrigatório'),
+  titulo_principal: z.string().optional(), 
   descricao: z.string().optional(),
   valor: z.number().positive('O valor deve ser positivo'),
-  data_inicio_str: z.string().min(1, 'A data é obrigatória'),
-  data_termino_str: z.string().min(1, 'O horário é obrigatório'),
-  horas_estimadas: z.number().int().positive(),
+  horas_estimadas: z.number().positive(),
+  dataInicio: z.string().datetime(), 
+  dataTermino: z.string().datetime(),
+  servicesList: z.string() 
 });
 
 export async function createProposalAction(formData: FormData) {
   const session = await getServerSession(authOptions); 
+  
   if (!session?.user?.id) {
     return { success: false, error: 'Usuário não autenticado.' };
   }
+  
   const id_contratante = session.user.id;
-
   const professionalName = formData.get('professionalName') as string;
-
-  const data_inicio = `${formData.get('selectedDate')}T${formData.get(
-    'selectedTime'
-  )}:00`;
-  const horas_estimadas = Number(formData.get('estimatedHours'));
-
-  const dataInicioObj = new Date(data_inicio);
-  const dataTerminoObj = new Date(
-    dataInicioObj.getTime() + horas_estimadas * 60 * 60 * 1000
-  );
 
   const validatedFields = ProposalSchema.safeParse({
     id_prestador: formData.get('professionalId'),
-    titulo: formData.get('serviceType'),
+    titulo_principal: formData.get('serviceType'),
     descricao: formData.get('description'),
     valor: Number(formData.get('totalValue')),
-    data_inicio_str: formData.get('selectedDate'),
-    data_termino_str: formData.get('selectedTime'),
-    horas_estimadas: horas_estimadas,
+    horas_estimadas: Number(formData.get('estimatedHours')),
+    dataInicio: formData.get('dataInicio'),
+    dataTermino: formData.get('dataTermino'),
+    servicesList: formData.get('servicesList')
   });
 
   if (!validatedFields.success) {
@@ -55,57 +48,75 @@ export async function createProposalAction(formData: FormData) {
     };
   }
 
-  const { id_prestador, titulo, descricao, valor } = validatedFields.data;
+  const { 
+    id_prestador, 
+    titulo_principal, 
+    descricao, 
+    valor, 
+    dataInicio, 
+    dataTermino, 
+    servicesList 
+  } = validatedFields.data;
+
+  let parsedServices: string[] = [];
+  try {
+    parsedServices = JSON.parse(servicesList);
+    if (!Array.isArray(parsedServices) || parsedServices.length === 0) {
+      throw new Error('Lista de serviços vazia');
+    }
+  } catch (e) {
+    return { success: false, error: 'Erro ao processar lista de serviços.' };
+  }
+
+  const proposalTitle = titulo_principal || parsedServices[0] || 'Serviço Contratado';
 
   try {
     const novaProposta = await prisma.proposta.create({
       data: {
         id_contratante: id_contratante,
         id_prestador: id_prestador,
-        titulo: titulo,
+        titulo: proposalTitle, 
         descricao: descricao || '',
         valor: valor,
         data_envio: new Date(),
-        data_inicio: dataInicioObj,
-        data_termino: dataTerminoObj,
+        data_inicio: new Date(dataInicio),
+        data_termino: new Date(dataTermino),
         Status: EnumStatusProposta.PENDENTE, 
         
         servicos: {
-          create: {
-            id_servico: 1,
-            nome_servico: titulo,
+          create: parsedServices.map((nomeServico, index) => ({
+            id_servico: index + 1, 
+            nome_servico: nomeServico,
             descricao: descricao || '',
-          }
+          }))
         }
       },
     });
 
-    // notificação prestador
     await prisma.notificacao.create({
       data: {
         userId: id_prestador,
         titulo: 'Nova proposta recebida!',
         mensagem: `Você recebeu uma nova proposta de ${
           session.user.name || 'um cliente'
-        }.`,
+        } para realizar: ${proposalTitle}.`,
         tipo: EnumTipoNotificacao.INFO, 
         link: `/propostas/${novaProposta.id}`,
       },
     });
 
-    // notificação contratante
     await prisma.notificacao.create({
       data: {
         userId: id_contratante, 
         titulo: 'Proposta enviada!',
-        mensagem: `Você enviou uma proposta de "${titulo}" para ${professionalName}.`,
+        mensagem: `Você enviou uma proposta de "${proposalTitle}" para ${professionalName}.`,
         tipo: EnumTipoNotificacao.SUCESS,
         link: `/propostas/${novaProposta.id}`,
       },
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao criar proposta:', error);
     return { success: false, error: 'Falha ao criar proposta no banco.' };
   }
 
