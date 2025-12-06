@@ -89,6 +89,8 @@ model Usuario {
   habilidades           PrestadorHabilidade[]
   propostas_contratadas Proposta[] @relation("ContratantePropostas")
   propostas_prestadas   Proposta[] @relation("PrestadorPropostas")
+  mensagens_enviadas    Mensagem[] @relation("RemetenteMensagem")
+  mensagens_recebidas   Mensagem[] @relation("DestinatarioMensagem")
 
   accounts     Account[]
   sessions     Session[]
@@ -132,6 +134,18 @@ model PrestadorHabilidade {
 
   @@id([id_habilidade, id_prestador])
   @@map("PRESTADOR_HABILIDADE")
+}
+
+model Mensagem {
+  id_mensagem Int @id @default(autoincrement())
+  id_remetente String
+  id_destinatario String
+  data DateTime
+
+  remetente Usuario @relation("RemetenteMensagem", fields: [id_remetente], references: [id])
+  destinatario Usuario @relation("DestinatarioMensagem", fields: [id_destinatario], references: [id])
+
+  @@map("MENSAGEM")
 }
 
 model Proposta {

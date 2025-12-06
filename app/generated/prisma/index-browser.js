@@ -188,6 +188,13 @@ exports.Prisma.PrestadorHabilidadeScalarFieldEnum = {
   nivel_proeficiencia: 'nivel_proeficiencia'
 };
 
+exports.Prisma.MensagemScalarFieldEnum = {
+  id_mensagem: 'id_mensagem',
+  id_remetente: 'id_remetente',
+  id_destinatario: 'id_destinatario',
+  data: 'data'
+};
+
 exports.Prisma.PropostaScalarFieldEnum = {
   id: 'id',
   id_contratante: 'id_contratante',
@@ -268,6 +275,7 @@ exports.Prisma.ModelName = {
   Notificacao: 'Notificacao',
   Habilidade: 'Habilidade',
   PrestadorHabilidade: 'PrestadorHabilidade',
+  Mensagem: 'Mensagem',
   Proposta: 'Proposta',
   Servico: 'Servico',
   Avaliacao: 'Avaliacao'

@@ -181,34 +181,37 @@ function PropostaActions({
   let actionButton = null;
 
   if (
-    (status === 'PENDENTE' && userRole === 'prestador') ||
-    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'contratante') ||
+    (status === 'PENDENTE' && userRole === 'contratante') ||
     (status === 'AGUARDANDO_PRESTADOR' && userRole === 'prestador')
   ) {
     actionButton = (
       <Link
         href={`/propostas/review/${id}`}
         className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
-      >
+        >
         <Check className="w-4 h-4" />
-        Revisar e Responder
+        Editar
       </Link>
     );
-  }
-  
-  else if (
-    (status === 'PENDENTE' && userRole === 'contratante') ||
-    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'prestador') ||
-    (status === 'AGUARDANDO_PRESTADOR' && userRole === 'contratante')
-  ) {
+
     actionButton = (
       <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium">
         <Clock className="w-4 h-4" />
         Aguardando resposta...
       </div>
     );
-  }
 
+    actionButton = (
+      <Link
+        href={`/propostas/remover`}
+        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+        >
+        <Trash2 className="w-4 h-4" />
+        Excluir
+      </Link>
+    )
+  }
+  
   else if (status === 'CONCLUIDA' && userRole === 'contratante') {
     actionButton = (
       <Link 

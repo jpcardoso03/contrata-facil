@@ -49,6 +49,11 @@ export type Habilidade = $Result.DefaultSelection<Prisma.$HabilidadePayload>
  */
 export type PrestadorHabilidade = $Result.DefaultSelection<Prisma.$PrestadorHabilidadePayload>
 /**
+ * Model Mensagem
+ * 
+ */
+export type Mensagem = $Result.DefaultSelection<Prisma.$MensagemPayload>
+/**
  * Model Proposta
  * 
  */
@@ -314,6 +319,16 @@ export class PrismaClient<
     * ```
     */
   get prestadorHabilidade(): Prisma.PrestadorHabilidadeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mensagem`: Exposes CRUD operations for the **Mensagem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mensagems
+    * const mensagems = await prisma.mensagem.findMany()
+    * ```
+    */
+  get mensagem(): Prisma.MensagemDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.proposta`: Exposes CRUD operations for the **Proposta** model.
@@ -792,6 +807,7 @@ export namespace Prisma {
     Notificacao: 'Notificacao',
     Habilidade: 'Habilidade',
     PrestadorHabilidade: 'PrestadorHabilidade',
+    Mensagem: 'Mensagem',
     Proposta: 'Proposta',
     Servico: 'Servico',
     Avaliacao: 'Avaliacao'
@@ -813,7 +829,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "verificationToken" | "usuario" | "notificacao" | "habilidade" | "prestadorHabilidade" | "proposta" | "servico" | "avaliacao"
+      modelProps: "account" | "session" | "verificationToken" | "usuario" | "notificacao" | "habilidade" | "prestadorHabilidade" | "mensagem" | "proposta" | "servico" | "avaliacao"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1335,6 +1351,80 @@ export namespace Prisma {
           }
         }
       }
+      Mensagem: {
+        payload: Prisma.$MensagemPayload<ExtArgs>
+        fields: Prisma.MensagemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MensagemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MensagemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          findFirst: {
+            args: Prisma.MensagemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MensagemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          findMany: {
+            args: Prisma.MensagemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>[]
+          }
+          create: {
+            args: Prisma.MensagemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          createMany: {
+            args: Prisma.MensagemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MensagemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>[]
+          }
+          delete: {
+            args: Prisma.MensagemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          update: {
+            args: Prisma.MensagemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          deleteMany: {
+            args: Prisma.MensagemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MensagemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MensagemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>[]
+          }
+          upsert: {
+            args: Prisma.MensagemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MensagemPayload>
+          }
+          aggregate: {
+            args: Prisma.MensagemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMensagem>
+          }
+          groupBy: {
+            args: Prisma.MensagemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MensagemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MensagemCountArgs<ExtArgs>
+            result: $Utils.Optional<MensagemCountAggregateOutputType> | number
+          }
+        }
+      }
       Proposta: {
         payload: Prisma.$PropostaPayload<ExtArgs>
         fields: Prisma.PropostaFieldRefs
@@ -1660,6 +1750,7 @@ export namespace Prisma {
     notificacao?: NotificacaoOmit
     habilidade?: HabilidadeOmit
     prestadorHabilidade?: PrestadorHabilidadeOmit
+    mensagem?: MensagemOmit
     proposta?: PropostaOmit
     servico?: ServicoOmit
     avaliacao?: AvaliacaoOmit
@@ -1746,6 +1837,8 @@ export namespace Prisma {
     habilidades: number
     propostas_contratadas: number
     propostas_prestadas: number
+    mensagens_enviadas: number
+    mensagens_recebidas: number
     accounts: number
     sessions: number
     notificacoes: number
@@ -1755,6 +1848,8 @@ export namespace Prisma {
     habilidades?: boolean | UsuarioCountOutputTypeCountHabilidadesArgs
     propostas_contratadas?: boolean | UsuarioCountOutputTypeCountPropostas_contratadasArgs
     propostas_prestadas?: boolean | UsuarioCountOutputTypeCountPropostas_prestadasArgs
+    mensagens_enviadas?: boolean | UsuarioCountOutputTypeCountMensagens_enviadasArgs
+    mensagens_recebidas?: boolean | UsuarioCountOutputTypeCountMensagens_recebidasArgs
     accounts?: boolean | UsuarioCountOutputTypeCountAccountsArgs
     sessions?: boolean | UsuarioCountOutputTypeCountSessionsArgs
     notificacoes?: boolean | UsuarioCountOutputTypeCountNotificacoesArgs
@@ -1790,6 +1885,20 @@ export namespace Prisma {
    */
   export type UsuarioCountOutputTypeCountPropostas_prestadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PropostaWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountMensagens_enviadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MensagemWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountMensagens_recebidasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MensagemWhereInput
   }
 
   /**
@@ -5335,6 +5444,8 @@ export namespace Prisma {
     habilidades?: boolean | Usuario$habilidadesArgs<ExtArgs>
     propostas_contratadas?: boolean | Usuario$propostas_contratadasArgs<ExtArgs>
     propostas_prestadas?: boolean | Usuario$propostas_prestadasArgs<ExtArgs>
+    mensagens_enviadas?: boolean | Usuario$mensagens_enviadasArgs<ExtArgs>
+    mensagens_recebidas?: boolean | Usuario$mensagens_recebidasArgs<ExtArgs>
     accounts?: boolean | Usuario$accountsArgs<ExtArgs>
     sessions?: boolean | Usuario$sessionsArgs<ExtArgs>
     notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
@@ -5388,6 +5499,8 @@ export namespace Prisma {
     habilidades?: boolean | Usuario$habilidadesArgs<ExtArgs>
     propostas_contratadas?: boolean | Usuario$propostas_contratadasArgs<ExtArgs>
     propostas_prestadas?: boolean | Usuario$propostas_prestadasArgs<ExtArgs>
+    mensagens_enviadas?: boolean | Usuario$mensagens_enviadasArgs<ExtArgs>
+    mensagens_recebidas?: boolean | Usuario$mensagens_recebidasArgs<ExtArgs>
     accounts?: boolean | Usuario$accountsArgs<ExtArgs>
     sessions?: boolean | Usuario$sessionsArgs<ExtArgs>
     notificacoes?: boolean | Usuario$notificacoesArgs<ExtArgs>
@@ -5402,6 +5515,8 @@ export namespace Prisma {
       habilidades: Prisma.$PrestadorHabilidadePayload<ExtArgs>[]
       propostas_contratadas: Prisma.$PropostaPayload<ExtArgs>[]
       propostas_prestadas: Prisma.$PropostaPayload<ExtArgs>[]
+      mensagens_enviadas: Prisma.$MensagemPayload<ExtArgs>[]
+      mensagens_recebidas: Prisma.$MensagemPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       notificacoes: Prisma.$NotificacaoPayload<ExtArgs>[]
@@ -5815,6 +5930,8 @@ export namespace Prisma {
     habilidades<T extends Usuario$habilidadesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$habilidadesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PrestadorHabilidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     propostas_contratadas<T extends Usuario$propostas_contratadasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$propostas_contratadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropostaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     propostas_prestadas<T extends Usuario$propostas_prestadasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$propostas_prestadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropostaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mensagens_enviadas<T extends Usuario$mensagens_enviadasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$mensagens_enviadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mensagens_recebidas<T extends Usuario$mensagens_recebidasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$mensagens_recebidasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends Usuario$accountsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends Usuario$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notificacoes<T extends Usuario$notificacoesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$notificacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6315,6 +6432,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PropostaScalarFieldEnum | PropostaScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.mensagens_enviadas
+   */
+  export type Usuario$mensagens_enviadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    where?: MensagemWhereInput
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    cursor?: MensagemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MensagemScalarFieldEnum | MensagemScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.mensagens_recebidas
+   */
+  export type Usuario$mensagens_recebidasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    where?: MensagemWhereInput
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    cursor?: MensagemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MensagemScalarFieldEnum | MensagemScalarFieldEnum[]
   }
 
   /**
@@ -9680,6 +9845,1093 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PrestadorHabilidadeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Mensagem
+   */
+
+  export type AggregateMensagem = {
+    _count: MensagemCountAggregateOutputType | null
+    _avg: MensagemAvgAggregateOutputType | null
+    _sum: MensagemSumAggregateOutputType | null
+    _min: MensagemMinAggregateOutputType | null
+    _max: MensagemMaxAggregateOutputType | null
+  }
+
+  export type MensagemAvgAggregateOutputType = {
+    id_mensagem: number | null
+  }
+
+  export type MensagemSumAggregateOutputType = {
+    id_mensagem: number | null
+  }
+
+  export type MensagemMinAggregateOutputType = {
+    id_mensagem: number | null
+    id_remetente: string | null
+    id_destinatario: string | null
+    data: Date | null
+  }
+
+  export type MensagemMaxAggregateOutputType = {
+    id_mensagem: number | null
+    id_remetente: string | null
+    id_destinatario: string | null
+    data: Date | null
+  }
+
+  export type MensagemCountAggregateOutputType = {
+    id_mensagem: number
+    id_remetente: number
+    id_destinatario: number
+    data: number
+    _all: number
+  }
+
+
+  export type MensagemAvgAggregateInputType = {
+    id_mensagem?: true
+  }
+
+  export type MensagemSumAggregateInputType = {
+    id_mensagem?: true
+  }
+
+  export type MensagemMinAggregateInputType = {
+    id_mensagem?: true
+    id_remetente?: true
+    id_destinatario?: true
+    data?: true
+  }
+
+  export type MensagemMaxAggregateInputType = {
+    id_mensagem?: true
+    id_remetente?: true
+    id_destinatario?: true
+    data?: true
+  }
+
+  export type MensagemCountAggregateInputType = {
+    id_mensagem?: true
+    id_remetente?: true
+    id_destinatario?: true
+    data?: true
+    _all?: true
+  }
+
+  export type MensagemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Mensagem to aggregate.
+     */
+    where?: MensagemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mensagems to fetch.
+     */
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MensagemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mensagems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mensagems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Mensagems
+    **/
+    _count?: true | MensagemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MensagemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MensagemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MensagemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MensagemMaxAggregateInputType
+  }
+
+  export type GetMensagemAggregateType<T extends MensagemAggregateArgs> = {
+        [P in keyof T & keyof AggregateMensagem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMensagem[P]>
+      : GetScalarType<T[P], AggregateMensagem[P]>
+  }
+
+
+
+
+  export type MensagemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MensagemWhereInput
+    orderBy?: MensagemOrderByWithAggregationInput | MensagemOrderByWithAggregationInput[]
+    by: MensagemScalarFieldEnum[] | MensagemScalarFieldEnum
+    having?: MensagemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MensagemCountAggregateInputType | true
+    _avg?: MensagemAvgAggregateInputType
+    _sum?: MensagemSumAggregateInputType
+    _min?: MensagemMinAggregateInputType
+    _max?: MensagemMaxAggregateInputType
+  }
+
+  export type MensagemGroupByOutputType = {
+    id_mensagem: number
+    id_remetente: string
+    id_destinatario: string
+    data: Date
+    _count: MensagemCountAggregateOutputType | null
+    _avg: MensagemAvgAggregateOutputType | null
+    _sum: MensagemSumAggregateOutputType | null
+    _min: MensagemMinAggregateOutputType | null
+    _max: MensagemMaxAggregateOutputType | null
+  }
+
+  type GetMensagemGroupByPayload<T extends MensagemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MensagemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MensagemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MensagemGroupByOutputType[P]>
+            : GetScalarType<T[P], MensagemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MensagemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_mensagem?: boolean
+    id_remetente?: boolean
+    id_destinatario?: boolean
+    data?: boolean
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mensagem"]>
+
+  export type MensagemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_mensagem?: boolean
+    id_remetente?: boolean
+    id_destinatario?: boolean
+    data?: boolean
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mensagem"]>
+
+  export type MensagemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_mensagem?: boolean
+    id_remetente?: boolean
+    id_destinatario?: boolean
+    data?: boolean
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mensagem"]>
+
+  export type MensagemSelectScalar = {
+    id_mensagem?: boolean
+    id_remetente?: boolean
+    id_destinatario?: boolean
+    data?: boolean
+  }
+
+  export type MensagemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_mensagem" | "id_remetente" | "id_destinatario" | "data", ExtArgs["result"]["mensagem"]>
+  export type MensagemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type MensagemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type MensagemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
+    destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $MensagemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Mensagem"
+    objects: {
+      remetente: Prisma.$UsuarioPayload<ExtArgs>
+      destinatario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_mensagem: number
+      id_remetente: string
+      id_destinatario: string
+      data: Date
+    }, ExtArgs["result"]["mensagem"]>
+    composites: {}
+  }
+
+  type MensagemGetPayload<S extends boolean | null | undefined | MensagemDefaultArgs> = $Result.GetResult<Prisma.$MensagemPayload, S>
+
+  type MensagemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MensagemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MensagemCountAggregateInputType | true
+    }
+
+  export interface MensagemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Mensagem'], meta: { name: 'Mensagem' } }
+    /**
+     * Find zero or one Mensagem that matches the filter.
+     * @param {MensagemFindUniqueArgs} args - Arguments to find a Mensagem
+     * @example
+     * // Get one Mensagem
+     * const mensagem = await prisma.mensagem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MensagemFindUniqueArgs>(args: SelectSubset<T, MensagemFindUniqueArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mensagem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MensagemFindUniqueOrThrowArgs} args - Arguments to find a Mensagem
+     * @example
+     * // Get one Mensagem
+     * const mensagem = await prisma.mensagem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MensagemFindUniqueOrThrowArgs>(args: SelectSubset<T, MensagemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mensagem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemFindFirstArgs} args - Arguments to find a Mensagem
+     * @example
+     * // Get one Mensagem
+     * const mensagem = await prisma.mensagem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MensagemFindFirstArgs>(args?: SelectSubset<T, MensagemFindFirstArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mensagem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemFindFirstOrThrowArgs} args - Arguments to find a Mensagem
+     * @example
+     * // Get one Mensagem
+     * const mensagem = await prisma.mensagem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MensagemFindFirstOrThrowArgs>(args?: SelectSubset<T, MensagemFindFirstOrThrowArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mensagems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mensagems
+     * const mensagems = await prisma.mensagem.findMany()
+     * 
+     * // Get first 10 Mensagems
+     * const mensagems = await prisma.mensagem.findMany({ take: 10 })
+     * 
+     * // Only select the `id_mensagem`
+     * const mensagemWithId_mensagemOnly = await prisma.mensagem.findMany({ select: { id_mensagem: true } })
+     * 
+     */
+    findMany<T extends MensagemFindManyArgs>(args?: SelectSubset<T, MensagemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mensagem.
+     * @param {MensagemCreateArgs} args - Arguments to create a Mensagem.
+     * @example
+     * // Create one Mensagem
+     * const Mensagem = await prisma.mensagem.create({
+     *   data: {
+     *     // ... data to create a Mensagem
+     *   }
+     * })
+     * 
+     */
+    create<T extends MensagemCreateArgs>(args: SelectSubset<T, MensagemCreateArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mensagems.
+     * @param {MensagemCreateManyArgs} args - Arguments to create many Mensagems.
+     * @example
+     * // Create many Mensagems
+     * const mensagem = await prisma.mensagem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MensagemCreateManyArgs>(args?: SelectSubset<T, MensagemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mensagems and returns the data saved in the database.
+     * @param {MensagemCreateManyAndReturnArgs} args - Arguments to create many Mensagems.
+     * @example
+     * // Create many Mensagems
+     * const mensagem = await prisma.mensagem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mensagems and only return the `id_mensagem`
+     * const mensagemWithId_mensagemOnly = await prisma.mensagem.createManyAndReturn({
+     *   select: { id_mensagem: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MensagemCreateManyAndReturnArgs>(args?: SelectSubset<T, MensagemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mensagem.
+     * @param {MensagemDeleteArgs} args - Arguments to delete one Mensagem.
+     * @example
+     * // Delete one Mensagem
+     * const Mensagem = await prisma.mensagem.delete({
+     *   where: {
+     *     // ... filter to delete one Mensagem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MensagemDeleteArgs>(args: SelectSubset<T, MensagemDeleteArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mensagem.
+     * @param {MensagemUpdateArgs} args - Arguments to update one Mensagem.
+     * @example
+     * // Update one Mensagem
+     * const mensagem = await prisma.mensagem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MensagemUpdateArgs>(args: SelectSubset<T, MensagemUpdateArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mensagems.
+     * @param {MensagemDeleteManyArgs} args - Arguments to filter Mensagems to delete.
+     * @example
+     * // Delete a few Mensagems
+     * const { count } = await prisma.mensagem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MensagemDeleteManyArgs>(args?: SelectSubset<T, MensagemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mensagems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mensagems
+     * const mensagem = await prisma.mensagem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MensagemUpdateManyArgs>(args: SelectSubset<T, MensagemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mensagems and returns the data updated in the database.
+     * @param {MensagemUpdateManyAndReturnArgs} args - Arguments to update many Mensagems.
+     * @example
+     * // Update many Mensagems
+     * const mensagem = await prisma.mensagem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mensagems and only return the `id_mensagem`
+     * const mensagemWithId_mensagemOnly = await prisma.mensagem.updateManyAndReturn({
+     *   select: { id_mensagem: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MensagemUpdateManyAndReturnArgs>(args: SelectSubset<T, MensagemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mensagem.
+     * @param {MensagemUpsertArgs} args - Arguments to update or create a Mensagem.
+     * @example
+     * // Update or create a Mensagem
+     * const mensagem = await prisma.mensagem.upsert({
+     *   create: {
+     *     // ... data to create a Mensagem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mensagem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MensagemUpsertArgs>(args: SelectSubset<T, MensagemUpsertArgs<ExtArgs>>): Prisma__MensagemClient<$Result.GetResult<Prisma.$MensagemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mensagems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemCountArgs} args - Arguments to filter Mensagems to count.
+     * @example
+     * // Count the number of Mensagems
+     * const count = await prisma.mensagem.count({
+     *   where: {
+     *     // ... the filter for the Mensagems we want to count
+     *   }
+     * })
+    **/
+    count<T extends MensagemCountArgs>(
+      args?: Subset<T, MensagemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MensagemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mensagem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MensagemAggregateArgs>(args: Subset<T, MensagemAggregateArgs>): Prisma.PrismaPromise<GetMensagemAggregateType<T>>
+
+    /**
+     * Group by Mensagem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MensagemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MensagemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MensagemGroupByArgs['orderBy'] }
+        : { orderBy?: MensagemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MensagemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMensagemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Mensagem model
+   */
+  readonly fields: MensagemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Mensagem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MensagemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    remetente<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    destinatario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Mensagem model
+   */
+  interface MensagemFieldRefs {
+    readonly id_mensagem: FieldRef<"Mensagem", 'Int'>
+    readonly id_remetente: FieldRef<"Mensagem", 'String'>
+    readonly id_destinatario: FieldRef<"Mensagem", 'String'>
+    readonly data: FieldRef<"Mensagem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Mensagem findUnique
+   */
+  export type MensagemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter, which Mensagem to fetch.
+     */
+    where: MensagemWhereUniqueInput
+  }
+
+  /**
+   * Mensagem findUniqueOrThrow
+   */
+  export type MensagemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter, which Mensagem to fetch.
+     */
+    where: MensagemWhereUniqueInput
+  }
+
+  /**
+   * Mensagem findFirst
+   */
+  export type MensagemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter, which Mensagem to fetch.
+     */
+    where?: MensagemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mensagems to fetch.
+     */
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Mensagems.
+     */
+    cursor?: MensagemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mensagems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mensagems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Mensagems.
+     */
+    distinct?: MensagemScalarFieldEnum | MensagemScalarFieldEnum[]
+  }
+
+  /**
+   * Mensagem findFirstOrThrow
+   */
+  export type MensagemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter, which Mensagem to fetch.
+     */
+    where?: MensagemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mensagems to fetch.
+     */
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Mensagems.
+     */
+    cursor?: MensagemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mensagems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mensagems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Mensagems.
+     */
+    distinct?: MensagemScalarFieldEnum | MensagemScalarFieldEnum[]
+  }
+
+  /**
+   * Mensagem findMany
+   */
+  export type MensagemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter, which Mensagems to fetch.
+     */
+    where?: MensagemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mensagems to fetch.
+     */
+    orderBy?: MensagemOrderByWithRelationInput | MensagemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Mensagems.
+     */
+    cursor?: MensagemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mensagems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mensagems.
+     */
+    skip?: number
+    distinct?: MensagemScalarFieldEnum | MensagemScalarFieldEnum[]
+  }
+
+  /**
+   * Mensagem create
+   */
+  export type MensagemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Mensagem.
+     */
+    data: XOR<MensagemCreateInput, MensagemUncheckedCreateInput>
+  }
+
+  /**
+   * Mensagem createMany
+   */
+  export type MensagemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Mensagems.
+     */
+    data: MensagemCreateManyInput | MensagemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Mensagem createManyAndReturn
+   */
+  export type MensagemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * The data used to create many Mensagems.
+     */
+    data: MensagemCreateManyInput | MensagemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Mensagem update
+   */
+  export type MensagemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Mensagem.
+     */
+    data: XOR<MensagemUpdateInput, MensagemUncheckedUpdateInput>
+    /**
+     * Choose, which Mensagem to update.
+     */
+    where: MensagemWhereUniqueInput
+  }
+
+  /**
+   * Mensagem updateMany
+   */
+  export type MensagemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Mensagems.
+     */
+    data: XOR<MensagemUpdateManyMutationInput, MensagemUncheckedUpdateManyInput>
+    /**
+     * Filter which Mensagems to update
+     */
+    where?: MensagemWhereInput
+    /**
+     * Limit how many Mensagems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Mensagem updateManyAndReturn
+   */
+  export type MensagemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * The data used to update Mensagems.
+     */
+    data: XOR<MensagemUpdateManyMutationInput, MensagemUncheckedUpdateManyInput>
+    /**
+     * Filter which Mensagems to update
+     */
+    where?: MensagemWhereInput
+    /**
+     * Limit how many Mensagems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Mensagem upsert
+   */
+  export type MensagemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Mensagem to update in case it exists.
+     */
+    where: MensagemWhereUniqueInput
+    /**
+     * In case the Mensagem found by the `where` argument doesn't exist, create a new Mensagem with this data.
+     */
+    create: XOR<MensagemCreateInput, MensagemUncheckedCreateInput>
+    /**
+     * In case the Mensagem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MensagemUpdateInput, MensagemUncheckedUpdateInput>
+  }
+
+  /**
+   * Mensagem delete
+   */
+  export type MensagemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
+    /**
+     * Filter which Mensagem to delete.
+     */
+    where: MensagemWhereUniqueInput
+  }
+
+  /**
+   * Mensagem deleteMany
+   */
+  export type MensagemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Mensagems to delete
+     */
+    where?: MensagemWhereInput
+    /**
+     * Limit how many Mensagems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Mensagem without action
+   */
+  export type MensagemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mensagem
+     */
+    select?: MensagemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Mensagem
+     */
+    omit?: MensagemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MensagemInclude<ExtArgs> | null
   }
 
 
@@ -13191,6 +14443,16 @@ export namespace Prisma {
   export type PrestadorHabilidadeScalarFieldEnum = (typeof PrestadorHabilidadeScalarFieldEnum)[keyof typeof PrestadorHabilidadeScalarFieldEnum]
 
 
+  export const MensagemScalarFieldEnum: {
+    id_mensagem: 'id_mensagem',
+    id_remetente: 'id_remetente',
+    id_destinatario: 'id_destinatario',
+    data: 'data'
+  };
+
+  export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
+
+
   export const PropostaScalarFieldEnum: {
     id: 'id',
     id_contratante: 'id_contratante',
@@ -13597,6 +14859,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeListRelationFilter
     propostas_contratadas?: PropostaListRelationFilter
     propostas_prestadas?: PropostaListRelationFilter
+    mensagens_enviadas?: MensagemListRelationFilter
+    mensagens_recebidas?: MensagemListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     notificacoes?: NotificacaoListRelationFilter
@@ -13617,6 +14881,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeOrderByRelationAggregateInput
     propostas_contratadas?: PropostaOrderByRelationAggregateInput
     propostas_prestadas?: PropostaOrderByRelationAggregateInput
+    mensagens_enviadas?: MensagemOrderByRelationAggregateInput
+    mensagens_recebidas?: MensagemOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     notificacoes?: NotificacaoOrderByRelationAggregateInput
@@ -13640,6 +14906,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeListRelationFilter
     propostas_contratadas?: PropostaListRelationFilter
     propostas_prestadas?: PropostaListRelationFilter
+    mensagens_enviadas?: MensagemListRelationFilter
+    mensagens_recebidas?: MensagemListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     notificacoes?: NotificacaoListRelationFilter
@@ -13857,6 +15125,61 @@ export namespace Prisma {
     id_habilidade?: IntWithAggregatesFilter<"PrestadorHabilidade"> | number
     id_prestador?: StringWithAggregatesFilter<"PrestadorHabilidade"> | string
     nivel_proeficiencia?: EnumEnumNivelProeficienciaWithAggregatesFilter<"PrestadorHabilidade"> | $Enums.EnumNivelProeficiencia
+  }
+
+  export type MensagemWhereInput = {
+    AND?: MensagemWhereInput | MensagemWhereInput[]
+    OR?: MensagemWhereInput[]
+    NOT?: MensagemWhereInput | MensagemWhereInput[]
+    id_mensagem?: IntFilter<"Mensagem"> | number
+    id_remetente?: StringFilter<"Mensagem"> | string
+    id_destinatario?: StringFilter<"Mensagem"> | string
+    data?: DateTimeFilter<"Mensagem"> | Date | string
+    remetente?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    destinatario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type MensagemOrderByWithRelationInput = {
+    id_mensagem?: SortOrder
+    id_remetente?: SortOrder
+    id_destinatario?: SortOrder
+    data?: SortOrder
+    remetente?: UsuarioOrderByWithRelationInput
+    destinatario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type MensagemWhereUniqueInput = Prisma.AtLeast<{
+    id_mensagem?: number
+    AND?: MensagemWhereInput | MensagemWhereInput[]
+    OR?: MensagemWhereInput[]
+    NOT?: MensagemWhereInput | MensagemWhereInput[]
+    id_remetente?: StringFilter<"Mensagem"> | string
+    id_destinatario?: StringFilter<"Mensagem"> | string
+    data?: DateTimeFilter<"Mensagem"> | Date | string
+    remetente?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+    destinatario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id_mensagem">
+
+  export type MensagemOrderByWithAggregationInput = {
+    id_mensagem?: SortOrder
+    id_remetente?: SortOrder
+    id_destinatario?: SortOrder
+    data?: SortOrder
+    _count?: MensagemCountOrderByAggregateInput
+    _avg?: MensagemAvgOrderByAggregateInput
+    _max?: MensagemMaxOrderByAggregateInput
+    _min?: MensagemMinOrderByAggregateInput
+    _sum?: MensagemSumOrderByAggregateInput
+  }
+
+  export type MensagemScalarWhereWithAggregatesInput = {
+    AND?: MensagemScalarWhereWithAggregatesInput | MensagemScalarWhereWithAggregatesInput[]
+    OR?: MensagemScalarWhereWithAggregatesInput[]
+    NOT?: MensagemScalarWhereWithAggregatesInput | MensagemScalarWhereWithAggregatesInput[]
+    id_mensagem?: IntWithAggregatesFilter<"Mensagem"> | number
+    id_remetente?: StringWithAggregatesFilter<"Mensagem"> | string
+    id_destinatario?: StringWithAggregatesFilter<"Mensagem"> | string
+    data?: DateTimeWithAggregatesFilter<"Mensagem"> | Date | string
   }
 
   export type PropostaWhereInput = {
@@ -14269,6 +15592,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
@@ -14289,6 +15614,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -14309,6 +15636,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
@@ -14329,6 +15658,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -14547,6 +15878,50 @@ export namespace Prisma {
     id_habilidade?: IntFieldUpdateOperationsInput | number
     id_prestador?: StringFieldUpdateOperationsInput | string
     nivel_proeficiencia?: EnumEnumNivelProeficienciaFieldUpdateOperationsInput | $Enums.EnumNivelProeficiencia
+  }
+
+  export type MensagemCreateInput = {
+    data: Date | string
+    remetente: UsuarioCreateNestedOneWithoutMensagens_enviadasInput
+    destinatario: UsuarioCreateNestedOneWithoutMensagens_recebidasInput
+  }
+
+  export type MensagemUncheckedCreateInput = {
+    id_mensagem?: number
+    id_remetente: string
+    id_destinatario: string
+    data: Date | string
+  }
+
+  export type MensagemUpdateInput = {
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    remetente?: UsuarioUpdateOneRequiredWithoutMensagens_enviadasNestedInput
+    destinatario?: UsuarioUpdateOneRequiredWithoutMensagens_recebidasNestedInput
+  }
+
+  export type MensagemUncheckedUpdateInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_remetente?: StringFieldUpdateOperationsInput | string
+    id_destinatario?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MensagemCreateManyInput = {
+    id_mensagem?: number
+    id_remetente: string
+    id_destinatario: string
+    data: Date | string
+  }
+
+  export type MensagemUpdateManyMutationInput = {
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MensagemUncheckedUpdateManyInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_remetente?: StringFieldUpdateOperationsInput | string
+    id_destinatario?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PropostaCreateInput = {
@@ -15017,6 +16392,12 @@ export namespace Prisma {
     none?: PropostaWhereInput
   }
 
+  export type MensagemListRelationFilter = {
+    every?: MensagemWhereInput
+    some?: MensagemWhereInput
+    none?: MensagemWhereInput
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
@@ -15040,6 +16421,10 @@ export namespace Prisma {
   }
 
   export type PropostaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MensagemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15320,6 +16705,35 @@ export namespace Prisma {
     _max?: NestedEnumEnumNivelProeficienciaFilter<$PrismaModel>
   }
 
+  export type MensagemCountOrderByAggregateInput = {
+    id_mensagem?: SortOrder
+    id_remetente?: SortOrder
+    id_destinatario?: SortOrder
+    data?: SortOrder
+  }
+
+  export type MensagemAvgOrderByAggregateInput = {
+    id_mensagem?: SortOrder
+  }
+
+  export type MensagemMaxOrderByAggregateInput = {
+    id_mensagem?: SortOrder
+    id_remetente?: SortOrder
+    id_destinatario?: SortOrder
+    data?: SortOrder
+  }
+
+  export type MensagemMinOrderByAggregateInput = {
+    id_mensagem?: SortOrder
+    id_remetente?: SortOrder
+    id_destinatario?: SortOrder
+    data?: SortOrder
+  }
+
+  export type MensagemSumOrderByAggregateInput = {
+    id_mensagem?: SortOrder
+  }
+
   export type EnumEnumStatusPropostaFilter<$PrismaModel = never> = {
     equals?: $Enums.EnumStatusProposta | EnumEnumStatusPropostaFieldRefInput<$PrismaModel>
     in?: $Enums.EnumStatusProposta[] | ListEnumEnumStatusPropostaFieldRefInput<$PrismaModel>
@@ -15550,6 +16964,20 @@ export namespace Prisma {
     connect?: PropostaWhereUniqueInput | PropostaWhereUniqueInput[]
   }
 
+  export type MensagemCreateNestedManyWithoutRemetenteInput = {
+    create?: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput> | MensagemCreateWithoutRemetenteInput[] | MensagemUncheckedCreateWithoutRemetenteInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutRemetenteInput | MensagemCreateOrConnectWithoutRemetenteInput[]
+    createMany?: MensagemCreateManyRemetenteInputEnvelope
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+  }
+
+  export type MensagemCreateNestedManyWithoutDestinatarioInput = {
+    create?: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput> | MensagemCreateWithoutDestinatarioInput[] | MensagemUncheckedCreateWithoutDestinatarioInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutDestinatarioInput | MensagemCreateOrConnectWithoutDestinatarioInput[]
+    createMany?: MensagemCreateManyDestinatarioInputEnvelope
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -15590,6 +17018,20 @@ export namespace Prisma {
     connectOrCreate?: PropostaCreateOrConnectWithoutPrestadorInput | PropostaCreateOrConnectWithoutPrestadorInput[]
     createMany?: PropostaCreateManyPrestadorInputEnvelope
     connect?: PropostaWhereUniqueInput | PropostaWhereUniqueInput[]
+  }
+
+  export type MensagemUncheckedCreateNestedManyWithoutRemetenteInput = {
+    create?: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput> | MensagemCreateWithoutRemetenteInput[] | MensagemUncheckedCreateWithoutRemetenteInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutRemetenteInput | MensagemCreateOrConnectWithoutRemetenteInput[]
+    createMany?: MensagemCreateManyRemetenteInputEnvelope
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+  }
+
+  export type MensagemUncheckedCreateNestedManyWithoutDestinatarioInput = {
+    create?: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput> | MensagemCreateWithoutDestinatarioInput[] | MensagemUncheckedCreateWithoutDestinatarioInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutDestinatarioInput | MensagemCreateOrConnectWithoutDestinatarioInput[]
+    createMany?: MensagemCreateManyDestinatarioInputEnvelope
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -15669,6 +17111,34 @@ export namespace Prisma {
     update?: PropostaUpdateWithWhereUniqueWithoutPrestadorInput | PropostaUpdateWithWhereUniqueWithoutPrestadorInput[]
     updateMany?: PropostaUpdateManyWithWhereWithoutPrestadorInput | PropostaUpdateManyWithWhereWithoutPrestadorInput[]
     deleteMany?: PropostaScalarWhereInput | PropostaScalarWhereInput[]
+  }
+
+  export type MensagemUpdateManyWithoutRemetenteNestedInput = {
+    create?: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput> | MensagemCreateWithoutRemetenteInput[] | MensagemUncheckedCreateWithoutRemetenteInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutRemetenteInput | MensagemCreateOrConnectWithoutRemetenteInput[]
+    upsert?: MensagemUpsertWithWhereUniqueWithoutRemetenteInput | MensagemUpsertWithWhereUniqueWithoutRemetenteInput[]
+    createMany?: MensagemCreateManyRemetenteInputEnvelope
+    set?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    disconnect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    delete?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    update?: MensagemUpdateWithWhereUniqueWithoutRemetenteInput | MensagemUpdateWithWhereUniqueWithoutRemetenteInput[]
+    updateMany?: MensagemUpdateManyWithWhereWithoutRemetenteInput | MensagemUpdateManyWithWhereWithoutRemetenteInput[]
+    deleteMany?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
+  }
+
+  export type MensagemUpdateManyWithoutDestinatarioNestedInput = {
+    create?: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput> | MensagemCreateWithoutDestinatarioInput[] | MensagemUncheckedCreateWithoutDestinatarioInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutDestinatarioInput | MensagemCreateOrConnectWithoutDestinatarioInput[]
+    upsert?: MensagemUpsertWithWhereUniqueWithoutDestinatarioInput | MensagemUpsertWithWhereUniqueWithoutDestinatarioInput[]
+    createMany?: MensagemCreateManyDestinatarioInputEnvelope
+    set?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    disconnect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    delete?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    update?: MensagemUpdateWithWhereUniqueWithoutDestinatarioInput | MensagemUpdateWithWhereUniqueWithoutDestinatarioInput[]
+    updateMany?: MensagemUpdateManyWithWhereWithoutDestinatarioInput | MensagemUpdateManyWithWhereWithoutDestinatarioInput[]
+    deleteMany?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -15753,6 +17223,34 @@ export namespace Prisma {
     update?: PropostaUpdateWithWhereUniqueWithoutPrestadorInput | PropostaUpdateWithWhereUniqueWithoutPrestadorInput[]
     updateMany?: PropostaUpdateManyWithWhereWithoutPrestadorInput | PropostaUpdateManyWithWhereWithoutPrestadorInput[]
     deleteMany?: PropostaScalarWhereInput | PropostaScalarWhereInput[]
+  }
+
+  export type MensagemUncheckedUpdateManyWithoutRemetenteNestedInput = {
+    create?: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput> | MensagemCreateWithoutRemetenteInput[] | MensagemUncheckedCreateWithoutRemetenteInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutRemetenteInput | MensagemCreateOrConnectWithoutRemetenteInput[]
+    upsert?: MensagemUpsertWithWhereUniqueWithoutRemetenteInput | MensagemUpsertWithWhereUniqueWithoutRemetenteInput[]
+    createMany?: MensagemCreateManyRemetenteInputEnvelope
+    set?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    disconnect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    delete?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    update?: MensagemUpdateWithWhereUniqueWithoutRemetenteInput | MensagemUpdateWithWhereUniqueWithoutRemetenteInput[]
+    updateMany?: MensagemUpdateManyWithWhereWithoutRemetenteInput | MensagemUpdateManyWithWhereWithoutRemetenteInput[]
+    deleteMany?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
+  }
+
+  export type MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput = {
+    create?: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput> | MensagemCreateWithoutDestinatarioInput[] | MensagemUncheckedCreateWithoutDestinatarioInput[]
+    connectOrCreate?: MensagemCreateOrConnectWithoutDestinatarioInput | MensagemCreateOrConnectWithoutDestinatarioInput[]
+    upsert?: MensagemUpsertWithWhereUniqueWithoutDestinatarioInput | MensagemUpsertWithWhereUniqueWithoutDestinatarioInput[]
+    createMany?: MensagemCreateManyDestinatarioInputEnvelope
+    set?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    disconnect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    delete?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    connect?: MensagemWhereUniqueInput | MensagemWhereUniqueInput[]
+    update?: MensagemUpdateWithWhereUniqueWithoutDestinatarioInput | MensagemUpdateWithWhereUniqueWithoutDestinatarioInput[]
+    updateMany?: MensagemUpdateManyWithWhereWithoutDestinatarioInput | MensagemUpdateManyWithWhereWithoutDestinatarioInput[]
+    deleteMany?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -15899,6 +17397,34 @@ export namespace Prisma {
     upsert?: UsuarioUpsertWithoutHabilidadesInput
     connect?: UsuarioWhereUniqueInput
     update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutHabilidadesInput, UsuarioUpdateWithoutHabilidadesInput>, UsuarioUncheckedUpdateWithoutHabilidadesInput>
+  }
+
+  export type UsuarioCreateNestedOneWithoutMensagens_enviadasInput = {
+    create?: XOR<UsuarioCreateWithoutMensagens_enviadasInput, UsuarioUncheckedCreateWithoutMensagens_enviadasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutMensagens_enviadasInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioCreateNestedOneWithoutMensagens_recebidasInput = {
+    create?: XOR<UsuarioCreateWithoutMensagens_recebidasInput, UsuarioUncheckedCreateWithoutMensagens_recebidasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutMensagens_recebidasInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutMensagens_enviadasNestedInput = {
+    create?: XOR<UsuarioCreateWithoutMensagens_enviadasInput, UsuarioUncheckedCreateWithoutMensagens_enviadasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutMensagens_enviadasInput
+    upsert?: UsuarioUpsertWithoutMensagens_enviadasInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutMensagens_enviadasInput, UsuarioUpdateWithoutMensagens_enviadasInput>, UsuarioUncheckedUpdateWithoutMensagens_enviadasInput>
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutMensagens_recebidasNestedInput = {
+    create?: XOR<UsuarioCreateWithoutMensagens_recebidasInput, UsuarioUncheckedCreateWithoutMensagens_recebidasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutMensagens_recebidasInput
+    upsert?: UsuarioUpsertWithoutMensagens_recebidasInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutMensagens_recebidasInput, UsuarioUpdateWithoutMensagens_recebidasInput>, UsuarioUncheckedUpdateWithoutMensagens_recebidasInput>
   }
 
   export type UsuarioCreateNestedOneWithoutPropostas_contratadasInput = {
@@ -16356,6 +17882,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
@@ -16375,6 +17903,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
@@ -16410,6 +17940,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
@@ -16429,6 +17961,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
@@ -16448,6 +17982,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
   }
@@ -16467,6 +18003,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   }
@@ -16502,6 +18040,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
   }
@@ -16521,6 +18061,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   }
@@ -16620,6 +18162,48 @@ export namespace Prisma {
 
   export type PropostaCreateManyPrestadorInputEnvelope = {
     data: PropostaCreateManyPrestadorInput | PropostaCreateManyPrestadorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MensagemCreateWithoutRemetenteInput = {
+    data: Date | string
+    destinatario: UsuarioCreateNestedOneWithoutMensagens_recebidasInput
+  }
+
+  export type MensagemUncheckedCreateWithoutRemetenteInput = {
+    id_mensagem?: number
+    id_destinatario: string
+    data: Date | string
+  }
+
+  export type MensagemCreateOrConnectWithoutRemetenteInput = {
+    where: MensagemWhereUniqueInput
+    create: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput>
+  }
+
+  export type MensagemCreateManyRemetenteInputEnvelope = {
+    data: MensagemCreateManyRemetenteInput | MensagemCreateManyRemetenteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MensagemCreateWithoutDestinatarioInput = {
+    data: Date | string
+    remetente: UsuarioCreateNestedOneWithoutMensagens_enviadasInput
+  }
+
+  export type MensagemUncheckedCreateWithoutDestinatarioInput = {
+    id_mensagem?: number
+    id_remetente: string
+    data: Date | string
+  }
+
+  export type MensagemCreateOrConnectWithoutDestinatarioInput = {
+    where: MensagemWhereUniqueInput
+    create: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput>
+  }
+
+  export type MensagemCreateManyDestinatarioInputEnvelope = {
+    data: MensagemCreateManyDestinatarioInput | MensagemCreateManyDestinatarioInput[]
     skipDuplicates?: boolean
   }
 
@@ -16787,6 +18371,48 @@ export namespace Prisma {
     data: XOR<PropostaUpdateManyMutationInput, PropostaUncheckedUpdateManyWithoutPrestadorInput>
   }
 
+  export type MensagemUpsertWithWhereUniqueWithoutRemetenteInput = {
+    where: MensagemWhereUniqueInput
+    update: XOR<MensagemUpdateWithoutRemetenteInput, MensagemUncheckedUpdateWithoutRemetenteInput>
+    create: XOR<MensagemCreateWithoutRemetenteInput, MensagemUncheckedCreateWithoutRemetenteInput>
+  }
+
+  export type MensagemUpdateWithWhereUniqueWithoutRemetenteInput = {
+    where: MensagemWhereUniqueInput
+    data: XOR<MensagemUpdateWithoutRemetenteInput, MensagemUncheckedUpdateWithoutRemetenteInput>
+  }
+
+  export type MensagemUpdateManyWithWhereWithoutRemetenteInput = {
+    where: MensagemScalarWhereInput
+    data: XOR<MensagemUpdateManyMutationInput, MensagemUncheckedUpdateManyWithoutRemetenteInput>
+  }
+
+  export type MensagemScalarWhereInput = {
+    AND?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
+    OR?: MensagemScalarWhereInput[]
+    NOT?: MensagemScalarWhereInput | MensagemScalarWhereInput[]
+    id_mensagem?: IntFilter<"Mensagem"> | number
+    id_remetente?: StringFilter<"Mensagem"> | string
+    id_destinatario?: StringFilter<"Mensagem"> | string
+    data?: DateTimeFilter<"Mensagem"> | Date | string
+  }
+
+  export type MensagemUpsertWithWhereUniqueWithoutDestinatarioInput = {
+    where: MensagemWhereUniqueInput
+    update: XOR<MensagemUpdateWithoutDestinatarioInput, MensagemUncheckedUpdateWithoutDestinatarioInput>
+    create: XOR<MensagemCreateWithoutDestinatarioInput, MensagemUncheckedCreateWithoutDestinatarioInput>
+  }
+
+  export type MensagemUpdateWithWhereUniqueWithoutDestinatarioInput = {
+    where: MensagemWhereUniqueInput
+    data: XOR<MensagemUpdateWithoutDestinatarioInput, MensagemUncheckedUpdateWithoutDestinatarioInput>
+  }
+
+  export type MensagemUpdateManyWithWhereWithoutDestinatarioInput = {
+    where: MensagemScalarWhereInput
+    data: XOR<MensagemUpdateManyMutationInput, MensagemUncheckedUpdateManyWithoutDestinatarioInput>
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -16892,6 +18518,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -16911,6 +18539,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -16946,6 +18576,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -16965,6 +18597,8 @@ export namespace Prisma {
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -17039,6 +18673,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
@@ -17058,6 +18694,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -17119,6 +18757,8 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
@@ -17138,6 +18778,208 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioCreateWithoutMensagens_enviadasInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutMensagens_enviadasInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutMensagens_enviadasInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutMensagens_enviadasInput, UsuarioUncheckedCreateWithoutMensagens_enviadasInput>
+  }
+
+  export type UsuarioCreateWithoutMensagens_recebidasInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutMensagens_recebidasInput = {
+    id?: string
+    name?: string | null
+    hashedPassword?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    city?: string | null
+    profissao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    sobre: string
+    tipo_usuario: $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
+    propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
+    propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutMensagens_recebidasInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutMensagens_recebidasInput, UsuarioUncheckedCreateWithoutMensagens_recebidasInput>
+  }
+
+  export type UsuarioUpsertWithoutMensagens_enviadasInput = {
+    update: XOR<UsuarioUpdateWithoutMensagens_enviadasInput, UsuarioUncheckedUpdateWithoutMensagens_enviadasInput>
+    create: XOR<UsuarioCreateWithoutMensagens_enviadasInput, UsuarioUncheckedCreateWithoutMensagens_enviadasInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutMensagens_enviadasInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutMensagens_enviadasInput, UsuarioUncheckedUpdateWithoutMensagens_enviadasInput>
+  }
+
+  export type UsuarioUpdateWithoutMensagens_enviadasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutMensagens_enviadasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUpsertWithoutMensagens_recebidasInput = {
+    update: XOR<UsuarioUpdateWithoutMensagens_recebidasInput, UsuarioUncheckedUpdateWithoutMensagens_recebidasInput>
+    create: XOR<UsuarioCreateWithoutMensagens_recebidasInput, UsuarioUncheckedCreateWithoutMensagens_recebidasInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutMensagens_recebidasInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutMensagens_recebidasInput, UsuarioUncheckedUpdateWithoutMensagens_recebidasInput>
+  }
+
+  export type UsuarioUpdateWithoutMensagens_recebidasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutMensagens_recebidasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    profissao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sobre?: StringFieldUpdateOperationsInput | string
+    tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
+    propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
+    propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -17157,6 +18999,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
@@ -17176,6 +19020,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -17200,6 +19046,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
+    mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoCreateNestedManyWithoutUsuarioInput
@@ -17219,6 +19067,8 @@ export namespace Prisma {
     tipo_usuario: $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
+    mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
+    mensagens_recebidas?: MensagemUncheckedCreateNestedManyWithoutDestinatarioInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     notificacoes?: NotificacaoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -17298,6 +19148,8 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
@@ -17317,6 +19169,8 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -17347,6 +19201,8 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
+    mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUpdateManyWithoutUsuarioNestedInput
@@ -17366,6 +19222,8 @@ export namespace Prisma {
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
+    mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+    mensagens_recebidas?: MensagemUncheckedUpdateManyWithoutDestinatarioNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     notificacoes?: NotificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -17602,6 +19460,18 @@ export namespace Prisma {
     resposta?: string | null
   }
 
+  export type MensagemCreateManyRemetenteInput = {
+    id_mensagem?: number
+    id_destinatario: string
+    data: Date | string
+  }
+
+  export type MensagemCreateManyDestinatarioInput = {
+    id_mensagem?: number
+    id_remetente: string
+    data: Date | string
+  }
+
   export type AccountCreateManyUserInput = {
     id?: string
     type: string
@@ -17729,6 +19599,40 @@ export namespace Prisma {
     data_termino?: DateTimeFieldUpdateOperationsInput | Date | string
     Status?: EnumEnumStatusPropostaFieldUpdateOperationsInput | $Enums.EnumStatusProposta
     resposta?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MensagemUpdateWithoutRemetenteInput = {
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    destinatario?: UsuarioUpdateOneRequiredWithoutMensagens_recebidasNestedInput
+  }
+
+  export type MensagemUncheckedUpdateWithoutRemetenteInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_destinatario?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MensagemUncheckedUpdateManyWithoutRemetenteInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_destinatario?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MensagemUpdateWithoutDestinatarioInput = {
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    remetente?: UsuarioUpdateOneRequiredWithoutMensagens_enviadasNestedInput
+  }
+
+  export type MensagemUncheckedUpdateWithoutDestinatarioInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_remetente?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MensagemUncheckedUpdateManyWithoutDestinatarioInput = {
+    id_mensagem?: IntFieldUpdateOperationsInput | number
+    id_remetente?: StringFieldUpdateOperationsInput | string
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
