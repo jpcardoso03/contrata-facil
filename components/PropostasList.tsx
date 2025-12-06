@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Home, Bell, User, Edit, FileText, ChevronDown, Check, Clock, Eye, Trash2, Star, X, RefreshCw } from 'lucide-react';
+import { Home, Bell, User, FileText, ChevronDown, Check, Clock, Trash2, Star, X, RefreshCw, Calendar, ListChecks, MessageSquare } from 'lucide-react';
 import { EnumStatusProposta, EnumTipoUsuario } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
 import { deleteProposalAction } from '@/app/propostas/remover/actions';
@@ -15,6 +15,7 @@ interface PropostasListProps {
   userType: EnumTipoUsuario;
 }
 
+// ... (Mantenha as funções StatCard, getStatusBadge e StatusUpdateModal IGUAIS ao que você já tem) ...
 function StatCard({ title, value }: { title: string; value: number }) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 text-center shadow-sm">
@@ -135,6 +136,7 @@ function StatusUpdateModal({
     </div>
   );
 }
+// ... (Mantenha as funções StatCard, getStatusBadge e StatusUpdateModal IGUAIS) ...
 
 function PropostaActions({
   proposta,
@@ -178,6 +180,7 @@ function PropostaActions({
     </button>
   );
 
+  // Lógica dos botões (Mantida a sua, apenas adicionado Link onde necessário)
   let actionButton = null;
 
   if (
@@ -193,30 +196,22 @@ function PropostaActions({
         Editar
       </Link>
     );
-
-    actionButton = (
-      <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium">
-        <Clock className="w-4 h-4" />
-        Aguardando resposta...
-      </div>
-    );
-
-    actionButton = (
-      <Link
-        href={`/propostas/remover`}
-        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
-        >
-        <Trash2 className="w-4 h-4" />
-        Excluir
-      </Link>
-    )
-  }
-  
-  else if (status === 'CONCLUIDA' && userRole === 'contratante') {
+  } else if (
+    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'contratante') ||
+    (status === 'PENDENTE' && userRole === 'prestador')
+  ) {
+      // Caso aguardando o OUTRO responder
+      actionButton = (
+        <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium bg-gray-50 rounded-lg">
+            <Clock className="w-4 h-4" />
+            Aguardando resposta...
+        </div>
+      );
+  } else if (status === 'CONCLUIDA' && userRole === 'contratante') {
     actionButton = (
       <Link 
         href={`/avaliar/${id}`}
-        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+        className="inline-flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 text-sm font-medium"
       >
         <Star className="w-4 h-4" />
         Avaliar
@@ -226,6 +221,7 @@ function PropostaActions({
 
   return (
     <div className="flex justify-end gap-3 flex-wrap">
+      {deleteButton}
       {updateStatusButton} 
       {actionButton}
     </div>
@@ -248,7 +244,7 @@ export default function PropostasList({
   const menuItems = [];
 
   if (userType !== EnumTipoUsuario.PRESTADOR) {
-     menuItems.push({ name: 'Home', icon: Home, active: false });
+      menuItems.push({ name: 'Home', icon: Home, active: false });
   }
 
   menuItems.push(
@@ -258,15 +254,10 @@ export default function PropostasList({
   );
 
   const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') {
-      router.push('/dashboard');
-    } else if (itemName === 'Notificações') {
-      router.push('/notificacoes');
-    } else if (itemName === 'Propostas') {
-      router.push('/propostas');
-    } else if (itemName === 'Perfil') {
-      router.push('/perfil');
-    }
+    if (itemName === 'Home') router.push('/dashboard');
+    else if (itemName === 'Notificações') router.push('/notificacoes');
+    else if (itemName === 'Propostas') router.push('/propostas');
+    else if (itemName === 'Perfil') router.push('/perfil');
   };
 
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -333,6 +324,7 @@ export default function PropostasList({
       </div>
 
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
+        {/* Cards de Estatística */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <StatCard title="Total" value={stats.total} />
           <StatCard title="Concluídas" value={stats.concluidas} />
@@ -351,7 +343,7 @@ export default function PropostasList({
               </p>
             </div>
           ) : (
-            initialPropostas.map((proposta) => {
+            propostas.map((proposta) => {
               const isExpanded = expandedId === proposta.id;
               return (
                 <div
@@ -360,49 +352,138 @@ export default function PropostasList({
                 >
                   <button
                     onClick={() => toggleProposta(proposta.id)}
-                    className="flex items-center justify-between w-full p-4 sm:p-6 text-left"
+                    className="flex items-center justify-between w-full p-4 sm:p-6 text-left transition-colors hover:bg-gray-50"
                   >
-                    <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-                      {proposta.titulo}
-                    </h2>
-                    <div className="flex items-center gap-4">
+                    <div className="min-w-0 flex-1 mr-4">
+                      <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs text-gray-500 font-medium">
+                            Enviada em {proposta.dataEnvio}
+                          </span>
+                      </div>
+                      <h2 className="text-base sm:text-lg font-bold text-gray-900 truncate">
+                        {proposta.titulo}
+                      </h2>
+                      <p className="text-sm text-gray-600 truncate mt-1">
+                         {proposta.userRole === 'contratante' 
+                            ? `Para: ${proposta.prestadorNome}` 
+                            : `De: ${proposta.contratanteNome}`}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
                       {getStatusBadge(proposta.status, proposta.userRole)}
-                      <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform ${
-                          isExpanded ? 'rotate-180' : ''
-                        }`}
-                      />
+                      <div className="flex items-center gap-1 mt-1">
+                          <span className="font-bold text-gray-900">{proposta.valorFormatado}</span>
+                          <ChevronDown
+                            className={`w-5 h-5 text-gray-400 transition-transform ${
+                              isExpanded ? 'rotate-180' : ''
+                            }`}
+                          />
+                      </div>
                     </div>
                   </button>
 
                   {isExpanded && (
-                    <div className="px-4 sm:px-6 pb-6 border-t border-gray-200">
-                      <div className="pt-4">
-                        <h4 className="font-semibold text-gray-800 mb-2">
-                          Descrição
-                        </h4>
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                          {proposta.descricao}
-                        </p>
+                    <div className="px-4 sm:px-6 pb-6 border-t border-gray-200 bg-gray-50/50">
+                      <div className="pt-6 space-y-6">
+                        
+                        {/* Seção 1: Detalhes Principais e Datas */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
+                                        <FileText className="w-4 h-4 text-blue-600" />
+                                        Descrição Geral
+                                    </h4>
+                                    <p className="text-gray-700 text-sm leading-relaxed bg-white p-3 rounded-lg border border-gray-200">
+                                        {proposta.descricao || 'Sem descrição.'}
+                                    </p>
+                                </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                          <div>
-                            <h4 className="font-semibold text-gray-800">
-                              Valor
-                            </h4>
-                            <p className="text-gray-700">
-                              {proposta.valorFormatado}
-                            </p>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-800">
-                              Prazo
-                            </h4>
-                            <p className="text-gray-700">{proposta.prazo}</p>
-                          </div>
+                                {/* Resposta/Comentário se houver */}
+                                {proposta.resposta && (
+                                    <div>
+                                        <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
+                                            <MessageSquare className="w-4 h-4 text-purple-600" />
+                                            Resposta / Observação
+                                        </h4>
+                                        <p className="text-gray-700 text-sm leading-relaxed bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                                            {proposta.resposta}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
+                                        <Calendar className="w-4 h-4 text-blue-600" />
+                                        Agendamento
+                                    </h4>
+                                    <div className="bg-white p-3 rounded-lg border border-gray-200 text-sm space-y-2">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Início:</span>
+                                            <span className="font-medium text-gray-900">{proposta.dataInicio}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">Término:</span>
+                                            <span className="font-medium text-gray-900">{proposta.dataTermino}</span>
+                                        </div>
+                                        <div className="border-t border-gray-100 my-2"></div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-500">Duração Total:</span>
+                                            <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs font-bold">
+                                                {proposta.duracaoEstimada}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
+                                        <User className="w-4 h-4 text-blue-600" />
+                                        Envolvidos
+                                    </h4>
+                                    <div className="bg-white p-3 rounded-lg border border-gray-200 text-sm space-y-1">
+                                        <p><span className="text-gray-500">Contratante:</span> <span className="font-medium">{proposta.contratanteNome}</span></p>
+                                        <p><span className="text-gray-500">Prestador:</span> <span className="font-medium">{proposta.prestadorNome}</span></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="mt-6">
+                        {/* Seção 2: Lista de Serviços */}
+                        <div>
+                            <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-3">
+                                <ListChecks className="w-4 h-4 text-blue-600" />
+                                Serviços Inclusos
+                            </h4>
+                            {proposta.servicos && proposta.servicos.length > 0 ? (
+                                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Item</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200">
+                                            {proposta.servicos.map((servico, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="px-4 py-2 text-sm text-gray-700">
+                                                        {servico.nome}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-500 italic">Nenhum serviço listado especificamente.</p>
+                            )}
+                        </div>
+
+                        {/* Botões de Ação */}
+                        <div className="pt-4 border-t border-gray-200">
                           <PropostaActions
                             proposta={proposta}
                             onDelete={handleDelete}
@@ -420,7 +501,7 @@ export default function PropostasList({
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 z-20">
         <div className="max-w-6xl mx-auto h-full">
           <div className="flex items-center justify-between h-full px-2">
             {menuItems.map((item, index) => {

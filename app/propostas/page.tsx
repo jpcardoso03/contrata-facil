@@ -5,17 +5,34 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { EnumStatusProposta, Proposta } from '@/app/generated/prisma';
-import { stat } from 'fs';
+import { EnumStatusProposta } from '@/app/generated/prisma';
 
+// Adicionei os novos campos necessários aqui
 export type PropostaProcessada = {
     id: number;
     titulo: string;
     descricao: string;
     valorFormatado: string;
-    prazo: string;
+    // Datas formatadas para exibição
+    dataEnvio: string;
+    dataInicio: string;
+    dataTermino: string;
+    duracaoEstimada: string;
+    
+    // Dados dos usuários
+    contratanteNome: string | null;
+    prestadorNome: string | null;
+    
     status: EnumStatusProposta;
     userRole: 'contratante' | 'prestador';
+    resposta: string | null; // Caso haja recusa ou negociação
+    
+    // Lista de serviços
+    servicos: {
+        id: number;
+        nome: string;
+        descricao: string;
+    }[];
 };
 
 export type PropostaStats = {
@@ -32,6 +49,12 @@ async function getPropostasData(userId: string) {
                 { id_contratante: userId },
                 { id_prestador: userId }
             ],
+        },
+        // IMPORTANTE: Incluir os relacionamentos
+        include: {
+            servicos: true,
+            contratante: { select: { name: true } },
+            prestador: { select: { name: true } }
         },
         orderBy: {
             data_envio: 'desc',
@@ -55,10 +78,22 @@ async function getPropostasData(userId: string) {
                 currency: 'BRL',
             }).format(proposta.valor.toNumber());
 
-            const prazo = formatDistance(
+            // Formatador de data e hora legível
+            const formatDate = (date: Date) => {
+                return new Intl.DateTimeFormat('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }).format(date);
+            };
+
+            // Cálculo da duração (ex: "5 horas")
+            const duracao = formatDistance(
                 proposta.data_termino,
                 proposta.data_inicio,
-                { locale: ptBR}
+                { locale: ptBR }
             );
 
             const userRole = proposta.id_contratante === userId ? 'contratante' : 'prestador';
@@ -68,9 +103,26 @@ async function getPropostasData(userId: string) {
                 titulo: proposta.titulo,
                 descricao: proposta.descricao,
                 valorFormatado: valorFormatado,
-                prazo: prazo,
+                
+                // Novos campos mapeados
+                dataEnvio: formatDate(proposta.data_envio),
+                dataInicio: formatDate(proposta.data_inicio),
+                dataTermino: formatDate(proposta.data_termino),
+                duracaoEstimada: duracao,
+                
+                contratanteNome: proposta.contratante.name,
+                prestadorNome: proposta.prestador.name,
+                resposta: proposta.resposta,
+
                 status: proposta.Status,
-                userRole
+                userRole,
+                
+                // Mapeando serviços
+                servicos: proposta.servicos.map(s => ({
+                    id: s.id_servico,
+                    nome: s.nome_servico,
+                    descricao: s.descricao
+                }))
             };
         }
     );
