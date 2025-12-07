@@ -85,6 +85,7 @@ model Usuario {
   valor          Decimal         @db.Money
   sobre          String
   tipo_usuario   EnumTipoUsuario
+  active         Boolean         @default(true)
 
   habilidades           PrestadorHabilidade[]
   propostas_contratadas Proposta[]            @relation("ContratantePropostas")
@@ -142,6 +143,8 @@ model Mensagem {
   id_remetente    String
   id_destinatario String
   data            DateTime
+  conteudo        String
+  lida            Boolean  @default(false)
 
   remetente    Usuario @relation("RemetenteMensagem", fields: [id_remetente], references: [id])
   destinatario Usuario @relation("DestinatarioMensagem", fields: [id_destinatario], references: [id])

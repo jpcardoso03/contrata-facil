@@ -160,7 +160,8 @@ exports.Prisma.UsuarioScalarFieldEnum = {
   profissao: 'profissao',
   valor: 'valor',
   sobre: 'sobre',
-  tipo_usuario: 'tipo_usuario'
+  tipo_usuario: 'tipo_usuario',
+  active: 'active'
 };
 
 exports.Prisma.NotificacaoScalarFieldEnum = {
@@ -192,7 +193,9 @@ exports.Prisma.MensagemScalarFieldEnum = {
   id_mensagem: 'id_mensagem',
   id_remetente: 'id_remetente',
   id_destinatario: 'id_destinatario',
-  data: 'data'
+  data: 'data',
+  conteudo: 'conteudo',
+  lida: 'lida'
 };
 
 exports.Prisma.PropostaScalarFieldEnum = {

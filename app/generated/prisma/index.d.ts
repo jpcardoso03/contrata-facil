@@ -5227,6 +5227,7 @@ export namespace Prisma {
     valor: Decimal | null
     sobre: string | null
     tipo_usuario: $Enums.EnumTipoUsuario | null
+    active: boolean | null
   }
 
   export type UsuarioMaxAggregateOutputType = {
@@ -5241,6 +5242,7 @@ export namespace Prisma {
     valor: Decimal | null
     sobre: string | null
     tipo_usuario: $Enums.EnumTipoUsuario | null
+    active: boolean | null
   }
 
   export type UsuarioCountAggregateOutputType = {
@@ -5255,6 +5257,7 @@ export namespace Prisma {
     valor: number
     sobre: number
     tipo_usuario: number
+    active: number
     _all: number
   }
 
@@ -5279,6 +5282,7 @@ export namespace Prisma {
     valor?: true
     sobre?: true
     tipo_usuario?: true
+    active?: true
   }
 
   export type UsuarioMaxAggregateInputType = {
@@ -5293,6 +5297,7 @@ export namespace Prisma {
     valor?: true
     sobre?: true
     tipo_usuario?: true
+    active?: true
   }
 
   export type UsuarioCountAggregateInputType = {
@@ -5307,6 +5312,7 @@ export namespace Prisma {
     valor?: true
     sobre?: true
     tipo_usuario?: true
+    active?: true
     _all?: true
   }
 
@@ -5408,6 +5414,7 @@ export namespace Prisma {
     valor: Decimal
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active: boolean
     _count: UsuarioCountAggregateOutputType | null
     _avg: UsuarioAvgAggregateOutputType | null
     _sum: UsuarioSumAggregateOutputType | null
@@ -5441,6 +5448,7 @@ export namespace Prisma {
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
+    active?: boolean
     habilidades?: boolean | Usuario$habilidadesArgs<ExtArgs>
     propostas_contratadas?: boolean | Usuario$propostas_contratadasArgs<ExtArgs>
     propostas_prestadas?: boolean | Usuario$propostas_prestadasArgs<ExtArgs>
@@ -5464,6 +5472,7 @@ export namespace Prisma {
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
+    active?: boolean
   }, ExtArgs["result"]["usuario"]>
 
   export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5478,6 +5487,7 @@ export namespace Prisma {
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
+    active?: boolean
   }, ExtArgs["result"]["usuario"]>
 
   export type UsuarioSelectScalar = {
@@ -5492,9 +5502,10 @@ export namespace Prisma {
     valor?: boolean
     sobre?: boolean
     tipo_usuario?: boolean
+    active?: boolean
   }
 
-  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "hashedPassword" | "email" | "emailVerified" | "image" | "city" | "profissao" | "valor" | "sobre" | "tipo_usuario", ExtArgs["result"]["usuario"]>
+  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "hashedPassword" | "email" | "emailVerified" | "image" | "city" | "profissao" | "valor" | "sobre" | "tipo_usuario" | "active", ExtArgs["result"]["usuario"]>
   export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     habilidades?: boolean | Usuario$habilidadesArgs<ExtArgs>
     propostas_contratadas?: boolean | Usuario$propostas_contratadasArgs<ExtArgs>
@@ -5533,6 +5544,7 @@ export namespace Prisma {
       valor: Prisma.Decimal
       sobre: string
       tipo_usuario: $Enums.EnumTipoUsuario
+      active: boolean
     }, ExtArgs["result"]["usuario"]>
     composites: {}
   }
@@ -5975,6 +5987,7 @@ export namespace Prisma {
     readonly valor: FieldRef<"Usuario", 'Decimal'>
     readonly sobre: FieldRef<"Usuario", 'String'>
     readonly tipo_usuario: FieldRef<"Usuario", 'EnumTipoUsuario'>
+    readonly active: FieldRef<"Usuario", 'Boolean'>
   }
     
 
@@ -9873,6 +9886,8 @@ export namespace Prisma {
     id_remetente: string | null
     id_destinatario: string | null
     data: Date | null
+    conteudo: string | null
+    lida: boolean | null
   }
 
   export type MensagemMaxAggregateOutputType = {
@@ -9880,6 +9895,8 @@ export namespace Prisma {
     id_remetente: string | null
     id_destinatario: string | null
     data: Date | null
+    conteudo: string | null
+    lida: boolean | null
   }
 
   export type MensagemCountAggregateOutputType = {
@@ -9887,6 +9904,8 @@ export namespace Prisma {
     id_remetente: number
     id_destinatario: number
     data: number
+    conteudo: number
+    lida: number
     _all: number
   }
 
@@ -9904,6 +9923,8 @@ export namespace Prisma {
     id_remetente?: true
     id_destinatario?: true
     data?: true
+    conteudo?: true
+    lida?: true
   }
 
   export type MensagemMaxAggregateInputType = {
@@ -9911,6 +9932,8 @@ export namespace Prisma {
     id_remetente?: true
     id_destinatario?: true
     data?: true
+    conteudo?: true
+    lida?: true
   }
 
   export type MensagemCountAggregateInputType = {
@@ -9918,6 +9941,8 @@ export namespace Prisma {
     id_remetente?: true
     id_destinatario?: true
     data?: true
+    conteudo?: true
+    lida?: true
     _all?: true
   }
 
@@ -10012,6 +10037,8 @@ export namespace Prisma {
     id_remetente: string
     id_destinatario: string
     data: Date
+    conteudo: string
+    lida: boolean
     _count: MensagemCountAggregateOutputType | null
     _avg: MensagemAvgAggregateOutputType | null
     _sum: MensagemSumAggregateOutputType | null
@@ -10038,6 +10065,8 @@ export namespace Prisma {
     id_remetente?: boolean
     id_destinatario?: boolean
     data?: boolean
+    conteudo?: boolean
+    lida?: boolean
     remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
     destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["mensagem"]>
@@ -10047,6 +10076,8 @@ export namespace Prisma {
     id_remetente?: boolean
     id_destinatario?: boolean
     data?: boolean
+    conteudo?: boolean
+    lida?: boolean
     remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
     destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["mensagem"]>
@@ -10056,6 +10087,8 @@ export namespace Prisma {
     id_remetente?: boolean
     id_destinatario?: boolean
     data?: boolean
+    conteudo?: boolean
+    lida?: boolean
     remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
     destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["mensagem"]>
@@ -10065,9 +10098,11 @@ export namespace Prisma {
     id_remetente?: boolean
     id_destinatario?: boolean
     data?: boolean
+    conteudo?: boolean
+    lida?: boolean
   }
 
-  export type MensagemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_mensagem" | "id_remetente" | "id_destinatario" | "data", ExtArgs["result"]["mensagem"]>
+  export type MensagemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_mensagem" | "id_remetente" | "id_destinatario" | "data" | "conteudo" | "lida", ExtArgs["result"]["mensagem"]>
   export type MensagemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     remetente?: boolean | UsuarioDefaultArgs<ExtArgs>
     destinatario?: boolean | UsuarioDefaultArgs<ExtArgs>
@@ -10092,6 +10127,8 @@ export namespace Prisma {
       id_remetente: string
       id_destinatario: string
       data: Date
+      conteudo: string
+      lida: boolean
     }, ExtArgs["result"]["mensagem"]>
     composites: {}
   }
@@ -10521,6 +10558,8 @@ export namespace Prisma {
     readonly id_remetente: FieldRef<"Mensagem", 'String'>
     readonly id_destinatario: FieldRef<"Mensagem", 'String'>
     readonly data: FieldRef<"Mensagem", 'DateTime'>
+    readonly conteudo: FieldRef<"Mensagem", 'String'>
+    readonly lida: FieldRef<"Mensagem", 'Boolean'>
   }
     
 
@@ -14403,7 +14442,8 @@ export namespace Prisma {
     profissao: 'profissao',
     valor: 'valor',
     sobre: 'sobre',
-    tipo_usuario: 'tipo_usuario'
+    tipo_usuario: 'tipo_usuario',
+    active: 'active'
   };
 
   export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -14447,7 +14487,9 @@ export namespace Prisma {
     id_mensagem: 'id_mensagem',
     id_remetente: 'id_remetente',
     id_destinatario: 'id_destinatario',
-    data: 'data'
+    data: 'data',
+    conteudo: 'conteudo',
+    lida: 'lida'
   };
 
   export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
@@ -14590,6 +14632,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'EnumTipoNotificacao'
    */
   export type EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnumTipoNotificacao'>
@@ -14600,13 +14649,6 @@ export namespace Prisma {
    * Reference to a field of type 'EnumTipoNotificacao[]'
    */
   export type ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnumTipoNotificacao[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -14856,6 +14898,7 @@ export namespace Prisma {
     valor?: DecimalFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioFilter<"Usuario"> | $Enums.EnumTipoUsuario
+    active?: BoolFilter<"Usuario"> | boolean
     habilidades?: PrestadorHabilidadeListRelationFilter
     propostas_contratadas?: PropostaListRelationFilter
     propostas_prestadas?: PropostaListRelationFilter
@@ -14878,6 +14921,7 @@ export namespace Prisma {
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
+    active?: SortOrder
     habilidades?: PrestadorHabilidadeOrderByRelationAggregateInput
     propostas_contratadas?: PropostaOrderByRelationAggregateInput
     propostas_prestadas?: PropostaOrderByRelationAggregateInput
@@ -14903,6 +14947,7 @@ export namespace Prisma {
     valor?: DecimalFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioFilter<"Usuario"> | $Enums.EnumTipoUsuario
+    active?: BoolFilter<"Usuario"> | boolean
     habilidades?: PrestadorHabilidadeListRelationFilter
     propostas_contratadas?: PropostaListRelationFilter
     propostas_prestadas?: PropostaListRelationFilter
@@ -14925,6 +14970,7 @@ export namespace Prisma {
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
+    active?: SortOrder
     _count?: UsuarioCountOrderByAggregateInput
     _avg?: UsuarioAvgOrderByAggregateInput
     _max?: UsuarioMaxOrderByAggregateInput
@@ -14947,6 +14993,7 @@ export namespace Prisma {
     valor?: DecimalWithAggregatesFilter<"Usuario"> | Decimal | DecimalJsLike | number | string
     sobre?: StringWithAggregatesFilter<"Usuario"> | string
     tipo_usuario?: EnumEnumTipoUsuarioWithAggregatesFilter<"Usuario"> | $Enums.EnumTipoUsuario
+    active?: BoolWithAggregatesFilter<"Usuario"> | boolean
   }
 
   export type NotificacaoWhereInput = {
@@ -15135,6 +15182,8 @@ export namespace Prisma {
     id_remetente?: StringFilter<"Mensagem"> | string
     id_destinatario?: StringFilter<"Mensagem"> | string
     data?: DateTimeFilter<"Mensagem"> | Date | string
+    conteudo?: StringFilter<"Mensagem"> | string
+    lida?: BoolFilter<"Mensagem"> | boolean
     remetente?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     destinatario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
   }
@@ -15144,6 +15193,8 @@ export namespace Prisma {
     id_remetente?: SortOrder
     id_destinatario?: SortOrder
     data?: SortOrder
+    conteudo?: SortOrder
+    lida?: SortOrder
     remetente?: UsuarioOrderByWithRelationInput
     destinatario?: UsuarioOrderByWithRelationInput
   }
@@ -15156,6 +15207,8 @@ export namespace Prisma {
     id_remetente?: StringFilter<"Mensagem"> | string
     id_destinatario?: StringFilter<"Mensagem"> | string
     data?: DateTimeFilter<"Mensagem"> | Date | string
+    conteudo?: StringFilter<"Mensagem"> | string
+    lida?: BoolFilter<"Mensagem"> | boolean
     remetente?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
     destinatario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
   }, "id_mensagem">
@@ -15165,6 +15218,8 @@ export namespace Prisma {
     id_remetente?: SortOrder
     id_destinatario?: SortOrder
     data?: SortOrder
+    conteudo?: SortOrder
+    lida?: SortOrder
     _count?: MensagemCountOrderByAggregateInput
     _avg?: MensagemAvgOrderByAggregateInput
     _max?: MensagemMaxOrderByAggregateInput
@@ -15180,6 +15235,8 @@ export namespace Prisma {
     id_remetente?: StringWithAggregatesFilter<"Mensagem"> | string
     id_destinatario?: StringWithAggregatesFilter<"Mensagem"> | string
     data?: DateTimeWithAggregatesFilter<"Mensagem"> | Date | string
+    conteudo?: StringWithAggregatesFilter<"Mensagem"> | string
+    lida?: BoolWithAggregatesFilter<"Mensagem"> | boolean
   }
 
   export type PropostaWhereInput = {
@@ -15589,6 +15646,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -15611,6 +15669,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -15633,6 +15692,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -15655,6 +15715,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -15677,6 +15738,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
   }
 
   export type UsuarioUpdateManyMutationInput = {
@@ -15691,6 +15753,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UsuarioUncheckedUpdateManyInput = {
@@ -15705,6 +15768,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type NotificacaoCreateInput = {
@@ -15882,6 +15946,8 @@ export namespace Prisma {
 
   export type MensagemCreateInput = {
     data: Date | string
+    conteudo: string
+    lida?: boolean
     remetente: UsuarioCreateNestedOneWithoutMensagens_enviadasInput
     destinatario: UsuarioCreateNestedOneWithoutMensagens_recebidasInput
   }
@@ -15891,10 +15957,14 @@ export namespace Prisma {
     id_remetente: string
     id_destinatario: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type MensagemUpdateInput = {
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
     remetente?: UsuarioUpdateOneRequiredWithoutMensagens_enviadasNestedInput
     destinatario?: UsuarioUpdateOneRequiredWithoutMensagens_recebidasNestedInput
   }
@@ -15904,6 +15974,8 @@ export namespace Prisma {
     id_remetente?: StringFieldUpdateOperationsInput | string
     id_destinatario?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MensagemCreateManyInput = {
@@ -15911,10 +15983,14 @@ export namespace Prisma {
     id_remetente: string
     id_destinatario: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type MensagemUpdateManyMutationInput = {
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MensagemUncheckedUpdateManyInput = {
@@ -15922,6 +15998,8 @@ export namespace Prisma {
     id_remetente?: StringFieldUpdateOperationsInput | string
     id_destinatario?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PropostaCreateInput = {
@@ -16380,6 +16458,11 @@ export namespace Prisma {
     not?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel> | $Enums.EnumTipoUsuario
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type PrestadorHabilidadeListRelationFilter = {
     every?: PrestadorHabilidadeWhereInput
     some?: PrestadorHabilidadeWhereInput
@@ -16452,6 +16535,7 @@ export namespace Prisma {
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
+    active?: SortOrder
   }
 
   export type UsuarioAvgOrderByAggregateInput = {
@@ -16470,6 +16554,7 @@ export namespace Prisma {
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
+    active?: SortOrder
   }
 
   export type UsuarioMinOrderByAggregateInput = {
@@ -16484,6 +16569,7 @@ export namespace Prisma {
     valor?: SortOrder
     sobre?: SortOrder
     tipo_usuario?: SortOrder
+    active?: SortOrder
   }
 
   export type UsuarioSumOrderByAggregateInput = {
@@ -16530,16 +16616,19 @@ export namespace Prisma {
     _max?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EnumEnumTipoNotificacaoFilter<$PrismaModel = never> = {
     equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     not?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NotificacaoCountOrderByAggregateInput = {
@@ -16583,14 +16672,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
     _max?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -16710,6 +16791,8 @@ export namespace Prisma {
     id_remetente?: SortOrder
     id_destinatario?: SortOrder
     data?: SortOrder
+    conteudo?: SortOrder
+    lida?: SortOrder
   }
 
   export type MensagemAvgOrderByAggregateInput = {
@@ -16721,6 +16804,8 @@ export namespace Prisma {
     id_remetente?: SortOrder
     id_destinatario?: SortOrder
     data?: SortOrder
+    conteudo?: SortOrder
+    lida?: SortOrder
   }
 
   export type MensagemMinOrderByAggregateInput = {
@@ -16728,6 +16813,8 @@ export namespace Prisma {
     id_remetente?: SortOrder
     id_destinatario?: SortOrder
     data?: SortOrder
+    conteudo?: SortOrder
+    lida?: SortOrder
   }
 
   export type MensagemSumOrderByAggregateInput = {
@@ -17071,6 +17158,10 @@ export namespace Prisma {
     set?: $Enums.EnumTipoUsuario
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput = {
     create?: XOR<PrestadorHabilidadeCreateWithoutPrestadorInput, PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput> | PrestadorHabilidadeCreateWithoutPrestadorInput[] | PrestadorHabilidadeUncheckedCreateWithoutPrestadorInput[]
     connectOrCreate?: PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput | PrestadorHabilidadeCreateOrConnectWithoutPrestadorInput[]
@@ -17303,10 +17394,6 @@ export namespace Prisma {
 
   export type EnumEnumTipoNotificacaoFieldUpdateOperationsInput = {
     set?: $Enums.EnumTipoNotificacao
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UsuarioUpdateOneRequiredWithoutNotificacoesNestedInput = {
@@ -17736,6 +17823,11 @@ export namespace Prisma {
     not?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel> | $Enums.EnumTipoUsuario
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -17776,16 +17868,19 @@ export namespace Prisma {
     _max?: NestedEnumEnumTipoUsuarioFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedEnumEnumTipoNotificacaoFilter<$PrismaModel = never> = {
     equals?: $Enums.EnumTipoNotificacao | EnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     in?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     notIn?: $Enums.EnumTipoNotificacao[] | ListEnumEnumTipoNotificacaoFieldRefInput<$PrismaModel>
     not?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel> | $Enums.EnumTipoNotificacao
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedEnumEnumTipoNotificacaoWithAggregatesFilter<$PrismaModel = never> = {
@@ -17796,14 +17891,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
     _max?: NestedEnumEnumTipoNotificacaoFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -17879,6 +17966,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -17900,6 +17988,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -17937,6 +18026,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -17958,6 +18048,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -17979,6 +18070,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -18000,6 +18092,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -18037,6 +18130,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -18058,6 +18152,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -18167,6 +18262,8 @@ export namespace Prisma {
 
   export type MensagemCreateWithoutRemetenteInput = {
     data: Date | string
+    conteudo: string
+    lida?: boolean
     destinatario: UsuarioCreateNestedOneWithoutMensagens_recebidasInput
   }
 
@@ -18174,6 +18271,8 @@ export namespace Prisma {
     id_mensagem?: number
     id_destinatario: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type MensagemCreateOrConnectWithoutRemetenteInput = {
@@ -18188,6 +18287,8 @@ export namespace Prisma {
 
   export type MensagemCreateWithoutDestinatarioInput = {
     data: Date | string
+    conteudo: string
+    lida?: boolean
     remetente: UsuarioCreateNestedOneWithoutMensagens_enviadasInput
   }
 
@@ -18195,6 +18296,8 @@ export namespace Prisma {
     id_mensagem?: number
     id_remetente: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type MensagemCreateOrConnectWithoutDestinatarioInput = {
@@ -18395,6 +18498,8 @@ export namespace Prisma {
     id_remetente?: StringFilter<"Mensagem"> | string
     id_destinatario?: StringFilter<"Mensagem"> | string
     data?: DateTimeFilter<"Mensagem"> | Date | string
+    conteudo?: StringFilter<"Mensagem"> | string
+    lida?: BoolFilter<"Mensagem"> | boolean
   }
 
   export type MensagemUpsertWithWhereUniqueWithoutDestinatarioInput = {
@@ -18515,6 +18620,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -18536,6 +18642,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -18573,6 +18680,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -18594,6 +18702,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -18671,6 +18780,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
@@ -18692,6 +18802,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
@@ -18755,6 +18866,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
@@ -18776,6 +18888,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
@@ -18797,6 +18910,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -18818,6 +18932,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -18844,6 +18959,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
@@ -18865,6 +18981,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
@@ -18902,6 +19019,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -18923,6 +19041,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -18955,6 +19074,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
@@ -18976,6 +19096,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
@@ -18997,6 +19118,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_prestadas?: PropostaCreateNestedManyWithoutPrestadorInput
     mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
@@ -19018,6 +19140,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_prestadas?: PropostaUncheckedCreateNestedManyWithoutPrestadorInput
     mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
@@ -19044,6 +19167,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaCreateNestedManyWithoutContratanteInput
     mensagens_enviadas?: MensagemCreateNestedManyWithoutRemetenteInput
@@ -19065,6 +19189,7 @@ export namespace Prisma {
     valor: Decimal | DecimalJsLike | number | string
     sobre: string
     tipo_usuario: $Enums.EnumTipoUsuario
+    active?: boolean
     habilidades?: PrestadorHabilidadeUncheckedCreateNestedManyWithoutPrestadorInput
     propostas_contratadas?: PropostaUncheckedCreateNestedManyWithoutContratanteInput
     mensagens_enviadas?: MensagemUncheckedCreateNestedManyWithoutRemetenteInput
@@ -19146,6 +19271,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_prestadas?: PropostaUpdateManyWithoutPrestadorNestedInput
     mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
@@ -19167,6 +19293,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_prestadas?: PropostaUncheckedUpdateManyWithoutPrestadorNestedInput
     mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
@@ -19199,6 +19326,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUpdateManyWithoutContratanteNestedInput
     mensagens_enviadas?: MensagemUpdateManyWithoutRemetenteNestedInput
@@ -19220,6 +19348,7 @@ export namespace Prisma {
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     sobre?: StringFieldUpdateOperationsInput | string
     tipo_usuario?: EnumEnumTipoUsuarioFieldUpdateOperationsInput | $Enums.EnumTipoUsuario
+    active?: BoolFieldUpdateOperationsInput | boolean
     habilidades?: PrestadorHabilidadeUncheckedUpdateManyWithoutPrestadorNestedInput
     propostas_contratadas?: PropostaUncheckedUpdateManyWithoutContratanteNestedInput
     mensagens_enviadas?: MensagemUncheckedUpdateManyWithoutRemetenteNestedInput
@@ -19464,12 +19593,16 @@ export namespace Prisma {
     id_mensagem?: number
     id_destinatario: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type MensagemCreateManyDestinatarioInput = {
     id_mensagem?: number
     id_remetente: string
     data: Date | string
+    conteudo: string
+    lida?: boolean
   }
 
   export type AccountCreateManyUserInput = {
@@ -19603,6 +19736,8 @@ export namespace Prisma {
 
   export type MensagemUpdateWithoutRemetenteInput = {
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
     destinatario?: UsuarioUpdateOneRequiredWithoutMensagens_recebidasNestedInput
   }
 
@@ -19610,16 +19745,22 @@ export namespace Prisma {
     id_mensagem?: IntFieldUpdateOperationsInput | number
     id_destinatario?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MensagemUncheckedUpdateManyWithoutRemetenteInput = {
     id_mensagem?: IntFieldUpdateOperationsInput | number
     id_destinatario?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MensagemUpdateWithoutDestinatarioInput = {
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
     remetente?: UsuarioUpdateOneRequiredWithoutMensagens_enviadasNestedInput
   }
 
@@ -19627,12 +19768,16 @@ export namespace Prisma {
     id_mensagem?: IntFieldUpdateOperationsInput | number
     id_remetente?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MensagemUncheckedUpdateManyWithoutDestinatarioInput = {
     id_mensagem?: IntFieldUpdateOperationsInput | number
     id_remetente?: StringFieldUpdateOperationsInput | string
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    lida?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AccountUpdateWithoutUserInput = {

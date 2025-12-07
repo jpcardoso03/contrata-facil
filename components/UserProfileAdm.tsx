@@ -159,7 +159,7 @@ export default function UserProfileAdmin({ user }: UserProfileAdminProps) {
             Zona de Perigo
           </h3>
           <p className="text-red-600 text-sm mb-4">
-            Ações administrativas irreversíveis ou que afetam o acesso do usuário à plataforma.
+            Banir um usuário impedirá que ele envie ou receba propostas.
           </p>
           
           <button

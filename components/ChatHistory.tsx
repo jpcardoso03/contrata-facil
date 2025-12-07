@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageSquare, User, Check, CheckCheck, Search } from 'lucide-react';
 
-interface Conversation {
+export interface Conversation {
   id: string;
   contactName: string;
   contactProfession: string;
-  contactAvatar: string;
+  contactAvatar: string | null;
   lastMessage: string;
   lastMessageTime: string;
   unreadCount: number;
@@ -16,82 +16,27 @@ interface Conversation {
   isOnline: boolean;
 }
 
-export default function ChatHistory() {
-  const router = useRouter();
-  
-  const [conversations] = useState<Conversation[]>([
-    {
-      id: '1',
-      contactName: 'Maria Silva',
-      contactProfession: 'Cliente',
-      contactAvatar: '/avatars/maria.jpg',
-      lastMessage: 'Obrigada pelo serviço! Ficou perfeito.',
-      lastMessageTime: '10:30',
-      unreadCount: 0,
-      lastMessageStatus: 'read',
-      isOnline: true
-    },
-    {
-      id: '2',
-      contactName: 'Carlos Santos',
-      contactProfession: 'Eletricista',
-      contactAvatar: '/avatars/carlos.jpg',
-      lastMessage: 'Posso ir amanhã às 14h para avaliar o problema.',
-      lastMessageTime: 'Ontem',
-      unreadCount: 2,
-      lastMessageStatus: 'delivered',
-      isOnline: false
-    },
-    {
-      id: '3',
-      contactName: 'Ana Oliveira',
-      contactProfession: 'Encanadora',
-      contactAvatar: '/avatars/ana.jpg',
-      lastMessage: 'O material chegou, podemos marcar a instalação.',
-      lastMessageTime: '15/12',
-      unreadCount: 0,
-      lastMessageStatus: 'read',
-      isOnline: true
-    },
-    {
-      id: '4',
-      contactName: 'Roberto Lima',
-      contactProfession: 'Pintor',
-      contactAvatar: '/avatars/roberto.jpg',
-      lastMessage: 'Qual seria o orçamento para pintar a sala?',
-      lastMessageTime: '14/12',
-      unreadCount: 1,
-      lastMessageStatus: 'sent',
-      isOnline: false
-    },
-    {
-      id: '5',
-      contactName: 'Fernanda Costa',
-      contactProfession: 'Cliente',
-      contactAvatar: '/avatars/fernanda.jpg',
-      lastMessage: 'Preciso de um serviço de jardinagem urgente.',
-      lastMessageTime: '13/12',
-      unreadCount: 0,
-      lastMessageStatus: 'read',
-      isOnline: false
-    },
-  ]);
+interface ChatHistoryProps {
+  initialConversations: Conversation[];
+}
 
+export default function ChatHistory({ initialConversations }: ChatHistoryProps) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredConversations = conversations.filter(conv =>
+  const filteredConversations = initialConversations.filter(conv =>
     conv.contactName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     conv.contactProfession.toLowerCase().includes(searchTerm.toLowerCase()) ||
     conv.lastMessage.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleConversationClick = (conversationId: string) => {
-    router.push(`/chat/${conversationId}`);
+  const handleConversationClick = (contactId: string) => {
+    router.push(`/mensagens/${contactId}`); 
   };
 
   const getStatusIcon = (status: Conversation['lastMessageStatus']) => {
     switch (status) {
-      case 'sent': return <Check className="w-3 h-3" />;
+      case 'sent': return <Check className="w-3 h-3 text-gray-400" />;
       case 'delivered': return <CheckCheck className="w-3 h-3 text-gray-400" />;
       case 'read': return <CheckCheck className="w-3 h-3 text-blue-500" />;
       default: return null;
@@ -100,7 +45,6 @@ export default function ChatHistory() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
@@ -118,7 +62,6 @@ export default function ChatHistory() {
       </div>
 
       <div className="max-w-4xl mx-auto p-4">
-        {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
             <input
@@ -132,25 +75,29 @@ export default function ChatHistory() {
           </div>
         </div>
 
-        {/* Conversations List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          {filteredConversations.length === 0 ? (
-            <div className="p-8 text-center">
-              <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {searchTerm ? `Nenhuma conversa encontrada para "${searchTerm}"` : 'Nenhuma conversa'}
+          {initialConversations.length === 0 ? (
+            <div className="p-12 text-center">
+              <MessageSquare className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Nenhuma conversa iniciada
               </h3>
-              <p className="text-gray-600">
-                {searchTerm ? 'Tente buscar por outro nome ou profissão' : 'Você ainda não tem conversas'}
+              <p className="text-gray-500 max-w-sm mx-auto">
+                O usuário não possui nenhuma conversa registrada no momento. Envie uma proposta ou aguarde contato.
               </p>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  Limpar busca
-                </button>
-              )}
+            </div>
+          ) : filteredConversations.length === 0 ? (
+            <div className="p-8 text-center">
+              <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Nenhum resultado para "{searchTerm}"
+              </h3>
+              <button
+                onClick={() => setSearchTerm('')}
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Limpar busca
+              </button>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
@@ -161,9 +108,8 @@ export default function ChatHistory() {
                   className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
                   <div className="flex items-start gap-3">
-                    {/* Avatar */}
                     <div className="relative flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                      <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border border-gray-100">
                         {conversation.contactAvatar ? (
                           <img 
                             src={conversation.contactAvatar} 
@@ -171,7 +117,9 @@ export default function ChatHistory() {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <User className="w-6 h-6 text-blue-600" />
+                          <span className="text-blue-600 font-bold text-lg">
+                            {conversation.contactName.charAt(0).toUpperCase()}
+                          </span>
                         )}
                       </div>
                       {conversation.isOnline && (
@@ -179,21 +127,20 @@ export default function ChatHistory() {
                       )}
                     </div>
 
-                    {/* Conversation Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-1">
                         <div>
                           <h3 className="font-semibold text-gray-900 truncate">
                             {conversation.contactName}
                           </h3>
-                          <p className="text-sm text-gray-600">{conversation.contactProfession}</p>
+                          <p className="text-sm text-gray-500 font-medium">{conversation.contactProfession}</p>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-400">
                             {conversation.lastMessageTime}
                           </span>
                           {conversation.unreadCount > 0 && (
-                            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full min-w-[20px] text-center">
+                            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full min-w-[20px] text-center font-bold">
                               {conversation.unreadCount}
                             </span>
                           )}
@@ -201,7 +148,7 @@ export default function ChatHistory() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-700 truncate pr-2">
+                        <p className={`text-sm truncate pr-2 ${conversation.unreadCount > 0 ? 'text-gray-900 font-medium' : 'text-gray-600'}`}>
                           {conversation.lastMessage}
                         </p>
                         <div className="flex-shrink-0">

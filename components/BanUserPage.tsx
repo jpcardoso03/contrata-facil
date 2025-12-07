@@ -1,50 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, User, AlertTriangle, CheckCircle, ShieldCheck } from 'lucide-react';
+import { toggleUserBanStatus } from '@/app/banir-usuario/actions';
 
-export default function BanUserPage() {
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  profession: string;
+  city: string;
+  photoUrl: string | null;
+  isActive: boolean;
+}
+
+interface BanUserPageProps {
+  user: UserData;
+}
+
+export default function BanUserPage({ user }: BanUserPageProps) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [banReason, setBanReason] = useState('');
-  const [banDuration, setBanDuration] = useState('');
 
-  const userData = {
-    name: "Ana Maria",
-    email: "ana.maria@email.com",
-    profession: "Designer",
-    city: "São Paulo, SP",
-    photoUrl: ""
-  };
+  const isBanningAction = user.isActive;
 
-  const durationOptions = [
-    { value: '1', label: '1 dia' },
-    { value: '3', label: '3 dias' },
-    { value: '7', label: '7 dias' },
-    { value: '30', label: '30 dias' },
-    { value: 'permanent', label: 'Permanente' }
-  ];
-
-  const handleConfirmBan = () => {
-    if (!banReason.trim()) {
-      alert('Por favor, informe o motivo do banimento');
-      return;
+  const handleConfirmAction = () => {
+    if (isBanningAction && !banReason.trim()) {
+       alert('Por favor, informe o motivo para continuar.');
+       return;
     }
 
-    if (!banDuration) {
-      alert('Por favor, selecione a duração do banimento');
-      return;
-    }
-
-    console.log('Banindo usuário:', {
-      userId: "123",
-      userName: userData.name,
-      reason: banReason,
-      duration: banDuration
+    startTransition(async () => {
+      const result = await toggleUserBanStatus(user.id, isBanningAction);
+      
+      if (result.success) {
+        alert(isBanningAction 
+          ? `Usuário ${user.name} foi banido com sucesso.` 
+          : `Usuário ${user.name} foi reativado com sucesso.`);
+        router.back();
+        router.refresh();
+      } else {
+        alert(`Erro: ${result.error}`);
+      }
     });
-
-    alert(`Usuário ${userData.name} banido com sucesso!`);
-    router.back();
   };
 
   const handleCancel = () => {
@@ -60,6 +60,9 @@ export default function BanUserPage() {
       .slice(0, 2);
   };
 
+  const themeColor = isBanningAction ? 'red' : 'green';
+  const IconComponent = isBanningAction ? AlertTriangle : ShieldCheck;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 px-4 py-4">
@@ -70,109 +73,111 @@ export default function BanUserPage() {
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <h1 className="text-xl font-bold text-gray-900">Banir Usuário</h1>
+          <h1 className="text-xl font-bold text-gray-900">
+            {isBanningAction ? 'Banir Usuário' : 'Reativar Usuário'}
+          </h1>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto p-4 space-y-6">
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
+        
+        <div className={`bg-${themeColor}-50 border border-${themeColor}-200 rounded-2xl p-6`}>
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <IconComponent className={`w-6 h-6 text-${themeColor}-600 flex-shrink-0 mt-0.5`} />
             <div>
-              <h3 className="font-semibold text-red-900 mb-2">Atenção: Esta ação é irreversível</h3>
-              <p className="text-red-700 text-sm">
-                Ao banir um usuário, ele perderá acesso à plataforma conforme a duração selecionada. 
-                Esta ação será registrada no sistema.
+              <h3 className={`font-semibold text-${themeColor}-900 mb-2`}>
+                {isBanningAction 
+                  ? 'Atenção: Esta ação suspende o acesso do usuário' 
+                  : 'Confirmar reativação de conta'}
+              </h3>
+              <p className={`text-${themeColor}-700 text-sm`}>
+                {isBanningAction
+                  ? 'Ao banir este usuário, ele ficará impedido de fazer login, enviar ou receber propostas até que seja reativado.'
+                  : 'Ao reativar este usuário, ele recuperará o acesso imediato à plataforma e poderá voltar a negociar.'}
               </p>
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Usuário a Ser Banido</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Usuário Selecionado
+          </h2>
           
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
-              {userData.photoUrl ? (
+            <div className={`w-16 h-16 ${isBanningAction ? 'bg-blue-500' : 'bg-gray-400'} rounded-full flex items-center justify-center`}>
+              {user.photoUrl ? (
                 <img 
-                  src={userData.photoUrl} 
-                  alt={userData.name}
+                  src={user.photoUrl} 
+                  alt={user.name}
                   className="w-16 h-16 rounded-full object-cover"
                 />
               ) : (
                 <span className="text-white font-bold text-lg">
-                  {getInitials(userData.name)}
+                  {getInitials(user.name)}
                 </span>
               )}
             </div>
             
             <div className="flex-1">
-              <h3 className="text-xl font-semibold text-gray-900">{userData.name}</h3>
+              <div className="flex items-center gap-2">
+                 <h3 className="text-xl font-semibold text-gray-900">{user.name}</h3>
+                 {!user.isActive && (
+                    <span className="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
+                        BANIDO
+                    </span>
+                 )}
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
                   <User className="w-4 h-4" />
-                  <span>{userData.profession}</span>
+                  <span>{user.profession}</span>
                 </div>
                 <div>
-                  <span>📧 {userData.email}</span>
+                  <span>📧 {user.email}</span>
                 </div>
                 <div>
-                  <span>📍 {userData.city}</span>
+                  <span>📍 {user.city}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Detalhes do Banimento</h2>
-
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Motivo do banimento *
-              </label>
-              <textarea
-                value={banReason}
-                onChange={(e) => setBanReason(e.target.value)}
-                rows={4}
-                placeholder="Digite o motivo do banimento..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duração do banimento *
-              </label>
-              <select
-                value={banDuration}
-                onChange={(e) => setBanDuration(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              >
-                <option value="">Selecione a duração...</option>
-                {durationOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {isBanningAction && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+             <h2 className="text-lg font-semibold text-gray-900 mb-4">Detalhes</h2>
+             <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Motivo do bloqueio
+                </label>
+                <textarea
+                  value={banReason}
+                  onChange={(e) => setBanReason(e.target.value)}
+                  rows={3}
+                  placeholder="Descreva o motivo..."
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                />
+             </div>
           </div>
-        </div>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-3">
           <button
-            onClick={handleConfirmBan}
-            disabled={!banReason.trim() || !banDuration}
-            className="flex-1 bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+            onClick={handleConfirmAction}
+            disabled={isPending || (isBanningAction && !banReason.trim())}
+            className={`flex-1 text-white py-3 px-6 rounded-lg transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed
+                ${isBanningAction ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}
+            `}
           >
-            Confirmar Banimento
+            {isPending 
+                ? 'Processando...' 
+                : (isBanningAction ? 'Confirmar Banimento' : 'Reativar Usuário')
+            }
           </button>
           <button
             onClick={handleCancel}
+            disabled={isPending}
             className="flex-1 border border-gray-300 text-gray-700 bg-white py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
             Cancelar
