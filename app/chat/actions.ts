@@ -30,6 +30,24 @@ export async function sendMessageAction(formData: FormData) {
   const { recipientId, content } = validated.data;
 
   try {
+    const sender = await prisma.usuario.findUnique({
+      where: { id: session.user.id },
+      select: { active: true }
+    });
+
+    if (!sender || !sender.active) {
+      return { success: false, error: 'Sua conta está suspensa. Você não pode enviar mensagens.' };
+    }
+
+    const recipient = await prisma.usuario.findUnique({
+      where: { id: recipientId },
+      select: { active: true }
+    });
+
+    if (!recipient || !recipient.active) {
+      return { success: false, error: 'Este usuário está suspenso e não pode receber mensagens.' };
+    }
+
     await prisma.mensagem.create({
       data: {
         id_remetente: session.user.id,

@@ -23,8 +23,7 @@ export async function getGlobalSkillsAction() {
     return skills.map(s => ({
       id: s.id,
       name: s.nome,
-      isPrimary: s.principal,
-      category: s.principal ? 'primary' : 'other'
+      imagemUrl: s.imagem_url
     }));
   } catch (error) {
     console.error("Erro ao buscar habilidades:", error);
@@ -32,7 +31,7 @@ export async function getGlobalSkillsAction() {
   }
 }
 
-export async function addGlobalSkillAction(name: string) {
+export async function addGlobalSkillAction(name: string, imagemUrl: string) {
   if (!await checkAdminPermission()) return { success: false, error: "Sem permissão." };
   
   if (!name.trim()) return { success: false, error: "Nome inválido." };
@@ -42,30 +41,42 @@ export async function addGlobalSkillAction(name: string) {
       data: {
         nome: name.trim(),
         descricao: 'Habilidade cadastrada pelo administrador', 
-        principal: false,
-        imagem_url: null
+        principal: true,
+        imagem_url: imagemUrl.trim() || null
       }
     });
     revalidatePath('/gerenciar-habilidades');
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return { success: false, error: "Já existe uma habilidade com este nome." };
+    }
     console.error(error);
-    return { success: false, error: "Erro ao criar. Verifique se já existe." };
+    return { success: false, error: "Erro ao criar habilidade." };
   }
 }
 
-export async function toggleGlobalSkillPrimaryAction(id: number, currentStatus: boolean) {
+export async function updateGlobalSkillAction(id: number, name: string, imagemUrl: string) {
   if (!await checkAdminPermission()) return { success: false, error: "Sem permissão." };
+  
+  if (!name.trim()) return { success: false, error: "Nome inválido." };
 
   try {
     await prisma.habilidade.update({
       where: { id },
-      data: { principal: !currentStatus }
+      data: {
+        nome: name.trim(),
+        imagem_url: imagemUrl.trim() || null
+      }
     });
     revalidatePath('/gerenciar-habilidades');
     return { success: true };
-  } catch (error) {
-    return { success: false, error: "Erro ao atualizar." };
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return { success: false, error: "Já existe uma habilidade com este nome." };
+    }
+    console.error(error);
+    return { success: false, error: "Erro ao atualizar habilidade." };
   }
 }
 
@@ -73,10 +84,16 @@ export async function removeGlobalSkillAction(id: number) {
   if (!await checkAdminPermission()) return { success: false, error: "Sem permissão." };
 
   try {
-    
-    await prisma.prestadorHabilidade.deleteMany({
+    const usageCount = await prisma.prestadorHabilidade.count({
       where: { id_habilidade: id }
     });
+
+    if (usageCount > 0) {
+      return { 
+        success: false, 
+        error: `Não é possível excluir. Esta habilidade está vinculada a ${usageCount} prestador(es).` 
+      };
+    }
 
     await prisma.habilidade.delete({
       where: { id }
@@ -85,7 +102,7 @@ export async function removeGlobalSkillAction(id: number) {
     revalidatePath('/gerenciar-habilidades');
     return { success: true };
   } catch (error) {
-    console.error(error);
-    return { success: false, error: "Erro ao remover habilidade." };
+    console.error("Erro ao remover habilidade:", error);
+    return { success: false, error: "Erro interno ao tentar remover a habilidade." };
   }
 }

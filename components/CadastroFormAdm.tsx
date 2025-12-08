@@ -1,75 +1,106 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CadastroFormAdmin() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    nomeCompleto: '',
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
     try {
-      // Simulação de cadastro - substitua pela sua API
-      console.log({
-        name,
-        email,
-        password,
-        role: 'admin'
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.nomeCompleto,
+          tipo_usuario: 'ADMINISTRADOR',
+        }),
       });
 
-      // Simular processamento
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Erro ao cadastrar administrador.');
+      }
+
+      setSuccess('Administrador cadastrado com sucesso!');
+      setFormData({ nomeCompleto: '', email: '', password: '' });
       
-      alert('Administrador cadastrado com sucesso!');
-      router.push('/admin/dashboard');
-      
-    } catch (err) {
+
+    } catch (err: any) {
       console.error(err);
-      setError('Erro ao cadastrar administrador');
+      setError(err.message || 'Ocorreu um erro inesperado.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm w-full max-w-md p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Cadastro Administrador</h1>
-          <p className="text-gray-600">Crie sua conta</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative">
+        <button 
+          onClick={() => router.back()} 
+          className="absolute top-6 left-6 text-gray-400 hover:text-gray-600 transition-colors"
+          title="Voltar"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+
+        <div className="text-center mb-8 mt-2">
+          <div className="flex justify-center mb-3">
+            <div className="p-3 bg-blue-100 rounded-full">
+                <ShieldCheck className="w-8 h-8 text-blue-600" />
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Novo Admin</h1>
+          <p className="text-gray-600">Cadastre um novo administrador no sistema</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Campo Nome */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="nomeCompleto" className="block text-sm font-medium text-gray-700 mb-2">
               Nome completo
             </label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
-                id="name"
+                id="nomeCompleto"
+                name="nomeCompleto"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={formData.nomeCompleto}
+                onChange={handleChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
-                placeholder="Seu nome completo"
+                placeholder="Nome do administrador"
                 required
                 disabled={isLoading}
               />
             </div>
           </div>
 
-          {/* Campo E-mail */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               E-mail
@@ -78,18 +109,18 @@ export default function CadastroFormAdmin() {
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 id="email"
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
-                placeholder="seu@email.com"
+                placeholder="admin@exemplo.com"
                 required
                 disabled={isLoading}
               />
             </div>
           </div>
 
-          {/* Campo Senha */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Senha
@@ -98,52 +129,44 @@ export default function CadastroFormAdmin() {
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 id="password"
+                name="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-600"
-                placeholder="Sua senha"
+                placeholder="Senha segura"
                 required
                 disabled={isLoading}
               />
             </div>
           </div>
 
-          {/* Mensagem de Erro */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
               {error}
             </div>
           )}
 
-          {/* Botão de Cadastro */}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm text-center">
+              {success}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (
-              <div className="flex items-center justify-center">
+              <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                 Cadastrando...
-              </div>
+              </>
             ) : (
-              'Cadastrar'
+              'Cadastrar Administrador'
             )}
           </button>
-
-          {/* Link para Login */}
-          <div className="text-center">
-            <p className="text-gray-600">
-              Já tem conta?{' '}
-              <a 
-                href="/admin/login" 
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-              >
-                Fazer login
-              </a>
-            </p>
-          </div>
         </form>
       </div>
     </div>

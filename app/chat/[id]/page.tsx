@@ -23,12 +23,18 @@ export default async function ChatPage(props: { params: Promise<{ id: string }> 
       name: true,
       profissao: true,
       image: true,
+      active: true, 
     }
   });
 
   if (!contactUser) {
     notFound();
   }
+
+  const currentUser = await prisma.usuario.findUnique({
+    where: { id: currentUserId },
+    select: { active: true }
+  });
 
   const messagesDb = await prisma.mensagem.findMany({
     where: {
@@ -57,24 +63,27 @@ export default async function ChatPage(props: { params: Promise<{ id: string }> 
     name: contactUser.name || 'Usuário',
     profession: contactUser.profissao || 'Sem profissão',
     avatar: contactUser.image,
-    online: false
+    online: false,
+    active: contactUser.active 
   };
 
-  
-  await prisma.mensagem.updateMany({
-    where: { 
-        id_destinatario: currentUserId,
-        id_remetente: otherUserId,
-        lida: false
-    },
-    data: { lida: true }
-  });
+  if (currentUser?.active) {
+    await prisma.mensagem.updateMany({
+      where: { 
+          id_destinatario: currentUserId,
+          id_remetente: otherUserId,
+          lida: false
+      },
+      data: { lida: true }
+    });
+  }
 
   return (
     <ChatScreen 
       contact={contactData} 
       initialMessages={formattedMessages} 
       currentUserId={currentUserId}
+      isCurrentUserActive={currentUser?.active ?? true} 
     />
   );
 }

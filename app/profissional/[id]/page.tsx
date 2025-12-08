@@ -12,9 +12,10 @@ export type ProcessedProfessional = {
   city: string;
   rating: string | number;
   reviews: number;
-  hourlyRate: string; // Prisma Decimal será convertido para string
+  hourlyRate: string;
   description: string;
   skills: string[];
+  isActive: boolean;
 };
 
 async function getProfessionalData(id: string): Promise<ProcessedProfessional | null> {
@@ -63,6 +64,7 @@ async function getProfessionalData(id: string): Promise<ProcessedProfessional | 
     hourlyRate: user.valor.toString(),
     description: user.sobre,
     skills,
+    isActive: user.active,
   };
 }
 
@@ -71,7 +73,7 @@ export default async function ProfessionalPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params; // 👈 aguarda o params (mudança necessária)
+  const { id } = await params;
 
   const session = await getServerSession(authOptions);
 
@@ -89,5 +91,17 @@ export default async function ProfessionalPage({
     notFound();
   }
 
-  return <ProfessionalProfile professional={professional} />;
+  const currentUser = await prisma.usuario.findUnique({
+    where: { id: session.user.id },
+    select: { active: true }
+  });
+
+  const isCurrentUserActive = currentUser?.active ?? false;
+
+  return (
+    <ProfessionalProfile 
+      professional={professional} 
+      isCurrentUserActive={isCurrentUserActive} 
+    />
+  );
 }

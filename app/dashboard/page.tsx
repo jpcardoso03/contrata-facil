@@ -1,4 +1,4 @@
-import ServicesMenu from '@/components/ServicesMenu';
+import ServicesMenu from '@/components/ContratanteMenu';
 import prisma from '@/app/data/prisma';
 
 import { getServerSession } from 'next-auth/next';
@@ -12,11 +12,8 @@ export type HabilidadeCard = {
   imagem_url: string | null;
 };
 
-async function getHabilidadesPrincipais() {
+async function getTodasHabilidades() {
   const habilidades = await prisma.habilidade.findMany({
-    where: {
-      principal: true,
-    },
     select: {
       id: true,
       nome: true,
@@ -43,6 +40,7 @@ export default async function DashboardPage() {
     redirect('/busca'); 
   }
 
-  const habilidades = await getHabilidadesPrincipais();
+  const habilidades = await getTodasHabilidades();
+  
   return <ServicesMenu habilidades={habilidades} />;
 }

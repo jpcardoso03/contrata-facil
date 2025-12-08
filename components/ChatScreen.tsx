@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Send, User, Search, MoreVertical, Check, CheckCheck, ArrowLeft, Paperclip, Smile } from 'lucide-react';
+import { Send, User, Search, MoreVertical, Check, CheckCheck, ArrowLeft, Paperclip, Smile, Ban, AlertCircle } from 'lucide-react';
 import { sendMessageAction } from '@/app/chat/actions';
 
 export interface ChatMessage {
@@ -19,15 +19,17 @@ export interface ChatContact {
   profession: string;
   avatar: string | null;
   online: boolean;
+  active: boolean; 
 }
 
 interface ChatScreenProps {
   contact: ChatContact;
   initialMessages: ChatMessage[];
   currentUserId: string;
+  isCurrentUserActive: boolean;
 }
 
-export default function ChatScreen({ contact, initialMessages, currentUserId }: ChatScreenProps) {
+export default function ChatScreen({ contact, initialMessages, isCurrentUserActive }: ChatScreenProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   
@@ -44,14 +46,16 @@ export default function ChatScreen({ contact, initialMessages, currentUserId }: 
   }, [messages]);
 
   useEffect(() => {
+    if (!isCurrentUserActive || !contact.active) return;
+
     const interval = setInterval(() => {
       router.refresh();
     }, 5000);
     return () => clearInterval(interval);
-  }, [router]);
+  }, [router, isCurrentUserActive, contact.active]);
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !isCurrentUserActive || !contact.active) return;
 
     const tempMessage: ChatMessage = {
       id: Date.now(),
@@ -72,7 +76,8 @@ export default function ChatScreen({ contact, initialMessages, currentUserId }: 
     startTransition(async () => {
         const result = await sendMessageAction(formData);
         if (!result.success) {
-            alert('Erro ao enviar mensagem');
+            alert(result.error);
+            setMessages((prev) => prev.filter(m => m.id !== tempMessage.id));
         } else {
             router.refresh();
         }
@@ -99,6 +104,8 @@ export default function ChatScreen({ contact, initialMessages, currentUserId }: 
     }
   };
 
+  const isChatBlocked = !isCurrentUserActive || !contact.active;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col">
       <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
@@ -119,12 +126,17 @@ export default function ChatScreen({ contact, initialMessages, currentUserId }: 
                     <User className="w-6 h-6 text-blue-600" />
                 )}
               </div>
-              {contact.online && (
+              {contact.online && contact.active && isCurrentUserActive && (
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               )}
             </div>
             <div>
-              <h1 className="font-semibold text-gray-900 text-sm sm:text-base">{contact.name}</h1>
+              <h1 className="font-semibold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                {contact.name}
+                {!contact.active && (
+                    <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-bold">SUSPENSO</span>
+                )}
+              </h1>
               <div className="flex items-center gap-2">
                 <span className="text-xs sm:text-sm text-gray-600">{contact.profession}</span>
               </div>
@@ -177,35 +189,53 @@ export default function ChatScreen({ contact, initialMessages, currentUserId }: 
 
         <div className="border-t border-gray-200 bg-white p-3 sm:p-4 sticky bottom-0">
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-end gap-2 sm:gap-3">
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden sm:block">
-                <Paperclip className="w-5 h-5 text-gray-600" />
-              </button>
-              
-              <div className="flex-1 relative">
-                <textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  placeholder="Digite sua mensagem..."
-                  rows={1}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none min-h-[44px] max-h-32 text-sm sm:text-base text-gray-900"
-                />
-                <button className="absolute right-2 bottom-2.5 p-1 hover:bg-gray-100 rounded transition-colors text-gray-400">
-                  <Smile className="w-5 h-5" />
+            
+            {isChatBlocked ? (
+                <div className="flex items-center justify-center p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500 gap-2">
+                    {!isCurrentUserActive ? (
+                        <>
+                            <AlertCircle className="w-5 h-5 text-red-500" />
+                            <span className="text-sm font-medium text-red-600">Sua conta está suspensa. Você não pode enviar mensagens.</span>
+                        </>
+                    ) : (
+                        <>
+                            <Ban className="w-5 h-5" />
+                            <span className="text-sm">Não é possível enviar mensagens para este usuário.</span>
+                        </>
+                    )}
+                </div>
+            ) : (
+                <div className="flex items-end gap-2 sm:gap-3">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden sm:block">
+                    <Paperclip className="w-5 h-5 text-gray-600" />
                 </button>
-              </div>
+                
+                <div className="flex-1 relative">
+                    <textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    placeholder="Digite sua mensagem..."
+                    rows={1}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none min-h-[44px] max-h-32 text-sm sm:text-base text-gray-900"
+                    />
+                    <button className="absolute right-2 bottom-2.5 p-1 hover:bg-gray-100 rounded transition-colors text-gray-400">
+                    <Smile className="w-5 h-5" />
+                    </button>
+                </div>
 
-              <button
-                onClick={handleSendMessage}
-                disabled={!newMessage.trim() || isPending}
-                className={`p-3 rounded-lg flex-shrink-0 transition-colors ${
-                    newMessage.trim() && !isPending ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-400'
-                }`}
-              >
-                <Send className="w-5 h-5" />
-              </button>
-            </div>
+                <button
+                    onClick={handleSendMessage}
+                    disabled={!newMessage.trim() || isPending}
+                    className={`p-3 rounded-lg flex-shrink-0 transition-colors ${
+                        newMessage.trim() && !isPending ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 text-gray-400'
+                    }`}
+                >
+                    <Send className="w-5 h-5" />
+                </button>
+                </div>
+            )}
+
           </div>
         </div>
       </div>
