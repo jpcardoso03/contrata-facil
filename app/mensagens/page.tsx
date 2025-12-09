@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { EnumTipoUsuario } from '@/app/generated/prisma'; 
 
 function formatMessageDate(date: Date) {
   const now = new Date();
@@ -83,5 +83,8 @@ export default async function MensagensPage() {
 
   const conversations = await getConversations(session.user.id);
 
-  return <ChatHistory initialConversations={conversations} />;
+  return <ChatHistory 
+            initialConversations={conversations} 
+            userType={session.user.tipo_usuario as EnumTipoUsuario} 
+         />;
 }

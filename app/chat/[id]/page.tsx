@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect, notFound } from 'next/navigation';
 import { format } from 'date-fns';
+import { EnumTipoUsuario } from '@/app/generated/prisma'; 
 
 export default async function ChatPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -83,7 +84,8 @@ export default async function ChatPage(props: { params: Promise<{ id: string }> 
       contact={contactData} 
       initialMessages={formattedMessages} 
       currentUserId={currentUserId}
-      isCurrentUserActive={currentUser?.active ?? true} 
+      isCurrentUserActive={currentUser?.active ?? true}
+      userType={session.user.tipo_usuario as EnumTipoUsuario}
     />
   );
 }

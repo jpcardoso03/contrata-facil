@@ -2,17 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  BarChart3, 
-  Calendar, 
-  Users, 
-  ArrowLeft, 
-  Filter, 
-  Download, 
-  Trophy,
-  User as UserIcon,
-  Briefcase
-} from 'lucide-react';
+import { BarChart3, Calendar, Users, ArrowLeft, Filter, User, Briefcase, Home, Search, ChartArea } from 'lucide-react';
 import { generateReportAction, type ReportResult } from '@/app/relatorios/actions';
 
 export default function ReportsScreen() {
@@ -48,6 +38,20 @@ export default function ReportsScreen() {
   const handleBack = () => {
     router.back();
   };
+
+  const handleMenuClick = (itemName: string) => {
+    if (itemName === 'Home') router.push('/adm');
+    else if (itemName === 'Relatorios') router.push('/relatorios')
+    else if (itemName === 'Busca') router.push('/busca');
+    else if (itemName === 'Perfil') router.push('/perfil'); 
+  };
+
+  const menuItems = [
+    { name: 'Home', icon: Home, active: false },
+    { name: 'Relatorios', icon: ChartArea, active: true},
+    { name: 'Busca', icon: Search, active: false },
+    { name: 'Perfil', icon: User, active: false },
+  ];
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -250,6 +254,30 @@ export default function ReportsScreen() {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
+        <div className="max-w-6xl mx-auto h-full">
+          <div className="grid grid-cols-4 h-full">
+            {menuItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleMenuClick(item.name)}
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full ${
+                    item.active
+                      ? 'text-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <IconComponent className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

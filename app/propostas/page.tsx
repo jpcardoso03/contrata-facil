@@ -7,27 +7,23 @@ import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { EnumStatusProposta } from '@/app/generated/prisma';
 
-// Adicionei os novos campos necessários aqui
 export type PropostaProcessada = {
     id: number;
     titulo: string;
     descricao: string;
     valorFormatado: string;
-    // Datas formatadas para exibição
     dataEnvio: string;
     dataInicio: string;
     dataTermino: string;
     duracaoEstimada: string;
     
-    // Dados dos usuários
     contratanteNome: string | null;
     prestadorNome: string | null;
     
     status: EnumStatusProposta;
     userRole: 'contratante' | 'prestador';
-    resposta: string | null; // Caso haja recusa ou negociação
+    resposta: string | null;
     
-    // Lista de serviços
     servicos: {
         id: number;
         nome: string;
@@ -50,7 +46,6 @@ async function getPropostasData(userId: string) {
                 { id_prestador: userId }
             ],
         },
-        // IMPORTANTE: Incluir os relacionamentos
         include: {
             servicos: true,
             contratante: { select: { name: true } },
@@ -78,7 +73,6 @@ async function getPropostasData(userId: string) {
                 currency: 'BRL',
             }).format(proposta.valor.toNumber());
 
-            // Formatador de data e hora legível
             const formatDate = (date: Date) => {
                 return new Intl.DateTimeFormat('pt-BR', {
                     day: '2-digit',
@@ -89,7 +83,6 @@ async function getPropostasData(userId: string) {
                 }).format(date);
             };
 
-            // Cálculo da duração (ex: "5 horas")
             const duracao = formatDistance(
                 proposta.data_termino,
                 proposta.data_inicio,
@@ -104,7 +97,6 @@ async function getPropostasData(userId: string) {
                 descricao: proposta.descricao,
                 valorFormatado: valorFormatado,
                 
-                // Novos campos mapeados
                 dataEnvio: formatDate(proposta.data_envio),
                 dataInicio: formatDate(proposta.data_inicio),
                 dataTermino: formatDate(proposta.data_termino),
@@ -117,7 +109,6 @@ async function getPropostasData(userId: string) {
                 status: proposta.Status,
                 userRole,
                 
-                // Mapeando serviços
                 servicos: proposta.servicos.map(s => ({
                     id: s.id_servico,
                     nome: s.nome_servico,

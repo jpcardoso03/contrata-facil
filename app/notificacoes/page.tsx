@@ -3,6 +3,7 @@ import NotificationsList from '@/components/NotificationsList';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
+import { EnumTipoUsuario } from '@/app/generated/prisma'; 
 
 async function getNotifications(userId:string) {
   const notifications = await prisma.notificacao.findMany({
@@ -32,10 +33,12 @@ export default async function NotificationsPage() {
   }
 
   const { notifications, unreadCount } = await getNotifications(session?.user.id);
+  
   return (
-  <NotificationsList
-    initialNotifications={notifications}
-    initialUnreadCount={unreadCount}
-    userType={session.user.tipo_usuario}
-     />);
+    <NotificationsList
+      initialNotifications={notifications}
+      initialUnreadCount={unreadCount}
+      userType={session.user.tipo_usuario as EnumTipoUsuario} 
+    />
+  );
 }

@@ -2,9 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, FileText, LogOut, Search } from 'lucide-react';
+import { User, MapPin, Star, Edit, Mail, Phone, Calendar, Home, Bell, FileText, LogOut, Search, ChartArea, MessageSquareText } from 'lucide-react';
 import type { ProcessedUserProfile } from '@/app/perfil/page'; 
 import { EnumTipoUsuario } from '@/app/generated/prisma';
+import { is } from 'zod/locales';
 
 interface MyProfileClientProps {
   user: ProcessedUserProfile;
@@ -24,11 +25,20 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
   }
 
   if (isAdm) {
+    menuItems.push({ name: 'Relatorios', icon: ChartArea, active: false });
     menuItems.push({ name: 'Busca', icon: Search, active: false });
   }
 
-  if (!isAdm) {
+  if (isContratante) {
+    menuItems.push({ name: 'BuscaContratante', icon: Search, active: false });
+  }
+
+  if (isPrestador) {
     menuItems.push({ name: 'Notificações', icon: Bell, active: false });
+  }
+
+  if (!isAdm) {
+    menuItems.push({ name: 'Mensagens', icon: MessageSquareText, active: false });
     menuItems.push({ name: 'Propostas', icon: FileText, active: false });
   }
 
@@ -54,8 +64,18 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
       if (isContratante) router.push('/dashboard');
       if (isAdm) router.push('/adm');
     } 
+    
+    else if (itemName === 'Relatorios') {
+      router.push('/relatorios');
+    }
     else if (itemName === 'Busca') {
       router.push('/busca');
+    }
+    else if (itemName === 'BuscaContratante') {
+      router.push('/busca-prestadores');
+    }
+    else if (itemName === 'Mensagens') {
+      router.push('/mensagens');
     }
     else if (itemName === 'Notificações') {
       router.push('/notificacoes');
@@ -77,14 +97,12 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Meu Perfil</h1>
         </div>
       </div>
 
-      {/* Conteúdo Principal */}
       <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
@@ -126,7 +144,6 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
               </div>
             </div>
             
-            {/* Informações Principais */}
             <div className="flex-1 w-full text-center sm:text-left">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
                 <div className="flex-1">
@@ -161,7 +178,6 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
                 </div>
               </div>
 
-              {/* Informações de Contato */}
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mt-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm">
                   <div className="flex items-center gap-2">
@@ -174,7 +190,6 @@ export default function MyProfileClient({ user }: MyProfileClientProps) {
           </div>
         </div>
 
-        {/* Sobre */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Sobre</h2>
           <p className="text-gray-700 leading-relaxed text-sm sm:text-base">

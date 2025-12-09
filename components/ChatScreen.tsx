@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Send, User, Search, MoreVertical, Check, CheckCheck, ArrowLeft, Paperclip, Smile, Ban, AlertCircle } from 'lucide-react';
+import { Send, User, Search, MoreVertical, Check, CheckCheck, ArrowLeft, Paperclip, Smile, Ban, AlertCircle, Home, Bell, FileText, MessageSquareText } from 'lucide-react';
 import { sendMessageAction } from '@/app/chat/actions';
+import { EnumTipoUsuario } from "@/app/generated/prisma";
 
 export interface ChatMessage {
   id: number;
@@ -27,15 +28,39 @@ interface ChatScreenProps {
   initialMessages: ChatMessage[];
   currentUserId: string;
   isCurrentUserActive: boolean;
+  userType: EnumTipoUsuario; // Nova prop
 }
 
-export default function ChatScreen({ contact, initialMessages, isCurrentUserActive }: ChatScreenProps) {
+export default function ChatScreen({ contact, initialMessages, isCurrentUserActive, userType }: ChatScreenProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const menuItems = [];
+
+  if (userType === EnumTipoUsuario.CONTRATANTE) {
+      menuItems.push({ name: 'Home', icon: Home, route: '/dashboard', active: false });
+      menuItems.push({ name: 'Busca', icon: Search, route: '/busca-prestadores', active: false });
+  } 
+  
+  if (userType === EnumTipoUsuario.PRESTADOR) {
+    menuItems.push({ name: 'Notificações', icon: Bell, route: '/notificacoes', active: false });
+  }
+
+  menuItems.push(
+    { name: 'Mensagens', icon: MessageSquareText, route: '/mensagens', active: true}, 
+    { name: 'Propostas', icon: FileText, route: '/propostas', active: false},
+    { name: 'Perfil', icon: User, route: '/perfil', active: false }
+  );
+
+  const handleMenuClick = (route: string) => {
+    router.push(route);
+  };
+
+  const gridClass = menuItems.length === 5 ? 'grid-cols-5' : 'grid-cols-4';
 
   useEffect(() => {
     setMessages(initialMessages);
@@ -107,7 +132,7 @@ export default function ChatScreen({ contact, initialMessages, isCurrentUserActi
   const isChatBlocked = !isCurrentUserActive || !contact.active;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col pb-20">
       <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -239,6 +264,31 @@ export default function ChatScreen({ contact, initialMessages, isCurrentUserActi
           </div>
         </div>
       </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20">
+        <div className="max-w-6xl mx-auto h-full">
+          <div className={`grid ${gridClass} h-full`}>
+            {menuItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleMenuClick(item.route)}
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
+                    item.active
+                      ? 'text-blue-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <IconComponent className={`w-6 h-6 mb-1 ${item.active ? 'fill-blue-100' : ''}`} />
+                  <span className="text-[10px] font-medium truncate w-full text-center">{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

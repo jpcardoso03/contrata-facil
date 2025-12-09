@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageSquare, User, Check, CheckCheck, Search } from 'lucide-react';
+import { MessageSquare, User, Check, CheckCheck, Search, MessageSquareText, Home, FileText, Bell } from 'lucide-react';
+import { EnumTipoUsuario } from "@/app/generated/prisma";
 
 export interface Conversation {
   id: string;
@@ -18,9 +19,10 @@ export interface Conversation {
 
 interface ChatHistoryProps {
   initialConversations: Conversation[];
+  userType: EnumTipoUsuario; 
 }
 
-export default function ChatHistory({ initialConversations }: ChatHistoryProps) {
+export default function ChatHistory({ initialConversations, userType }: ChatHistoryProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -31,7 +33,7 @@ export default function ChatHistory({ initialConversations }: ChatHistoryProps) 
   );
 
   const handleConversationClick = (contactId: string) => {
-    router.push(`/mensagens/${contactId}`); 
+    router.push(`/chat/${contactId}`); 
   };
 
   const getStatusIcon = (status: Conversation['lastMessageStatus']) => {
@@ -43,9 +45,32 @@ export default function ChatHistory({ initialConversations }: ChatHistoryProps) 
     }
   };
 
+  const menuItems = [];
+
+  if (userType === EnumTipoUsuario.CONTRATANTE) {
+      menuItems.push({ name: 'Home', icon: Home, route: '/dashboard', active: false });
+      menuItems.push({ name: 'Busca', icon: Search, route: '/busca-prestadores', active: false });
+  } 
+  
+  if (userType === EnumTipoUsuario.PRESTADOR) {
+    menuItems.push({ name: 'Notificações', icon: Bell, route: '/notificacoes', active: false });
+  }
+
+  menuItems.push(
+    { name: 'Mensagens', icon: MessageSquareText, route: '/mensagens', active: true},
+    { name: 'Propostas', icon: FileText, route: '/propostas', active: false},
+    { name: 'Perfil', icon: User, route: '/perfil', active: false }
+  );
+
+  const handleMenuClick = (route: string) => {
+    router.push(route);
+  };
+
+  const gridClass = menuItems.length === 5 ? 'grid-cols-5' : 'grid-cols-4';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pb-20">
+      <div className="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -163,6 +188,31 @@ export default function ChatHistory({ initialConversations }: ChatHistoryProps) 
           )}
         </div>
       </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="max-w-6xl mx-auto h-full">
+          <div className={`grid ${gridClass} h-full`}>
+            {menuItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleMenuClick(item.route)}
+                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
+                    item.active
+                      ? 'text-blue-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <IconComponent className={`w-6 h-6 mb-1 ${item.active ? 'fill-blue-100' : ''}`} />
+                  <span className="text-[10px] font-medium truncate w-full text-center">{item.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

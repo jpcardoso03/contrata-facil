@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { UserPlus, Search, Settings, Home, User, Users, Briefcase, UserCheck } from 'lucide-react';
+import { UserPlus, Search, Settings, Home, User, Users, Briefcase, UserCheck, ChartArea } from 'lucide-react';
 
 interface AdminHomeProps {
   data: {
@@ -22,6 +22,7 @@ export default function AdminHomeScreen({ data }: AdminHomeProps) {
 
   const handleMenuClick = (itemName: string) => {
     if (itemName === 'Home') router.push('/adm');
+    else if (itemName === 'Relatorios') router.push('/relatorios')
     else if (itemName === 'Busca') router.push('/busca');
     else if (itemName === 'Perfil') router.push('/perfil'); 
   };
@@ -65,7 +66,8 @@ export default function AdminHomeScreen({ data }: AdminHomeProps) {
   ];
 
   const menuItems = [
-    { name: 'Home', icon: Home, active: true }, // Home ativa aqui
+    { name: 'Home', icon: Home, active: true },
+    { name: 'Relatorios', icon: ChartArea, active: false},
     { name: 'Busca', icon: Search, active: false },
     { name: 'Perfil', icon: User, active: false },
   ];
@@ -157,7 +159,7 @@ export default function AdminHomeScreen({ data }: AdminHomeProps) {
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-3 h-full">
+          <div className="grid grid-cols-4 h-full">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (

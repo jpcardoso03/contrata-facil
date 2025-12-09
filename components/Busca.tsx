@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, MapPin, Star, User, Home, Loader2 } from 'lucide-react';
+import { Search, MapPin, Star, User, Home, Loader2, ChartArea } from 'lucide-react';
 
 interface Professional {
   id: string;
@@ -60,6 +60,7 @@ export default function SearchScreen() {
 
   const menuItems = [
     { name: 'Home', icon: Home, active: false },
+    { name: 'Relatorios', icon: ChartArea, active: false},
     { name: 'Busca', icon: Search, active: true },
     { name: 'Perfil', icon: User, active: false },
   ];
@@ -128,6 +129,7 @@ export default function SearchScreen() {
 
   const handleMenuClick = (itemName: string) => {
     if (itemName === 'Home') router.push('/adm');
+    else if (itemName === 'Relatorios') router.push('/relatorios')
     else if (itemName === 'Busca') router.push('/busca');
     else if (itemName === 'Perfil') router.push('/perfil'); 
   };
@@ -323,7 +325,7 @@ export default function SearchScreen() {
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="grid grid-cols-3 h-full">
+          <div className="grid grid-cols-4 h-full">
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (

@@ -6,7 +6,7 @@ import prisma from "@/app/data/prisma";
 import { EnumStatusProposta, EnumTipoNotificacao } from "@/app/generated/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function updateProposalStatusAction(id: number, newStatus: EnumStatusProposta) {
+export async function updateProposalStatusAction(id: number, newStatus: EnumStatusProposta, resposta?: string) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -21,41 +21,59 @@ export async function updateProposalStatusAction(id: number, newStatus: EnumStat
       return { success: false, error: "Proposta não encontrada" };
     }
 
-    if (proposta.id_contratante !== session.user.id) {
-      return { success: false, error: "Apenas o contratante pode atualizar o status desta proposta." };
+    const isContratante = proposta.id_contratante === session.user.id;
+    const isPrestador = proposta.id_prestador === session.user.id;
+
+    if (!isContratante && !isPrestador) {
+        return { success: false, error: "Sem permissão." };
     }
 
     await prisma.proposta.update({
       where: { id },
-      data: { Status: newStatus } 
+      data: { 
+        Status: newStatus,
+        resposta: resposta || undefined 
+      } 
     });
 
     let titulo = '';
     let mensagem = '';
+    let targetUserId = '';
 
-    if (newStatus === 'EM_ANDAMENTO') {
-      titulo = 'Projeto Iniciado!';
-      mensagem = `O contratante iniciou a execução do projeto "${proposta.titulo}".`;
-    } else if (newStatus === 'CONCLUIDA') {
-      titulo = 'Projeto Concluído!';
-      mensagem = `O contratante marcou o projeto "${proposta.titulo}" como concluído.`;
+    if (isContratante) {
+        targetUserId = proposta.id_prestador;
+        if (newStatus === 'EM_ANDAMENTO') {
+            titulo = 'Projeto Iniciado!';
+            mensagem = `O contratante iniciou a execução do projeto "${proposta.titulo}".`;
+        } else if (newStatus === 'CONCLUIDA') {
+            titulo = 'Projeto Concluído!';
+            mensagem = `O contratante marcou o projeto "${proposta.titulo}" como concluído.`;
+        }
+    } 
+    else if (isPrestador) {
+        targetUserId = proposta.id_contratante;
+        if (newStatus === 'ACEITA') { //
+            titulo = 'Proposta Aceita!';
+            mensagem = `O prestador aceitou sua proposta para "${proposta.titulo}".`;
+        } else if (newStatus === 'RECUSADA') {
+            titulo = 'Proposta Recusada';
+            mensagem = `O prestador recusou sua proposta para "${proposta.titulo}".`;
+        }
     }
 
-    if (titulo) {
+    if (titulo && targetUserId) {
       await prisma.notificacao.create({
         data: {
-          userId: proposta.id_prestador,
+          userId: targetUserId,
           titulo: titulo,
           mensagem: mensagem,
-          tipo: newStatus === 'CONCLUIDA' ? EnumTipoNotificacao.SUCESS : EnumTipoNotificacao.INFO,
+          tipo: newStatus === 'CONCLUIDA' || newStatus === 'ACEITA' ? EnumTipoNotificacao.SUCESS : EnumTipoNotificacao.INFO,
           link: `/propostas`
         }
       });
     }
 
     revalidatePath('/propostas');
-    
-    console.log(`Sucesso: Proposta ${id} atualizada para ${newStatus}`);
     return { success: true };
 
   } catch (error) {

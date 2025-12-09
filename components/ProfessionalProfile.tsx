@@ -35,7 +35,7 @@ export default function ProfessionalProfile({ professional, isCurrentUserActive 
 
   const handleContactClick = () => {
     if (!canInteract) return;
-    console.log('Entrar em contato com:', professional.name);
+    router.push(`/chat/${professional.id}`);
   };
 
   const handleCreateProposalClick = () => {

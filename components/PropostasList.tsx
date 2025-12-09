@@ -3,7 +3,11 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Home, Bell, User, FileText, ChevronDown, Check, Clock, Trash2, Star, X, RefreshCw, Calendar, ListChecks, MessageSquare } from 'lucide-react';
+import { 
+  Home, Bell, User, FileText, ChevronDown, Check, Clock, Trash2, 
+  Star, X, RefreshCw, Calendar, ListChecks, MessageSquareText, 
+  Search, MessageSquare, ThumbsUp, Edit 
+} from 'lucide-react';
 import { EnumStatusProposta, EnumTipoUsuario } from "@/app/generated/prisma";
 import type { PropostaProcessada, PropostaStats } from '@/app/propostas/page';
 import { deleteProposalAction } from '@/app/propostas/remover/actions';
@@ -26,109 +30,60 @@ function StatCard({ title, value }: { title: string; value: number }) {
   );
 }
 
-function getStatusBadge(
-  status: EnumStatusProposta,
-  userRole: 'contratante' | 'prestador'
-) {
+function getStatusBadge(status: EnumStatusProposta, userRole: 'contratante' | 'prestador') {
   let text = '';
   let className = '';
 
   switch (status) {
     case 'CONCLUIDA':
-      text = 'Concluída';
-      className = 'bg-green-100 text-green-800';
-      break;
+      text = 'Concluída'; className = 'bg-green-100 text-green-800'; break;
     case 'EM_ANDAMENTO':
-      text = 'Em andamento';
-      className = 'bg-blue-100 text-blue-800';
-      break;
+      text = 'Em andamento'; className = 'bg-blue-100 text-blue-800'; break;
     case 'PENDENTE':
       text = userRole === 'contratante' ? 'Aguardando Prestador' : 'Revisão Necessária';
       className = userRole === 'contratante' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800 animate-pulse';
       break;
     case 'AGUARDANDO_CONTRATANTE':
-      text = userRole === 'contratante' ? 'Revisão Necessária' : 'Aguardando Contratante';
+      text = userRole === 'contratante' ? 'Aguardando Confirmação' : 'Aguardando Contratante';
       className = userRole === 'contratante' ? 'bg-yellow-100 text-yellow-800 animate-pulse' : 'bg-gray-100 text-gray-800';
       break;
     case 'AGUARDANDO_PRESTADOR':
-      text = userRole === 'contratante' ? 'Aguardando Prestador' : 'Revisão Necessária';
-      className = userRole === 'contratante' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800 animate-pulse';
-      break;
+      text = 'Aguardando Prestador'; className = 'bg-yellow-100 text-yellow-800'; break;
     case 'ACEITA':
-      text = 'Aceita';
-      className = 'bg-indigo-100 text-indigo-800';
-      break;
+      text = 'Aceita'; className = 'bg-indigo-100 text-indigo-800'; break;
     case 'RECUSADA':
-      text = 'Recusada';
-      className = 'bg-red-100 text-red-800';
-      break;
+      text = 'Recusada'; className = 'bg-red-100 text-red-800'; break;
     default:
-      text = 'Cancelada';
-      className = 'bg-gray-100 text-gray-800';
+      text = 'Cancelada'; className = 'bg-gray-100 text-gray-800';
   }
-  return (
-    <span
-      className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${className}`}
-    >
-      {text}
-    </span>
-  );
+  return <span className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${className}`}>{text}</span>;
 }
 
-function StatusUpdateModal({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  currentStatus 
+function RespondProposalModal({ 
+  isOpen, onClose, onConfirm, actionType 
 }: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  onConfirm: (newStatus: EnumStatusProposta) => void;
-  currentStatus: EnumStatusProposta | null;
+  isOpen: boolean; onClose: () => void; onConfirm: (response: string) => void; actionType: 'ACEITA' | 'RECUSADA' | null; 
 }) {
-  if (!isOpen || !currentStatus) return null;
+  const [responseText, setResponseText] = useState('');
+  if (!isOpen || !actionType) return null;
+  const isAccepting = actionType === 'ACEITA';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-        >
-          <X className="w-5 h-5" />
-        </button>
-        
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Atualizar Proposta</h3>
-        <p className="text-gray-500 mb-6">Selecione o novo status para esta proposta:</p>
-        
-        <div className="flex flex-col gap-3">
-          {currentStatus === 'ACEITA' && (
-            <button
-              onClick={() => onConfirm('EM_ANDAMENTO')}
-              className="w-full py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium rounded-lg border border-blue-200 transition-colors flex items-center justify-center gap-2"
-            >
-              <Clock className="w-4 h-4" />
-              Marcar como Em Andamento
-            </button>
-          )}
-
-          {(currentStatus === 'ACEITA' || currentStatus === 'EM_ANDAMENTO') && (
-            <button
-              onClick={() => onConfirm('CONCLUIDA')}
-              className="w-full py-3 px-4 bg-green-50 hover:bg-green-100 text-green-700 font-medium rounded-lg border border-green-200 transition-colors flex items-center justify-center gap-2"
-            >
-              <Check className="w-4 h-4" />
-              Marcar como Concluída
-            </button>
-          )}
-        </div>
-
-        <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end">
-          <button 
-            onClick={onClose}
-            className="text-gray-600 font-medium text-sm hover:underline"
-          >
-            Cancelar
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+        <h3 className={`text-xl font-bold mb-2 ${isAccepting ? 'text-green-700' : 'text-red-700'}`}>
+          {isAccepting ? 'Aceitar Proposta' : 'Recusar Proposta'}
+        </h3>
+        <p className="text-gray-500 mb-4 text-sm">
+          {isAccepting ? 'Você está prestes a aceitar este serviço. Deseja enviar uma mensagem ao contratante?' : 'Tem certeza que deseja recusar? Você pode explicar o motivo abaixo.'}
+        </p>
+        <textarea value={responseText} onChange={(e) => setResponseText(e.target.value)} placeholder={isAccepting ? "Ex: Combinado! Aguardo confirmação." : "Ex: Infelizmente não tenho agenda..."} rows={3} className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none mb-4"/>
+        <div className="flex gap-3 justify-end">
+          <button onClick={onClose} className="px-4 py-2 text-gray-600 font-medium text-sm hover:bg-gray-100 rounded-lg transition-colors">Voltar</button>
+          <button onClick={() => onConfirm(responseText)} className={`px-4 py-2 text-white font-medium text-sm rounded-lg transition-colors flex items-center gap-2 ${isAccepting ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`}>
+            {isAccepting ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+            {isAccepting ? 'Confirmar Aceite' : 'Confirmar Recusa'}
           </button>
         </div>
       </div>
@@ -136,92 +91,116 @@ function StatusUpdateModal({
   );
 }
 
+function StatusUpdateModal({ isOpen, onClose, onConfirm, currentStatus }: { isOpen: boolean; onClose: () => void; onConfirm: (newStatus: EnumStatusProposta) => void; currentStatus: EnumStatusProposta | null; }) {
+  if (!isOpen || !currentStatus) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">Atualizar Status</h3>
+        <p className="text-gray-500 mb-6 text-sm">O que deseja fazer com este projeto?</p>
+        <div className="flex flex-col gap-3">
+          {currentStatus === 'ACEITA' && <button onClick={() => onConfirm('EM_ANDAMENTO')} className="w-full py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium rounded-lg border border-blue-200 flex items-center justify-center gap-2 transition-colors"><Clock className="w-4 h-4" /> Iniciar Serviço</button>}
+          {(currentStatus === 'ACEITA' || currentStatus === 'EM_ANDAMENTO') && <button onClick={() => onConfirm('CONCLUIDA')} className="w-full py-3 px-4 bg-green-50 hover:bg-green-100 text-green-700 font-medium rounded-lg border border-green-200 flex items-center justify-center gap-2 transition-colors"><Check className="w-4 h-4" /> Concluir Serviço</button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function PropostaActions({
   proposta,
   onDelete,
-  onUpdateStatusClick, 
+  onUpdateStatusClick,
+  onRespondClick,
   isPending,
 }: {
   proposta: PropostaProcessada;
   onDelete: (id: number) => void;
   onUpdateStatusClick: (proposta: PropostaProcessada) => void;
+  onRespondClick: (proposta: PropostaProcessada, action: 'ACEITA' | 'RECUSADA') => void;
   isPending: boolean;
 }) {
   const { status, userRole, id } = proposta;
 
-  const canDelete =
-    userRole === 'contratante' && (status === 'PENDENTE' || status === 'CONCLUIDA');
-  
-  const deleteButton = canDelete && (
-    <button
-      onClick={() => onDelete(id)}
-      disabled={isPending}
-      className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 text-sm font-medium disabled:opacity-50"
-    >
-      <Trash2 className="w-4 h-4" />
-      Excluir
-    </button>
-  );
+  if (userRole === 'contratante') {
+      if (status === 'PENDENTE' || status === 'CONCLUIDA' || status === 'RECUSADA') {
+          return (
+            <div className="flex justify-end gap-3 items-center flex-wrap">
+               {status === 'PENDENTE' && (
+                   <span className="inline-flex items-center gap-2 text-gray-500 px-3 py-1 text-sm font-medium bg-gray-50 rounded-lg">
+                       <Clock className="w-4 h-4" /> Aguardando Prestador
+                   </span>
+               )}
 
-  const canUpdateStatus = 
-    userRole === 'contratante' && 
-    (status === 'EM_ANDAMENTO' || status === 'ACEITA');
+               {status === 'PENDENTE' && (
+                 <Link
+                   href={`/propostas/update/${id}`}
+                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
+                 >
+                   <Edit className="w-4 h-4" /> Editar
+                 </Link>
+               )}
 
-  const updateStatusButton = canUpdateStatus && (
-    <button
-      onClick={() => onUpdateStatusClick(proposta)}
-      disabled={isPending}
-      className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium disabled:opacity-50"
-    >
-      <RefreshCw className="w-4 h-4" />
-      Atualizar Proposta
-    </button>
-  );
-
-  let actionButton = null;
-
-  if (
-    (status === 'PENDENTE' && userRole === 'contratante') ||
-    (status === 'AGUARDANDO_PRESTADOR' && userRole === 'prestador')
-  ) {
-    actionButton = (
-      <Link
-        href={`/propostas/update/${id}`}
-        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
-        >
-        <Check className="w-4 h-4" />
-        Editar
-      </Link>
-    );
-  } else if (
-    (status === 'AGUARDANDO_CONTRATANTE' && userRole === 'contratante') ||
-    (status === 'PENDENTE' && userRole === 'prestador')
-  ) {
-      actionButton = (
-        <div className="inline-flex items-center gap-2 text-gray-500 px-4 py-2 text-sm font-medium bg-gray-50 rounded-lg">
-            <Clock className="w-4 h-4" />
-            Aguardando resposta...
-        </div>
-      );
-  } else if (status === 'CONCLUIDA' && userRole === 'contratante') {
-    actionButton = (
-      <Link 
-        href={`/avaliar/${id}`}
-        className="inline-flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 text-sm font-medium"
-      >
-        <Star className="w-4 h-4" />
-        Avaliar
-      </Link>
-    )
+               <button 
+                 onClick={() => onDelete(id)} 
+                 disabled={isPending} 
+                 className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 text-sm font-medium transition-colors"
+               >
+                 <Trash2 className="w-4 h-4" /> Excluir
+               </button>
+            </div>
+          );
+      }
+      if (status === 'ACEITA' || status === 'EM_ANDAMENTO') {
+          return (
+            <div className="flex justify-end">
+                <button 
+                  onClick={() => onUpdateStatusClick(proposta)} 
+                  disabled={isPending} 
+                  className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4" /> Atualizar Status
+                </button>
+            </div>
+          );
+      }
   }
 
-  return (
-    <div className="flex justify-end gap-3 flex-wrap">
-      {deleteButton}
-      {updateStatusButton} 
-      {actionButton}
-    </div>
-  );
+  if (userRole === 'prestador') {
+      if (status === 'PENDENTE' || status === 'AGUARDANDO_PRESTADOR') {
+          return (
+            <div className="flex justify-end gap-3">
+                <button 
+                    onClick={() => onRespondClick(proposta, 'RECUSADA')} 
+                    disabled={isPending} 
+                    className="inline-flex items-center gap-2 border border-red-200 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 text-sm font-medium transition-colors"
+                >
+                    <X className="w-4 h-4" /> Recusar
+                </button>
+                <button 
+                    onClick={() => onRespondClick(proposta, 'ACEITA')} 
+                    disabled={isPending} 
+                    className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm font-medium transition-colors"
+                >
+                    <ThumbsUp className="w-4 h-4" /> Aceitar
+                </button>
+            </div>
+          );
+      }
+      if (status === 'ACEITA' || status === 'AGUARDANDO_CONTRATANTE') {
+          return (
+            <div className="flex justify-end">
+                <div className="inline-flex items-center gap-2 text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg text-sm font-medium">
+                    <Clock className="w-4 h-4" /> Aguardando Contratante iniciar
+                </div>
+            </div>
+          );
+      }
+  }
+
+  return null;
 }
 
 export default function PropostasList({
@@ -230,93 +209,96 @@ export default function PropostasList({
   userType
 }: PropostasListProps) {
   const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
   const [propostas, setPropostas] = useState(initialPropostas);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isRespondModalOpen, setIsRespondModalOpen] = useState(false);
   const [selectedProposta, setSelectedProposta] = useState<PropostaProcessada | null>(null);
+  const [responseActionType, setResponseActionType] = useState<'ACEITA' | 'RECUSADA' | null>(null);
+
+  const toggleProposta = (id: number) => setExpandedId(expandedId === id ? null : id);
 
   const menuItems = [];
 
-  if (userType !== EnumTipoUsuario.PRESTADOR) {
-      menuItems.push({ name: 'Home', icon: Home, active: false });
+  if (userType === EnumTipoUsuario.CONTRATANTE) {
+      menuItems.push({ name: 'Home', icon: Home, route: '/dashboard', active: false });
+      menuItems.push({ name: 'Busca', icon: Search, route: '/busca-prestadores', active: false });
+  } 
+  
+  if (userType === EnumTipoUsuario.PRESTADOR) {
+    menuItems.push({ name: 'Notificações', icon: Bell, route: '/notificacoes', active: false });
   }
 
   menuItems.push(
-    { name: 'Notificações', icon: Bell, active: false },
-    { name: 'Propostas', icon: FileText, active: true},
-    { name: 'Perfil', icon: User, active: false }
+    { name: 'Mensagens', icon: MessageSquareText, route: '/mensagens', active: false},
+    { name: 'Propostas', icon: FileText, route: '/propostas', active: true},
+    { name: 'Perfil', icon: User, route: '/perfil', active: false }
   );
 
-  const handleMenuClick = (itemName: string) => {
-    if (itemName === 'Home') router.push('/dashboard');
-    else if (itemName === 'Notificações') router.push('/notificacoes');
-    else if (itemName === 'Propostas') router.push('/propostas');
-    else if (itemName === 'Perfil') router.push('/perfil');
+  const handleMenuClick = (route: string) => {
+    router.push(route);
   };
 
-  const [expandedId, setExpandedId] = useState<number | null>(null);
-
-  const toggleProposta = (id: number) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
+  const gridClass = menuItems.length === 5 ? 'grid-cols-5' : 'grid-cols-4';
 
   const handleDelete = (id: number) => {
-    if (confirm('Tem certeza que deseja excluir esta proposta? Esta ação não pode ser desfeita.')) {
+    if (confirm('Tem certeza que deseja excluir esta proposta?')) {
       startTransition(async () => {
         const result = await deleteProposalAction(id);
         if (result.success) {
-          setPropostas((prev) => prev.filter((p) => p.id !== id));
-          alert('Proposta excluída com sucesso.');
-          router.refresh();
+            setPropostas(p => p.filter(x => x.id !== id));
+            router.refresh();
         } else {
-          alert(`Erro ao excluir: ${result.error}`);
+            alert(result.error);
         }
       });
     }
   };
 
-  const openUpdateModal = (proposta: PropostaProcessada) => {
+  const openStatusModal = (proposta: PropostaProcessada) => {
     setSelectedProposta(proposta);
-    setIsModalOpen(true);
+    setIsStatusModalOpen(true);
   };
 
   const handleStatusUpdate = (newStatus: EnumStatusProposta) => {
     if (!selectedProposta) return;
-
     startTransition(async () => {
-      const result = await updateProposalStatusAction(selectedProposta.id, newStatus);
-      
-      if (result.success) {
-        setPropostas((prev) => 
-          prev.map((p) => 
-            p.id === selectedProposta.id ? { ...p, status: newStatus } : p
-          )
-        );
-        setIsModalOpen(false);
-        setSelectedProposta(null);
-        router.refresh();
-      } else {
-        alert('Erro ao atualizar status.');
-      }
+      await updateProposalStatusAction(selectedProposta.id, newStatus);
+      setIsStatusModalOpen(false);
+      router.refresh();
     });
   };
 
+  const openRespondModal = (proposta: PropostaProcessada, action: 'ACEITA' | 'RECUSADA') => {
+      setSelectedProposta(proposta);
+      setResponseActionType(action);
+      setIsRespondModalOpen(true);
+  };
+
+  const handlePrestadorResponse = (responseText: string) => {
+      if (!selectedProposta || !responseActionType) return;
+
+      startTransition(async () => {
+          const result = await updateProposalStatusAction(selectedProposta.id, responseActionType, responseText);
+          if (result.success) {
+              setIsRespondModalOpen(false);
+              setSelectedProposta(null);
+              setResponseActionType(null);
+              router.refresh(); 
+          } else {
+              alert(result.error);
+          }
+      });
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20 relative">
-      
-      <StatusUpdateModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleStatusUpdate}
-        currentStatus={selectedProposta?.status || null}
-      />
+      <StatusUpdateModal isOpen={isStatusModalOpen} onClose={() => setIsStatusModalOpen(false)} onConfirm={handleStatusUpdate} currentStatus={selectedProposta?.status || null} />
+      <RespondProposalModal isOpen={isRespondModalOpen} onClose={() => setIsRespondModalOpen(false)} onConfirm={handlePrestadorResponse} actionType={responseActionType} />
 
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 max-w-6xl mx-auto">
-          Propostas
-        </h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 max-w-6xl mx-auto">Propostas</h1>
       </div>
 
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
@@ -328,53 +310,29 @@ export default function PropostasList({
         </div>
 
         <div className="space-y-4">
-          {initialPropostas.length === 0 ? (
-            <div className="text-center bg-white border border-gray-200 rounded-xl p-12">
-              <h3 className="text-xl font-semibold text-gray-900">
-                Nenhuma proposta encontrada
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Quando você criar propostas, elas aparecerão aqui.
-              </p>
-            </div>
+          {propostas.length === 0 ? (
+             <div className="text-center bg-white border border-gray-200 rounded-xl p-12 text-gray-500">Nenhuma proposta encontrada.</div>
           ) : (
             propostas.map((proposta) => {
               const isExpanded = expandedId === proposta.id;
               return (
-                <div
-                  key={proposta.id}
-                  className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden"
-                >
-                  <button
-                    onClick={() => toggleProposta(proposta.id)}
-                    className="flex items-center justify-between w-full p-4 sm:p-6 text-left transition-colors hover:bg-gray-50"
-                  >
+                <div key={proposta.id} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                  <button onClick={() => toggleProposta(proposta.id)} className="flex items-center justify-between w-full p-4 sm:p-6 text-left hover:bg-gray-50 transition-colors">
                     <div className="min-w-0 flex-1 mr-4">
-                      <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs text-gray-500 font-medium">
-                            Enviada em {proposta.dataEnvio}
-                          </span>
-                      </div>
-                      <h2 className="text-base sm:text-lg font-bold text-gray-900 truncate">
-                        {proposta.titulo}
-                      </h2>
-                      <p className="text-sm text-gray-600 truncate mt-1">
-                         {proposta.userRole === 'contratante' 
-                            ? `Para: ${proposta.prestadorNome}` 
-                            : `De: ${proposta.contratanteNome}`}
-                      </p>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs text-gray-500 font-medium">Enviada em {proposta.dataEnvio}</span>
+                        </div>
+                        <h2 className="text-base sm:text-lg font-bold text-gray-900 truncate">{proposta.titulo}</h2>
+                        <p className="text-sm text-gray-600 truncate mt-1">
+                            {proposta.userRole === 'contratante' ? `Para: ${proposta.prestadorNome}` : `De: ${proposta.contratanteNome}`}
+                        </p>
                     </div>
-
-                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                      {getStatusBadge(proposta.status, proposta.userRole)}
-                      <div className="flex items-center gap-1 mt-1">
-                          <span className="font-bold text-gray-900">{proposta.valorFormatado}</span>
-                          <ChevronDown
-                            className={`w-5 h-5 text-gray-400 transition-transform ${
-                              isExpanded ? 'rotate-180' : ''
-                            }`}
-                          />
-                      </div>
+                    <div className="flex flex-col items-end gap-2">
+                        {getStatusBadge(proposta.status, proposta.userRole)}
+                        <div className="flex items-center gap-1 font-bold text-gray-900">
+                            {proposta.valorFormatado}
+                            <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                        </div>
                     </div>
                   </button>
 
@@ -384,100 +342,51 @@ export default function PropostasList({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
                                 <div>
-                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
-                                        <FileText className="w-4 h-4 text-blue-600" />
-                                        Descrição Geral
-                                    </h4>
-                                    <p className="text-gray-700 text-sm leading-relaxed bg-white p-3 rounded-lg border border-gray-200">
-                                        {proposta.descricao || 'Sem descrição.'}
-                                    </p>
+                                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2"><FileText className="w-4 h-4 text-blue-600"/> Descrição</h4>
+                                    <p className="bg-white p-3 rounded-lg border border-gray-200 text-sm text-gray-700 leading-relaxed">{proposta.descricao || 'Sem descrição'}</p>
                                 </div>
-
                                 {proposta.resposta && (
                                     <div>
-                                        <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
-                                            <MessageSquare className="w-4 h-4 text-purple-600" />
-                                            Resposta / Observação
-                                        </h4>
-                                        <p className="text-gray-700 text-sm leading-relaxed bg-yellow-50 p-3 rounded-lg border border-yellow-100">
-                                            {proposta.resposta}
-                                        </p>
+                                        <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2"><MessageSquare className="w-4 h-4 text-purple-600"/> Resposta / Observação</h4>
+                                        <p className="bg-yellow-50 p-3 rounded-lg border border-yellow-100 text-sm text-gray-700 leading-relaxed">{proposta.resposta}</p>
                                     </div>
                                 )}
                             </div>
-
+                            
                             <div className="space-y-4">
                                 <div>
-                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
-                                        <Calendar className="w-4 h-4 text-blue-600" />
-                                        Agendamento
-                                    </h4>
+                                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2"><Calendar className="w-4 h-4 text-blue-600"/> Agendamento</h4>
                                     <div className="bg-white p-3 rounded-lg border border-gray-200 text-sm space-y-2">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">Início:</span>
-                                            <span className="font-medium text-gray-900">{proposta.dataInicio}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">Término:</span>
-                                            <span className="font-medium text-gray-900">{proposta.dataTermino}</span>
-                                        </div>
+                                        <div className="flex justify-between"><span className="text-gray-500">Início:</span> <span>{proposta.dataInicio}</span></div>
+                                        <div className="flex justify-between"><span className="text-gray-500">Fim:</span> <span>{proposta.dataTermino}</span></div>
                                         <div className="border-t border-gray-100 my-2"></div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-gray-500">Duração Total:</span>
-                                            <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs font-bold">
-                                                {proposta.duracaoEstimada}
-                                            </span>
-                                        </div>
+                                        <div className="flex justify-between font-bold text-blue-800"><span>Duração:</span> <span>{proposta.duracaoEstimada}</span></div>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-2">
-                                        <User className="w-4 h-4 text-blue-600" />
-                                        Envolvidos
-                                    </h4>
-                                    <div className="bg-white p-3 rounded-lg border border-gray-200 text-sm space-y-1">
-                                        <p><span className="text-gray-500">Contratante:</span> <span className="font-medium">{proposta.contratanteNome}</span></p>
-                                        <p><span className="text-gray-500">Prestador:</span> <span className="font-medium">{proposta.prestadorNome}</span></p>
+                                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2"><ListChecks className="w-4 h-4 text-blue-600"/> Serviços</h4>
+                                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                        {proposta.servicos && proposta.servicos.length > 0 ? (
+                                            <ul className="divide-y divide-gray-200">
+                                                {proposta.servicos.map((s, i) => (
+                                                    <li key={i} className="px-4 py-2 text-sm text-gray-700">{s.nome}</li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p className="px-4 py-2 text-sm text-gray-500 italic">Nenhum serviço listado.</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div>
-                            <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-3">
-                                <ListChecks className="w-4 h-4 text-blue-600" />
-                                Serviços Inclusos
-                            </h4>
-                            {proposta.servicos && proposta.servicos.length > 0 ? (
-                                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-50">
-                                            <tr>
-                                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Item</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-200">
-                                            {proposta.servicos.map((servico, idx) => (
-                                                <tr key={idx}>
-                                                    <td className="px-4 py-2 text-sm text-gray-700">
-                                                        {servico.nome}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            ) : (
-                                <p className="text-sm text-gray-500 italic">Nenhum serviço listado especificamente.</p>
-                            )}
                         </div>
 
                         <div className="pt-4 border-t border-gray-200">
                           <PropostaActions
                             proposta={proposta}
                             onDelete={handleDelete}
-                            onUpdateStatusClick={openUpdateModal}
+                            onUpdateStatusClick={openStatusModal}
+                            onRespondClick={openRespondModal}
                             isPending={isPending}
                           />
                         </div>
@@ -490,30 +399,23 @@ export default function PropostasList({
           )}
         </div>
       </div>
-
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 z-20">
+      
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20">
         <div className="max-w-6xl mx-auto h-full">
-          <div className="flex items-center justify-between h-full px-2">
+          <div className={`grid ${gridClass} h-full`}>
             {menuItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
-                <button
-                  key={index}
-                  onClick={() => handleMenuClick(item.name)}
-                  className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${
-                    item.active
-                      ? 'text-blue-600'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  <IconComponent className="w-5 h-5 mb-1" />
-                  <span className="text-xs font-medium">{item.name}</span>
+                <button key={index} onClick={() => handleMenuClick(item.route)} className={`flex flex-col items-center justify-center py-2 transition-colors h-full w-full ${item.active ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}>
+                  <IconComponent className={`w-6 h-6 mb-1 ${item.active ? 'fill-blue-100' : ''}`} />
+                  <span className="text-[10px] font-medium truncate w-full text-center">{item.name}</span>
                 </button>
               );
             })}
           </div>
         </div>
       </div>
+
     </div>
   );
 }
