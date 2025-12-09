@@ -3,8 +3,8 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Home, Bell, User, MapPin, Star, Mail, ShieldBan, ArrowLeft, Briefcase, UserCircle, Shield } from 'lucide-react';
-import type { ProcessedUser } from '@/app/adm/usuario/[id]/page'; // Vamos definir esse tipo na página abaixo
-import { banUserAction } from '@/app/adm/actions';
+import type { ProcessedUser } from '@/app/adm/usuario/[id]/page';
+import { banUserAction, unbanUserAction } from '@/app/adm/actions';
 
 interface UserProfileAdminProps {
   user: ProcessedUser;
@@ -13,6 +13,7 @@ interface UserProfileAdminProps {
 export default function UserProfileAdmin({ user }: UserProfileAdminProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [userState, setUserState] = useState(user);
 
   const handleBackClick = () => {
     router.back();
@@ -31,6 +32,20 @@ export default function UserProfileAdmin({ user }: UserProfileAdminProps) {
       });
     }
   };
+
+  const handleUnbanClick = () => {
+  if (confirm(`Deseja DESBANIR o usuário ${userState.name}?`)) {
+    startTransition(async () => {
+      const result = await unbanUserAction(userState.id);
+      if (result.success) {
+        alert('Usuário desbanido com sucesso.');
+        setUserState({ ...userState, active: true }); // ⬅ Atualiza sem recarregar
+      } else {
+        alert('Erro ao desbanir usuário.');
+      }
+    });
+  }
+};
 
   const getUserTypeBadge = (type: string) => {
     switch (type) {
@@ -162,13 +177,23 @@ export default function UserProfileAdmin({ user }: UserProfileAdminProps) {
             Banir um usuário impedirá que ele envie ou receba propostas.
           </p>
           
-          <button
-            onClick={teste => router.push("../../banir-usuario")}
-            disabled={isPending}
-            className="w-full sm:w-auto bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium disabled:opacity-50"
-          >
-            {isPending ? 'Processando...' : 'Banir Usuário'}
-          </button>
+          {user.active ? (
+            <button
+              onClick={() => router.push(`/banir-usuario/${user.id}`)}
+              disabled={isPending}
+              className="w-full sm:w-auto bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium disabled:opacity-50"
+            >
+              {isPending ? 'Processando...' : 'Banir Usuário'}
+            </button>
+          ) : (
+            <button
+              onClick={handleUnbanClick}
+              disabled={isPending}
+              className="w-full sm:w-auto bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium disabled:opacity-50"
+            >
+              {isPending ? 'Processando...' : 'Desbanir Usuário'}
+            </button>
+          )}
         </div>
 
       </div>

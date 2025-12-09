@@ -125,34 +125,44 @@ function PropostaActions({
   const { status, userRole, id } = proposta;
 
   if (userRole === 'contratante') {
-      if (status === 'PENDENTE' || status === 'CONCLUIDA' || status === 'RECUSADA') {
-          return (
-            <div className="flex justify-end gap-3 items-center flex-wrap">
-               {status === 'PENDENTE' && (
-                   <span className="inline-flex items-center gap-2 text-gray-500 px-3 py-1 text-sm font-medium bg-gray-50 rounded-lg">
-                       <Clock className="w-4 h-4" /> Aguardando Prestador
-                   </span>
-               )}
+    if (status === 'PENDENTE' || status === 'CONCLUIDA' || status === 'RECUSADA') {
+        return (
+          <div className="flex justify-end gap-3 items-center flex-wrap">
 
-               {status === 'PENDENTE' && (
-                 <Link
-                   href={`/propostas/update/${id}`}
-                   className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
-                 >
-                   <Edit className="w-4 h-4" /> Editar
-                 </Link>
-               )}
-
-               <button 
-                 onClick={() => onDelete(id)} 
-                 disabled={isPending} 
-                 className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 text-sm font-medium transition-colors"
+             {status === 'CONCLUIDA' && (
+               <Link
+                 href={`/avaliar/${id}`}
+                 className="inline-flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 text-sm font-medium transition-colors"
                >
-                 <Trash2 className="w-4 h-4" /> Excluir
-               </button>
-            </div>
-          );
-      }
+                 <Star className="w-4 h-4" /> Avaliar
+               </Link>
+             )}
+
+             {status === 'PENDENTE' && (
+               <span className="inline-flex items-center gap-2 text-gray-500 px-3 py-1 text-sm font-medium bg-gray-50 rounded-lg">
+                   <Clock className="w-4 h-4" /> Aguardando Prestador
+               </span>
+             )}
+
+             {status === 'PENDENTE' && (
+               <Link
+                 href={`/propostas/update/${id}`}
+                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
+               >
+                 <Edit className="w-4 h-4" /> Editar
+               </Link>
+             )}
+
+             <button 
+               onClick={() => onDelete(id)} 
+               disabled={isPending} 
+               className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 text-sm font-medium transition-colors"
+             >
+               <Trash2 className="w-4 h-4" /> Excluir
+             </button>
+          </div>
+        );
+    }
       if (status === 'ACEITA' || status === 'EM_ANDAMENTO') {
           return (
             <div className="flex justify-end">

@@ -23,3 +23,16 @@ export async function banUserAction(userIdToBan: string) {
         return { success: false, error: "Erro ao processar banimento" };
     }
 }
+
+export async function unbanUserAction(userId: string) {
+  try {
+    await prisma.usuario.update({
+      where: { id: userId },
+      data: { active: true },
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}

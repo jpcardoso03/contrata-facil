@@ -17,6 +17,7 @@ export type ProcessedUser = {
   hourlyRate: string; 
   description: string;
   skills: string[];
+  active: boolean;
 };
 
 async function getUserData(id: string): Promise<ProcessedUser | null> {
@@ -68,6 +69,7 @@ async function getUserData(id: string): Promise<ProcessedUser | null> {
     hourlyRate: user.valor ? user.valor.toString() : '0',
     description: user.sobre,
     skills,
+    active: user.active,
   };
 }
 

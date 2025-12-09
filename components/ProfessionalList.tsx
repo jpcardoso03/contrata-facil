@@ -45,7 +45,6 @@ export default function ProfessionalList({
 
   return (
     <div className="min-h-screen bg-white pb-20">
-      {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
            <div className="flex items-center gap-3">
@@ -57,7 +56,6 @@ export default function ProfessionalList({
            </button>
            <div>
              <h1 className="text-lg sm:text-xl font-bold text-gray-900">{serviceName}</h1>
-              {/* O 'professionals' agora vem das props */}
              <p className="text-sm text-gray-600">{professionals.length} profissionais encontrados</p>
            </div>
          </div>
@@ -69,7 +67,6 @@ export default function ProfessionalList({
        </div>
       </div>
 
-      {/* Lista de Profissionais */}
       <div className="max-w-4xl mx-auto p-4 sm:p-6">
        <div className="space-y-4">
        {professionals.map((professional, index) => (
@@ -77,7 +74,6 @@ export default function ProfessionalList({
            <Link href={`/profissional/${professional.id}`}>
              <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer">
                <div className="flex flex-col sm:flex-row items-center gap-4">
-                 {/* Foto circular */}
                  <div className="flex-shrink-0">
                    <img
                         src={professional.photoUrl || '/default-avatar.png'} 
@@ -86,7 +82,6 @@ export default function ProfessionalList({
                       />
                    </div>
 
-                   {/* Informações */}
                    <div className="flex-1 w-full text-center sm:text-left">
                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                        <div className="flex-1">
@@ -120,7 +115,6 @@ export default function ProfessionalList({
                 </div>
              </Link>
 
-             {/* Linha */}
              {index < professionals.length - 1 && (
                <div className="border-t border-gray-200 my-4"></div>
               )}
@@ -129,7 +123,6 @@ export default function ProfessionalList({
         </div>
       </div>
 
-      {/* Menu Inferior */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16">
       </div>
     </div>
